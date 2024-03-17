@@ -1,5 +1,6 @@
 *
 
 !.gitignore
-!/src
-!/map
+!/src/*.cpp
+!/src/*.h
+!/map/*.txt
