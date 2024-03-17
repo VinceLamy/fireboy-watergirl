@@ -2,13 +2,14 @@
 #define GAME_H
 
 #include <chrono>
+
 #include "map.h"
-using namespace std;
 
 class Game
 {
 	Map _map;
 	bool _gameOver;
+	bool _levelFinished;
 	bool _isJumping;
 	bool _wasButton;
 	chrono::time_point<chrono::system_clock> _start;
@@ -22,6 +23,9 @@ public:
 
 	void GetInput();
 	void CheckPosition();
+	void CheckGates();
+	void CheckButtons();
+	void CheckExits();
 	void Interact();
 
 	void Play();

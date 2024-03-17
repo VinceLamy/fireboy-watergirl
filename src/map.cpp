@@ -11,8 +11,6 @@
 #include "lever.h"
 #include "pool.h"
 #include "wall.h"
-//#include "platform.h"
-
 
 using namespace std;
 
@@ -74,8 +72,6 @@ void Map::ReadMap()
 		//Ajoute tout le reste
 		while (niveau.good())
 		{
-			int lastPlatformX;
-			int lastPlatformY;
 			getline(niveau, ligne);
 			string s;
 			stringstream ss(ligne);
@@ -147,13 +143,12 @@ void Map::ReadMap()
 				{
 					o2 = VERTICAL;
 				}
-				//AddPlatform(stoi(v[2]), stoi(v[3]), stoi(v[4]), stoi(v[5]), stoi(v[6]), o2);
 				break;
 			}
 		}
 		niveau.close();
 	}
- }
+}
 
 void Map::ShowMap()
 {
@@ -166,111 +161,11 @@ void Map::ShowMap()
 		cout << endl;
 	}
 }
-//
-//void Map::CheckPlatforms()
-//{
-//	for (int y = 0; y < _grid.size(); y++)
-//	{
-//		for (int x = 0; x < _grid[y].size(); x++)
-//		{
-//			if (_grid[y][x]->GetType() == PLATFORM)
-//			{
-//				Platform* thisPlatform = static_cast<Platform*>(_grid[y][x]);
-//				thisPlatform->CheckControllers();
-//
-//				if (thisPlatform->GetMoveMe() == true)
-//				{
-//					MovePlatform(x, y);
-//					thisPlatform->SetMoveMe(false);
-//				}
-//			}
-//		}
-//	}
-//}
 
 void Map::SetGrid(vector<vector<Tile*>> g)
 {
 	_grid = g;
 }
-//
-//void Map::MovePlatform(int x, int y)
-//{
-//	Platform* movingPlatform = static_cast<Platform*>(_grid[y][x]);
-//	vector<Tile*> slaves = movingPlatform->GetSlaves();
-//	movingPlatform->MovePlatform();
-//	int size = movingPlatform->GetSize();
-//
-//	Coordinate final = movingPlatform->GetFinal();
-//	Coordinate initial = movingPlatform->GetInitial();
-//
-//	Coordinate slavePos;
-//	if (movingPlatform->GetOrientation() == HORIZONTAL)
-//	{
-//		if (movingPlatform->GetState() == CLOSED)
-//		{
-//			movingPlatform->SetState(MOVING);
-//			delete _grid[final.y][final.x];
-//			_grid[final.y][final.x] = _grid[y][x];
-//			_grid[initial.y][initial.x] = new Tile(initial.x, initial.y);
-//			for (int i = 0; i < slaves.size(); i++)
-//			{
-//				slavePos = slaves[i]->GetPosition();
-//				delete _grid[slavePos.y][slavePos.x];
-//				_grid[slavePos.y][slavePos.x] = slaves[i];
-//				_grid[initial.y][initial.x + i + 1] = new Tile(initial.x + i + 1, initial.y);
-//			}
-//			movingPlatform->SetState(OPEN);
-//		}
-//		else if (movingPlatform->GetState() == OPEN)
-//		{
-//			movingPlatform->SetState(MOVING);
-//			delete _grid[initial.y][initial.x];
-//			_grid[initial.y][initial.x] = _grid[y][x];
-//			_grid[final.y][final.x] = new Tile(final.x, final.y);
-//			for (int i = 0; i < slaves.size(); i++)
-//			{
-//				slavePos = slaves[i]->GetPosition();
-//				delete _grid[slavePos.y][slavePos.x];
-//				_grid[slavePos.y][slavePos.x] = slaves[i];
-//				_grid[final.y][final.x + i + 1] = new Tile(final.x + i + 1, final.y);
-//			}
-//			movingPlatform->SetState(CLOSED);
-//		}
-//	}
-//	else if (movingPlatform->GetOrientation() == VERTICAL)
-//	{
-//		if (movingPlatform->GetState() == CLOSED)
-//		{
-//			movingPlatform->SetState(MOVING);
-//			delete _grid[final.y][final.x];
-//			_grid[final.y][final.x] = _grid[y][x];
-//			_grid[initial.y][initial.x] = new Tile(initial.x, initial.y);
-//			for (int i = 0; i < slaves.size(); i++)
-//			{
-//				slavePos = slaves[i]->GetPosition();
-//				delete _grid[slavePos.y][slavePos.x];
-//				_grid[slavePos.y][slavePos.x] = slaves[i];
-//				_grid[initial.y - i - 1][initial.x] = new Tile(initial.x, initial.y - i - 1);
-//			}
-//			movingPlatform->SetState(OPEN);
-//		}
-//		else if (movingPlatform->GetState() == OPEN)
-//		{
-//			movingPlatform->SetState(MOVING);
-//			delete _grid[initial.y][initial.x];
-//			_grid[initial.y][initial.x] = _grid[y][x];
-//			_grid[final.y][final.x] = new Tile(final.x, final.y);
-//			for (int i = 0; i < slaves.size(); i++)
-//			{
-//				slavePos = slaves[i]->GetPosition();
-//				delete _grid[slavePos.y][slavePos.x];
-//				_grid[slavePos.y][slavePos.x] = slaves[i];
-//				_grid[final.y - i - 1][final.x] = new Tile(final.x, final.y - i - 1);
-//			}
-//			movingPlatform->SetState(CLOSED);
-//		}
-//	}
-//}
 
 void Map::AddTile(int x, int y)
 {
@@ -299,6 +194,8 @@ void Map::AddExit(int x, int y)
 	Tile* nExit = new Exit(x, y);
 	delete _grid[y][x];
 	_grid[y][x] = nExit;
+	Exit* exit = static_cast<Exit*>(nExit);
+	_exit.push_back(exit);
 }
 
 void Map::AddPool(int x, int y, Element e)
@@ -364,39 +261,11 @@ void Map::AddButton(int x, int y)
 	delete _grid[y][x];
 	_grid[y][x] = nButton;
 	Controller* platformButton = static_cast<Controller*>(nButton);
+	Button* thisButton = static_cast<Button*>(nButton);
 	_lastControllers.push_back(platformButton);
+	_button.push_back(thisButton);
 
 }
-//
-//void Map::AddPlatform(int x, int y, int xFinal, int yFinal, int size, Orientation o)
-//{
-//	Tile* nSlavePlatform;
-//	vector<Tile*> slavePlatformVector;
-//	if (o == HORIZONTAL)
-//	{
-//		for (int i = 1; i < size; i++)
-//		{
-//			nSlavePlatform = new Platform(x + i, y);
-//			delete _grid[y][x + i];
-//			_grid[y][x + i] = nSlavePlatform;
-//			slavePlatformVector.push_back(nSlavePlatform);
-//		}
-//	}
-//	else if (o == VERTICAL)
-//	{
-//		for (int i = 1; i < size; i++)
-//		{
-//			nSlavePlatform = new Platform(x, y - i);
-//			delete _grid[y - i][x];
-//			_grid[y - i][x] = nSlavePlatform;
-//			slavePlatformVector.push_back(nSlavePlatform);
-//		}
-//	}
-//	Tile* nPlatform = new Platform(x, y, xFinal, yFinal, size, o, slavePlatformVector, _lastControllers);
-//	delete _grid[y][x];
-//	_grid[y][x] = nPlatform;
-//	_lastControllers.clear();
-//}
 
 void Map::Clear()
 {
@@ -410,6 +279,21 @@ void Map::Clear()
 	_fileName = NULL;
 	_grid.clear();
 	_lastControllers.clear();
+}
+
+vector<Gate*> Map::GetGates()
+{
+	return _gate;
+}
+
+vector<Button*> Map::GetButton()
+{
+	return _button;
+}
+
+vector<Exit*> Map::GetExit()
+{
+	return _exit;
 }
 
 Character* Map::GetActiveCharacter()
@@ -443,22 +327,4 @@ Pool* Map::GetPoolAt(int x, int y)
 	for (int i = 0; i < _pool.size(); i++)
 		if (_pool[i]->GetPosition().x == coord.x && _pool[i]->GetPosition().y == coord.y)
 			return _pool[i];
-}
-
-void Map::OpenGateAt(int x, int y)
-{
-	for (int i = 0; i < _gate.capacity(); i++)
-	{
-		_gate[i]->OpenGate(x, y);
-		_grid[y][x] = new Tile(x, y);
-	}
-}
-
-void Map::CloseGateAt(int x, int y)
-{
-	for (int i = 0; i < _gate.capacity(); i++)
-	{
-		_gate[i]->CloseGate(x, y);
-		_grid[y][x] = new Tile(x, y);
-	}
 }

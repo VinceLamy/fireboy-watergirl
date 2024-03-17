@@ -23,52 +23,51 @@ Gate::~Gate()
 {
 }
 
+State Gate::GetState()
+{
+	return _state;
+}
+
 void Gate::SetState(State s)
 {
 	_state = s;
 }
 
-void Gate::OpenGate(int x, int y)
+void Gate::CheckControllers()
 {
-	Coordinate coord;
-
-	coord.x = x;
-	coord.y = y;
-
 	for (int i = 0; i < _controllers.size(); i++)
 	{
-		if (_controllers[i]->GetPosition().x == coord.x && _controllers[i]->GetPosition().y == coord.y)
-		{
-			if (_controllers[i]->GetState() == CLOSED)
-			{
-				_state = OPEN;
-				_controllers[i]->SetState(OPEN);
-
-				for (int y = 0; y < _slaveGates.size(); y++)
-					_slaveGates[y]->SetState(OPEN);
-			}
-		}
-	}
-}
-
-void Gate::CloseGate(int x, int y)
-{
-	Coordinate coord;
-
-	coord.x = x;
-	coord.y = y;
-
-	for (int i = 0; i < _controllers.size(); i++)
-	{
-		if (_controllers[i]->GetPosition().x == coord.x && _controllers[i]->GetPosition().y == coord.y)
+		if (_state == CLOSED)
 		{
 			if (_controllers[i]->GetState() == OPEN)
 			{
-				_state = CLOSED;
-				_controllers[i]->SetState(CLOSED);
+				_state = OPEN;
 
 				for (int y = 0; y < _slaveGates.size(); y++)
-					delete _slaveGates[y];
+				{
+					_slaveGates[y]->SetState(OPEN);
+				}
+			}
+
+		}
+		if (_state == OPEN)
+		{
+			if (_controllers[i]->GetState() == CLOSED)
+			{
+				_state = CLOSED;
+				for (int y = 0; y < _slaveGates.size(); y++)
+				{
+					_slaveGates[y]->SetState(CLOSED);
+				}
+			}
+			else
+			{
+				_state = OPEN;
+				for (int y = 0; y < _slaveGates.size(); y++)
+				{
+					_slaveGates[y]->SetState(OPEN);
+				}
+				break;
 			}
 		}
 	}

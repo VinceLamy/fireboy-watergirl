@@ -15,10 +15,10 @@ public:
 	Gate(int x, int y, int size, Orientation o, vector<Gate*> slaveGates, vector<Controller*> controllers);
 	~Gate();
 
+	State GetState();
 	void SetState(State s);
 
-	void OpenGate(int x, int y);
-	void CloseGate(int x, int y);
+	void CheckControllers();
 
 	void Show();
 

@@ -16,5 +16,8 @@ Lever::Lever()
 
 void Lever::Show()
 {
-	cout << 'L';
+	if (GetState() == CLOSED)
+		cout << 'L';
+	if (GetState() == OPEN)
+		cout << '<';
 }
