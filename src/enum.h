@@ -11,7 +11,9 @@ enum Type
 	LEVER,
 	PLATFORM,
 	POOL,
-	WALL
+	WALL,
+	CODELOCK,
+	CODEGIVER
 };
 
 enum Orientation

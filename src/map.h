@@ -9,6 +9,8 @@
 #include "gate.h"
 #include "pool.h"
 #include "exit.h"
+#include "codelock.h"
+#include "codegiver.h"
 
 using namespace std;
 
@@ -36,6 +38,8 @@ public:
 	void AddGate(int x, int y, int size, Orientation o);
 	void AddLever(int x, int y);
 	void AddButton(int x, int y);
+	void AddCodeLock(int x, int y, vector<CodeGiver*>);
+	void AddCodeGiver(int x, int y);
 
 	void Clear();
 
@@ -51,12 +55,14 @@ private:
 	const char* _fileName;
 	vector<vector<Tile*>> _grid;
 	vector<Controller*> _lastControllers;
+	vector<CodeGiver*> _lastCodeGiver;
 	vector<Button*> _button;
 	Character* _waterGirl;
 	Character* _fireBoy;
 	vector<Pool*> _pool;
 	vector<Gate*> _gate;
 	vector<Exit*> _exit;
+
 };
 
 #endif MAP_H

@@ -144,6 +144,12 @@ void Map::ReadMap()
 					o2 = VERTICAL;
 				}
 				break;
+			case '$':
+				AddCodeLock(stoi(v[1]), stoi(v[2]), _lastCodeGiver);
+				break;
+			case '@':
+				AddCodeGiver(stoi(v[1]), stoi(v[2]));
+				break;
 			}
 		}
 		niveau.close();
@@ -265,6 +271,25 @@ void Map::AddButton(int x, int y)
 	_lastControllers.push_back(platformButton);
 	_button.push_back(thisButton);
 
+}
+
+void Map::AddCodeLock(int x, int y, vector<CodeGiver*>)
+{
+	Tile* nCodeLock = new CodeLock(x, y, _lastCodeGiver);
+	Controller* thisCodeLock = static_cast<Controller*>(nCodeLock);
+	_lastControllers.push_back(thisCodeLock);
+	delete _grid[y][x];
+	_grid[y][x] = nCodeLock;
+	_lastCodeGiver.clear();
+}
+
+void Map::AddCodeGiver(int x, int y)
+{
+	Tile* nCodeGiver = new CodeGiver(x, y);
+	CodeGiver* thisCodeGiver = static_cast<CodeGiver*>(nCodeGiver);
+	_lastCodeGiver.push_back(thisCodeGiver);
+	delete _grid[y][x];
+	_grid[y][x] = nCodeGiver;
 }
 
 void Map::Clear()
