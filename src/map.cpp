@@ -304,6 +304,17 @@ Character* Map::GetActiveCharacter()
 	return _waterGirl;
 }
 
+Character* Map::GetFireBoy(){
+
+	return _fireBoy;
+}
+
+Character* Map::GetWaterGirl() {
+
+	return _waterGirl;
+}
+
+
 void Map::SwitchCharacter()
 {
 	if (_fireBoy->getState())
@@ -327,4 +338,6 @@ Pool* Map::GetPoolAt(int x, int y)
 	for (int i = 0; i < _pool.size(); i++)
 		if (_pool[i]->GetPosition().x == coord.x && _pool[i]->GetPosition().y == coord.y)
 			return _pool[i];
+
+	return nullptr;
 }

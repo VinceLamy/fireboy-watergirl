@@ -43,6 +43,8 @@ public:
 	vector<Button*> GetButton();
 	vector<Exit*> GetExit();
 	Character* GetActiveCharacter();
+	Character* GetFireBoy();
+	Character* GetWaterGirl();
 	void SwitchCharacter();
 
 	Pool* GetPoolAt(int x, int y);
