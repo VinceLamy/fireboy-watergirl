@@ -6,6 +6,8 @@
 #include "pool.h"
 #include "Windows.h"
 
+#include "enum.h"
+
 using namespace std;
 
 Game::Game()
@@ -54,96 +56,48 @@ void Game::GetInput()
 
 	if (GetKeyState('A') & 0x8000)
 	{
+		// Assigne le type de la position à gauche du personnage actif
+		Type type = grid[ActivePlayerPos.y][ActivePlayerPos.x - 1]->GetType();
 
-		if (grid[ActivePlayerPos.y][ActivePlayerPos.x - 1]->GetType() == WALL)
+		if (type == WALL){
 			return;
+		}
 
-
-		if (grid[ActivePlayerPos.y][ActivePlayerPos.x - 1]->GetType() == GATE)
-		{
-			
+		// Si une gate à gauche
+		if (type == GATE){			
 			Gate* thisGate = static_cast<Gate*>(grid[ActivePlayerPos.y][ActivePlayerPos.x - 1]);
 			
-			// Condition stupide 
 			if (thisGate->GetState() == CLOSED)
 				return;
-
-
-			if (thisGate->GetState() == OPEN)
-			{
-				_map.GetActiveCharacter()->SetPosition(ActivePlayerPos.x - 2, ActivePlayerPos.y);
-				swap(grid[ActivePlayerPos.y][ActivePlayerPos.x - 2], grid[ActivePlayerPos.y][ActivePlayerPos.x]);
-			}
 		}
 
-		if (grid[ActivePlayerPos.y + 1][ActivePlayerPos.x - 1]->GetType() == POOL)
-		{
-			Pool* pool = _map.GetPoolAt(ActivePlayerPos.x - 1, ActivePlayerPos.y + 1);
-
-
-			if (pool->GetElement() != _map.GetActiveCharacter()->getElement())
-				//_gameOver = true;
-				;
-			else
-			{
-				_map.GetActiveCharacter()->SetPosition(ActivePlayerPos.x - 1, ActivePlayerPos.y);
-				swap(grid[ActivePlayerPos.y][ActivePlayerPos.x - 1], grid[ActivePlayerPos.y][ActivePlayerPos.x]);
-			}
-		}
-		if (grid[ActivePlayerPos.y][ActivePlayerPos.x - 1]->GetType() == TILE)
-		{
-			_map.GetActiveCharacter()->SetPosition(ActivePlayerPos.x - 1, ActivePlayerPos.y);
-			swap(grid[ActivePlayerPos.y][ActivePlayerPos.x - 1], grid[ActivePlayerPos.y][ActivePlayerPos.x]);
-		}
+		// Déplacement vers la gauche
+		_map.GetActiveCharacter()->SetPosition(ActivePlayerPos.x - 1, ActivePlayerPos.y);
+		swap(grid[ActivePlayerPos.y][ActivePlayerPos.x - 1], grid[ActivePlayerPos.y][ActivePlayerPos.x]);
 	}
+
 	if (GetKeyState('D') & 0x8000)
 	{
-		if (grid[ActivePlayerPos.y][ActivePlayerPos.x + 1]->GetType() == WALL)
-			return;
+		// Assigne le type de la position à droite du personnage actif
+		Type type = grid[ActivePlayerPos.y][ActivePlayerPos.x + 1]->GetType();
 
 		// Si une gate à droite
-		if (grid[ActivePlayerPos.y][ActivePlayerPos.x + 1]->GetType() == GATE)
-		{
+		if (type == GATE){
 			Gate* thisGate = static_cast<Gate*>(grid[ActivePlayerPos.y][ActivePlayerPos.x + 1]);
 
-				// Si gate fermée, rien ne se produit
-				if (thisGate->GetState() == CLOSED)
+			// Si gate fermée, rien ne se produit
+			if (thisGate->GetState() == CLOSED){
 					return;
-
-				// Si ouverte, déplcament vers la droite
-				if (thisGate->GetState() == OPEN)
-				{
-					_map.GetActiveCharacter()->SetPosition(ActivePlayerPos.x + 2, ActivePlayerPos.y);
-					swap(grid[ActivePlayerPos.y][ActivePlayerPos.x + 2], grid[ActivePlayerPos.y][ActivePlayerPos.x]);
-				}
-		}
-		
-		// Si une piscine en bas à droite
-		if (grid[ActivePlayerPos.y + 1][ActivePlayerPos.x + 1]->GetType() == POOL)
-		{
-			Pool* pool = _map.GetPoolAt(ActivePlayerPos.x + 1, ActivePlayerPos.y + 1);
-
-			// Vérifie si la piscine est d'un type différent que celui du personnage
-			if (pool->GetElement() != _map.GetActiveCharacter()->getElement())
-				//_gameOver = true;
-				;
-
-			// Si même type, le déplacement peut se produire
-			else
-			{
-				// Déplacement vers la droite
-				_map.GetActiveCharacter()->SetPosition(ActivePlayerPos.x + 1, ActivePlayerPos.y);
-				swap(grid[ActivePlayerPos.y][ActivePlayerPos.x + 1], grid[ActivePlayerPos.y][ActivePlayerPos.x]);
 			}
 		}
 
-		// Si une tuile vide à droite
-		if (grid[ActivePlayerPos.y][ActivePlayerPos.x + 1]->GetType() == TILE)
-		{
-			// Déplacement vers la droite
-			_map.GetActiveCharacter()->SetPosition(ActivePlayerPos.x + 1, ActivePlayerPos.y);
-			swap(grid[ActivePlayerPos.y][ActivePlayerPos.x + 1], grid[ActivePlayerPos.y][ActivePlayerPos.x]);
-		}	
+		if (type == WALL){
+		return;
+		}
+	
+		// Déplacement vers la droite
+		_map.GetActiveCharacter()->SetPosition(ActivePlayerPos.x + 1, ActivePlayerPos.y);
+		swap(grid[ActivePlayerPos.y][ActivePlayerPos.x + 1], grid[ActivePlayerPos.y][ActivePlayerPos.x]);
 	}
 
 	if (GetAsyncKeyState('Q') & 0x8000)
