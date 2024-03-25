@@ -29,10 +29,11 @@ void Game::GetInput()
 		// S'assure que la tuile au dessus de personnage est vide pour lui permette continuer son ascension
 		if (grid[ActivePlayerPos.y - 1][ActivePlayerPos.x]->GetType() == TILE)
 		{
+			// Fait physiquement monter le personnage dans les airs d'une position
 			_map.GetActiveCharacter()->SetPosition(ActivePlayerPos.x, ActivePlayerPos.y - 1);
 			swap(grid[ActivePlayerPos.y - 1][ActivePlayerPos.x], grid[ActivePlayerPos.y][ActivePlayerPos.x]);
 
-			// Permet de créer un effet d'animation en incrémentant de 1 la hauteur à chaque rafraichissement
+			// Incrémente le compteur de la hauteur
 			_jumpHeight++;
 		}
 	}
@@ -51,6 +52,7 @@ void Game::GetInput()
 				_jumpHeight++;
 			}
 		}
+		_map.SetGrid(grid);
 	}
 
 	if (GetKeyState('A') & 0x8000)
@@ -58,11 +60,11 @@ void Game::GetInput()
 		// Assigne le type de la position à gauche du personnage actif
 		Type type = grid[ActivePlayerPos.y][ActivePlayerPos.x - 1]->GetType();
 
+		// Si un mur à gauche, pas de déplacement
 		if (type == WALL){
 			return;
 		}
 
-		// Si une gate à gauche
 		if (type == GATE){			
 			Gate* thisGate = static_cast<Gate*>(grid[ActivePlayerPos.y][ActivePlayerPos.x - 1]);
 			
@@ -73,6 +75,7 @@ void Game::GetInput()
 		// Déplacement vers la gauche
 		_map.GetActiveCharacter()->SetPosition(ActivePlayerPos.x - 1, ActivePlayerPos.y);
 		swap(grid[ActivePlayerPos.y][ActivePlayerPos.x - 1], grid[ActivePlayerPos.y][ActivePlayerPos.x]);
+		_map.SetGrid(grid);
 	}
 
 	if (GetKeyState('D') & 0x8000)
@@ -80,16 +83,16 @@ void Game::GetInput()
 		// Assigne le type de la position à droite du personnage actif
 		Type type = grid[ActivePlayerPos.y][ActivePlayerPos.x + 1]->GetType();
 
-		// Si une gate à droite
+		// Si une gate fermée à droite, pas de déplacemen
 		if (type == GATE){
 			Gate* thisGate = static_cast<Gate*>(grid[ActivePlayerPos.y][ActivePlayerPos.x + 1]);
 
-			// Si gate fermée, rien ne se produit
 			if (thisGate->GetState() == CLOSED){
 					return;
 			}
 		}
 
+		// Si un mur à droite, pas de déplacemen
 		if (type == WALL){
 		return;
 		}
@@ -97,6 +100,7 @@ void Game::GetInput()
 		// Déplacement vers la droite
 		_map.GetActiveCharacter()->SetPosition(ActivePlayerPos.x + 1, ActivePlayerPos.y);
 		swap(grid[ActivePlayerPos.y][ActivePlayerPos.x + 1], grid[ActivePlayerPos.y][ActivePlayerPos.x]);
+		_map.SetGrid(grid);
 	}
 
 	if (GetAsyncKeyState('Q') & 0x8000)
@@ -114,10 +118,7 @@ void Game::GetInput()
 		Interact();
 	}
 
-	// Devrait-il être à la fin de tout. Peut-être que le jeu plante à cause qu'on travaille sur 2 versions différentes de la grille. Prob pas le problème
-	_map.SetGrid(grid);
 }
-
 
 void Game::Play()
 {
@@ -151,28 +152,33 @@ void Game::CheckPosition()
 	Coordinate ActivePlayerPos = _map.GetActiveCharacter()->GetPosition();
 	chrono::duration<double> elapsed_time = chrono::system_clock::now() - _start;
 
+	// Regarde si la tuile en bas du personnage actif est vide
 	if (grid[ActivePlayerPos.y + 1][ActivePlayerPos.x]->GetType() == TILE)
 	{
+		//Si le personnage est en saut et que le délai de saut est dépassé. Le delay de saut devrait etre un define dans le header file.
 		if (_isJumping && elapsed_time > chrono::milliseconds{ 750 })
 		{
-			// Idéalement ne devrait pas se limiter au active player, car on peut changer de personnage en même temps qu'on est dans les airs
+			// Redescendre le compteur de hauteur et le personnage
 			_map.GetActiveCharacter()->SetPosition(ActivePlayerPos.x, ActivePlayerPos.y + 1);
 			swap(grid[ActivePlayerPos.y + 1][ActivePlayerPos.x], grid[ActivePlayerPos.y][ActivePlayerPos.x]);
 			_jumpHeight--;
 
-
+			// Vérifie que le personnage n'est pas en train de sauter ou que le personnage touche au sol
 			if (_jumpHeight == 0 || grid[ActivePlayerPos.y + 1][ActivePlayerPos.x]->GetType() != TILE)
 			{
 				_isJumping = false;
 				_jumpHeight = 0;
 			}
 		}
+
+		// Pas sûr que ce soit la meilleure formulation des conditions dans cette fonction, mais bon...
 		else if (!_isJumping)
 		{
 			_map.GetActiveCharacter()->SetPosition(ActivePlayerPos.x, ActivePlayerPos.y + 1);
 			swap(grid[ActivePlayerPos.y + 1][ActivePlayerPos.x], grid[ActivePlayerPos.y][ActivePlayerPos.x]);
 		}
 	}
+	 
 	else
 	{
 		_isJumping = false;
@@ -181,8 +187,10 @@ void Game::CheckPosition()
 
 	_map.SetGrid(grid);
 }
+
 void Game::CheckGates()
-{
+{	
+	// Actualise l'état des Gate en fonction de l'état des controllers
 	for (int i = 0; i < _map.GetGates().size(); i++)
 	{
 		_map.GetGates()[i]->CheckControllers();
@@ -191,11 +199,13 @@ void Game::CheckGates()
 
 void Game::CheckButtons()
 {
+	// Actualise l'état des boutons en vérifiant si un personnage se trouve sur un bouton
+
 	vector<vector<Tile*>> grid = _map.GetGrid();
-	Coordinate coord;
+
 	for (int i = 0; i < _map.GetButton().size(); i++)
 	{
-		coord = _map.GetButton()[i]->GetPosition();
+		Coordinate coord = _map.GetButton()[i]->GetPosition();
 
 		if (grid[coord.y - 1][coord.x]->GetType() == CHARACTER)
 		{
@@ -207,7 +217,10 @@ void Game::CheckButtons()
 		}
 	}
 }
+
 void Game::CheckPools() {
+	// Possiblement à remodifier. Je pourrais checker seulement le personnage principal
+
 	// Accéder à la position du fireboy
 	int x = _map.GetFireBoy()->GetPosition().x;
 	int y = _map.GetFireBoy()->GetPosition().y;
@@ -221,11 +234,11 @@ void Game::CheckPools() {
 		}
 	}
 
-	// Accéder à la position du fireboy
+	// Accéder à la position du Watergirl
 	x = _map.GetWaterGirl()->GetPosition().x;
 	y = _map.GetWaterGirl()->GetPosition().y;
 
-	// Condition qui est vraie si Fireboy est au dessus d'une pool
+	// Condition qui est vraie si Watergirl est au dessus d'une pool
 	if (_map.GetPoolAt(x, y + 1) != nullptr){
 
 		// Termine la partie si l'élément n'est pas le même que celui du personnage
@@ -239,6 +252,11 @@ void Game::CheckExits()
 {
 	vector<vector<Tile*>> grid = _map.GetGrid();
 	Coordinate coord;
+
+	// Aurait pu faire un for loop de 2, car size() est toujours 2 
+
+
+	// Permet d'actualiser l'état de chacune des exits
 	for (int i = 0; i < _map.GetExit().size(); i++)
 	{
 		coord = _map.GetExit()[i]->GetPosition();
@@ -253,31 +271,32 @@ void Game::CheckExits()
 		}
 	}
 
+	// Termine la partie si les deux exits sont OPEN
 	for (int y = 0; y < _map.GetExit().size(); y++)
 	{
 		if (_map.GetExit()[y]->GetState() == CLOSED)
 		{
-			_levelFinished = false;
 			return;
 		}
-		else
-		{
-			_levelFinished = true;
-		}
 	}
-}
 
+	_levelFinished = true;
+}
 
 void Game::Interact()
 {
+	// Permet de modifier l'état d'un levier
 	vector<vector<Tile*>> grid = _map.GetGrid();
 	Coordinate ActivePlayerPos = _map.GetActiveCharacter()->GetPosition();
 
+
+	// Vérifie que le personnage actif se trouve au-dessus d'un levier
 	if (grid[ActivePlayerPos.y + 1][ActivePlayerPos.x]->GetType() == LEVER)
 	{
 		Lever* thisLever = static_cast<Lever*>(grid[ActivePlayerPos.y + 1][ActivePlayerPos.x]);
 		if (thisLever->GetState() == CLOSED)
 			thisLever->SetState(OPEN);
+
 		else
 		{
 			thisLever->SetState(CLOSED);

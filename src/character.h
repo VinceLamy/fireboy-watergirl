@@ -21,9 +21,7 @@ public:
 
 private:
 	Element _element;
-	//float _gravite;
 	bool _state;
-	Coordinate _speed;
 };
 
 #endif CARACTER_H

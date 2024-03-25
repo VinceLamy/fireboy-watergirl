@@ -35,6 +35,7 @@ void Gate::SetState(State s)
 
 void Gate::CheckControllers()
 {
+	// Vérifie les controllers pour actualiser l'état de la gate
 	for (int i = 0; i < _controllers.size(); i++)
 	{
 		if (_state == CLOSED)
