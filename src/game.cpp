@@ -26,10 +26,9 @@ void Game::GetInput()
 
 	if(_isJumping && elapsed_time < chrono::milliseconds{750} && _jumpHeight < 3)
 	{
-		// Besoin d'une tuile au dessus du personnage pour sauter
+		// S'assure que la tuile au dessus de personnage est vide pour lui permette continuer son ascension
 		if (grid[ActivePlayerPos.y - 1][ActivePlayerPos.x]->GetType() == TILE)
 		{
-
 			_map.GetActiveCharacter()->SetPosition(ActivePlayerPos.x, ActivePlayerPos.y - 1);
 			swap(grid[ActivePlayerPos.y - 1][ActivePlayerPos.x], grid[ActivePlayerPos.y][ActivePlayerPos.x]);
 
@@ -102,6 +101,11 @@ void Game::GetInput()
 
 	if (GetAsyncKeyState('Q') & 0x8000)
 	{
+		// Impossible de changer de personnage si celui-ci se retrouve dans les airs
+		if (_isJumping) {
+			return;
+		}
+
 		_map.SwitchCharacter();
 	}
 
