@@ -6,6 +6,9 @@
 class Controller : public Tile
 {
 public:
+	Controller();
+	~Controller();
+
 	void SetState(State s);
 	State GetState();
 
@@ -13,6 +16,8 @@ public:
 
 private:
 	State _state = CLOSED;
+	// Sprite
+	// Color
 };
 
 #endif CONTROLLER_H
