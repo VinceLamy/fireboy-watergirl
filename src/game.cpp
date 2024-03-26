@@ -5,12 +5,13 @@
 #include "conio.h"
 #include "pool.h"
 #include "Windows.h"
+#include <string>
 
 using namespace std;
 
 Game::Game()
 {
-	_map = Map("./map/2.txt");
+	NextLevel();
 
 	_gameOver = _isJumping = _wasButton = _levelFinished = false;
 	_jumpHeight = 0;
@@ -19,6 +20,14 @@ Game::Game()
 Game::~Game()
 {
 	
+}
+
+void Game::NextLevel()
+{
+	_currentLevel++;
+	string a = "./map/" + to_string(_currentLevel) + ".txt";
+	const char* b = a.c_str();
+	_map = Map(b);
 }
 
 void Game::GetInput()
