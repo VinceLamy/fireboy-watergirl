@@ -10,7 +10,7 @@ using namespace std;
 
 Game::Game()
 {
-	_map = Map("./map/testCode.txt");
+	_map = Map("./map/2.txt");
 
 	_gameOver = _isJumping = _wasButton = _levelFinished = false;
 	_jumpHeight = 0;
@@ -44,7 +44,23 @@ void Game::GetInput()
 			_start = chrono::system_clock::now();
 			_isJumping = true;
 
-			if (grid[ActivePlayerPos.y][ActivePlayerPos.x - 1]->GetType() == TILE)
+			if (grid[ActivePlayerPos.y - 2][ActivePlayerPos.x]->GetType() == GATE)
+			{
+				Gate* thisGate = static_cast<Gate*>(grid[ActivePlayerPos.y - 2][ActivePlayerPos.x]);
+				if (thisGate->GetState() == OPEN)
+				{
+					_map.GetActiveCharacter()->SetPosition(ActivePlayerPos.x, ActivePlayerPos.y - 3);
+					swap(grid[ActivePlayerPos.y - 3][ActivePlayerPos.x], grid[ActivePlayerPos.y][ActivePlayerPos.x]);
+					_jumpHeight += 3;
+				}
+				else if (thisGate->GetState() == CLOSED)
+				{
+					_map.GetActiveCharacter()->SetPosition(ActivePlayerPos.x, ActivePlayerPos.y - 1);
+					swap(grid[ActivePlayerPos.y - 1][ActivePlayerPos.x], grid[ActivePlayerPos.y][ActivePlayerPos.x]);
+					_jumpHeight++;
+				}
+			}
+			else if (grid[ActivePlayerPos.y - 1][ActivePlayerPos.x]->GetType() == TILE)
 			{
 				_map.GetActiveCharacter()->SetPosition(ActivePlayerPos.x, ActivePlayerPos.y - 1);
 				swap(grid[ActivePlayerPos.y - 1][ActivePlayerPos.x], grid[ActivePlayerPos.y][ActivePlayerPos.x]);
@@ -54,9 +70,6 @@ void Game::GetInput()
 	}
 	if (GetKeyState('A') & 0x8000)
 	{
-		if (grid[ActivePlayerPos.y][ActivePlayerPos.x - 1]->GetType() == WALL)
-			return;
-
 		if (grid[ActivePlayerPos.y][ActivePlayerPos.x - 1]->GetType() == GATE)
 		{
 			Gate* thisGate = static_cast<Gate*>(grid[ActivePlayerPos.y][ActivePlayerPos.x - 1]);
@@ -89,9 +102,6 @@ void Game::GetInput()
 	}
 	if (GetKeyState('D') & 0x8000)
 	{
-		if (grid[ActivePlayerPos.y][ActivePlayerPos.x + 1]->GetType() == WALL)
-			return;
-
 		if (grid[ActivePlayerPos.y][ActivePlayerPos.x + 1]->GetType() == GATE)
 		{
 			Gate* thisGate = static_cast<Gate*>(grid[ActivePlayerPos.y][ActivePlayerPos.x + 1]);
@@ -153,7 +163,7 @@ void Game::Play()
 		CheckExits();
 		system("CLS");
 		_map.ShowMap();
-		Sleep(125);
+		Sleep(50);
 	} while (!_gameOver && !_levelFinished);
 
 	system("CLS");
@@ -188,6 +198,31 @@ void Game::CheckPosition()
 			_map.GetActiveCharacter()->SetPosition(ActivePlayerPos.x, ActivePlayerPos.y + 1);
 			swap(grid[ActivePlayerPos.y + 1][ActivePlayerPos.x], grid[ActivePlayerPos.y][ActivePlayerPos.x]);
 		}
+	}
+	else if (grid[ActivePlayerPos.y + 1][ActivePlayerPos.x]->GetType() == GATE)
+	{
+		Gate* thisGate = static_cast<Gate*>(grid[ActivePlayerPos.y + 1][ActivePlayerPos.x]);
+		if (thisGate->GetState() == OPEN)
+		{
+			if (_isJumping && elapsed_time > chrono::milliseconds{ 750 })
+			{
+				_map.GetActiveCharacter()->SetPosition(ActivePlayerPos.x, ActivePlayerPos.y + 2);
+				swap(grid[ActivePlayerPos.y + 2][ActivePlayerPos.x], grid[ActivePlayerPos.y][ActivePlayerPos.x]);
+				_jumpHeight--;
+
+				if (_jumpHeight == 0 || grid[ActivePlayerPos.y + 1][ActivePlayerPos.x]->GetType() != TILE)
+				{
+					_isJumping = false;
+					_jumpHeight = 0;
+				}
+			}
+			else if (!_isJumping)
+			{
+				_map.GetActiveCharacter()->SetPosition(ActivePlayerPos.x, ActivePlayerPos.y + 2);
+				swap(grid[ActivePlayerPos.y + 2][ActivePlayerPos.x], grid[ActivePlayerPos.y][ActivePlayerPos.x]);
+			}
+		}
+
 	}
 	else
 	{

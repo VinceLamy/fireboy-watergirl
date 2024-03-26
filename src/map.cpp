@@ -106,6 +106,12 @@ void Map::ReadMap()
 					AddPool(i, stoi(v[3]), FIRE);
 				}
 				break;
+			case '~':
+				for (int i = stoi(v[1]); i <= stoi(v[2]); i++)
+				{
+					AddPool(i, stoi(v[3]), GOO);
+				}
+				break;
 			case 'E':
 				AddCharacter(stoi(v[1]), stoi(v[2]), WATER);
 				break;
