@@ -8,26 +8,104 @@
 
 using namespace std;
 
-Game::Game()
+Game::Game() {}
+
+Game::Game(const char* port)
 {
-	_map = Map("./map/testCode.txt");
+	_map = Map("./map/0.txt");
 
 	_gameOver = _isJumping = _wasButton = _levelFinished = false;
 	_jumpHeight = 0;
+
+	comm = new Communication(port);
 }
 
 Game::~Game()
 {
-	
+
 }
 
 void Game::GetInput()
+{
+
+	data.jump = false;
+	data.interact = false;
+	data.switchChars = false;
+
+	data.moveRight = false;
+	data.moveLeft = false;
+
+	parse_status = comm->GetInputData();
+
+	if (parse_status)
+	{
+
+		//std::cout << "jump" << std::endl;
+		data.jump = comm->rcv_msg["boutons"]["3"] == 1;
+		data.interact = comm->rcv_msg["boutons"]["2"] == 1;
+		data.switchChars = comm->rcv_msg["boutons"]["1"] == 1;
+
+		size_t len;
+		data.moveRight = std::stof(std::string(comm->rcv_msg["joystick"]["x"])) < -0.5;
+		data.moveLeft = std::stof(std::string(comm->rcv_msg["joystick"]["x"])) > 0.5;
+	}
+}
+
+void Game::SendResponse()
+{
+	if (comm->rcv_msg["boutons"]["1"] == 1)
+	{
+		if (etat_joueur == 0)
+		{
+			comm->send_msg["joueur"] = 2;
+			etat_joueur = 1;
+		}
+		else if (etat_joueur == 1)
+		{
+			comm->send_msg["joueur"] = 1;
+			etat_joueur = 0;
+		}
+	}
+
+	int deltaT = 0;
+
+	if (parse_status)
+		deltaT = comm->rcv_msg["dt"].template get<int>();
+	else
+	{
+		deltaT = 50;
+	}
+
+	dt += deltaT;
+
+	if (dt >= 1000)
+	{
+		--compteur_depart;
+		dt = 0;
+	}
+
+
+	if (compteur_depart <= 0)
+		compteur_depart = VALEUR_TIMER;
+
+
+	comm->send_msg["seg"] = compteur_depart;
+
+	comm->send_msg["lcd"] = "Salut!";
+
+	Sleep(10);
+
+	comm->SendToPort(comm->send_msg);
+
+}
+
+void Game::MovePlayers()
 {
 	vector<vector<Tile*>> grid = _map.GetGrid();
 	Coordinate ActivePlayerPos = _map.GetActiveCharacter()->GetPosition();
 	chrono::duration<double> elapsed_time = chrono::system_clock::now() - _start;
 
-	if(_isJumping && elapsed_time < chrono::milliseconds{750} && _jumpHeight < 3)
+	if (_isJumping && elapsed_time < chrono::milliseconds{ 750 } && _jumpHeight < 3)
 	{
 		if (grid[ActivePlayerPos.y - 1][ActivePlayerPos.x]->GetType() == TILE)
 		{
@@ -37,7 +115,7 @@ void Game::GetInput()
 		}
 	}
 
-	if(GetKeyState('W') & 0x8000)
+	if (data.jump)
 	{
 		if (_isJumping == false)
 		{
@@ -52,7 +130,7 @@ void Game::GetInput()
 			}
 		}
 	}
-	if (GetKeyState('A') & 0x8000)
+	if (data.moveLeft)
 	{
 		if (grid[ActivePlayerPos.y][ActivePlayerPos.x - 1]->GetType() == WALL)
 			return;
@@ -60,7 +138,7 @@ void Game::GetInput()
 		if (grid[ActivePlayerPos.y][ActivePlayerPos.x - 1]->GetType() == GATE)
 		{
 			Gate* thisGate = static_cast<Gate*>(grid[ActivePlayerPos.y][ActivePlayerPos.x - 1]);
-			
+
 			if (thisGate->GetState() == CLOSED)
 				return;
 			if (thisGate->GetState() == OPEN)
@@ -87,7 +165,7 @@ void Game::GetInput()
 			swap(grid[ActivePlayerPos.y][ActivePlayerPos.x - 1], grid[ActivePlayerPos.y][ActivePlayerPos.x]);
 		}
 	}
-	if (GetKeyState('D') & 0x8000)
+	if (data.moveRight)
 	{
 		if (grid[ActivePlayerPos.y][ActivePlayerPos.x + 1]->GetType() == WALL)
 			return;
@@ -96,13 +174,13 @@ void Game::GetInput()
 		{
 			Gate* thisGate = static_cast<Gate*>(grid[ActivePlayerPos.y][ActivePlayerPos.x + 1]);
 
-				if (thisGate->GetState() == CLOSED)
-					return;
-				if (thisGate->GetState() == OPEN)
-				{
-					_map.GetActiveCharacter()->SetPosition(ActivePlayerPos.x + 2, ActivePlayerPos.y);
-					swap(grid[ActivePlayerPos.y][ActivePlayerPos.x + 2], grid[ActivePlayerPos.y][ActivePlayerPos.x]);
-				}
+			if (thisGate->GetState() == CLOSED)
+				return;
+			if (thisGate->GetState() == OPEN)
+			{
+				_map.GetActiveCharacter()->SetPosition(ActivePlayerPos.x + 2, ActivePlayerPos.y);
+				swap(grid[ActivePlayerPos.y][ActivePlayerPos.x + 2], grid[ActivePlayerPos.y][ActivePlayerPos.x]);
+			}
 		}
 
 		if (grid[ActivePlayerPos.y + 1][ActivePlayerPos.x + 1]->GetType() == POOL)
@@ -121,23 +199,20 @@ void Game::GetInput()
 			_map.GetActiveCharacter()->SetPosition(ActivePlayerPos.x + 1, ActivePlayerPos.y);
 			swap(grid[ActivePlayerPos.y][ActivePlayerPos.x + 1], grid[ActivePlayerPos.y][ActivePlayerPos.x]);
 		}
-
-		
 	}
 
-	if (GetKeyState('Q') & 0x8000)
+	if (data.switchChars)
 	{
 		_map.SwitchCharacter();
 	}
 
-	if (GetKeyState('E') & 0x8000)
+	if (data.interact)
 	{
 		Interact();
 	}
 
 	_map.SetGrid(grid);
 }
-
 
 void Game::Play()
 {
@@ -147,17 +222,19 @@ void Game::Play()
 	do
 	{
 		GetInput();
+		MovePlayers();
 		CheckPosition();
 		CheckButtons();
 		CheckGates();
 		CheckExits();
+		SendResponse();
 		system("CLS");
 		_map.ShowMap();
-		Sleep(125);
+		Sleep(50);
 	} while (!_gameOver && !_levelFinished);
 
 	system("CLS");
-	if(_gameOver)
+	if (_gameOver)
 		cout << "Gameover\n";
 	if (_levelFinished)
 		cout << "Good Job!!!\n";
@@ -204,7 +281,6 @@ void Game::CheckGates()
 		_map.GetGates()[i]->CheckControllers();
 	}
 }
-
 void Game::CheckButtons()
 {
 	vector<vector<Tile*>> grid = _map.GetGrid();
@@ -223,7 +299,6 @@ void Game::CheckButtons()
 		}
 	}
 }
-
 void Game::CheckExits()
 {
 	vector<vector<Tile*>> grid = _map.GetGrid();
@@ -255,8 +330,6 @@ void Game::CheckExits()
 		}
 	}
 }
-
-
 void Game::Interact()
 {
 	vector<vector<Tile*>> grid = _map.GetGrid();
@@ -271,20 +344,5 @@ void Game::Interact()
 		{
 			thisLever->SetState(CLOSED);
 		}
-	}
-	else if (grid[ActivePlayerPos.y + 1][ActivePlayerPos.x]->GetType() == CODELOCK)
-	{
-		CodeLock* thisCodeLock = static_cast<CodeLock*>(grid[ActivePlayerPos.y + 1][ActivePlayerPos.x]);
-		if (thisCodeLock->GetState() == OPEN)
-			return;
-		else
-		{
-			thisCodeLock->VerifyCode();
-		}
-	}
-	else if (grid[ActivePlayerPos.y + 1][ActivePlayerPos.x]->GetType() == CODEGIVER)
-	{
-		CodeGiver* thisCodeGiver = static_cast<CodeGiver*>(grid[ActivePlayerPos.y + 1][ActivePlayerPos.x]);
-		thisCodeGiver->ShowCode();
 	}
 }
