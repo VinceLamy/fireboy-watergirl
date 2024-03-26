@@ -11,7 +11,7 @@ using namespace std;
 
 Game::Game()
 {
-	NextLevel();
+	NewLevel();
 
 	_gameOver = _isJumping = _wasButton = _levelFinished = false;
 	_jumpHeight = 0;
@@ -22,9 +22,8 @@ Game::~Game()
 	
 }
 
-void Game::NextLevel()
+void Game::NewLevel()
 {
-	_currentLevel++;
 	_map.Clear();
 
 	switch (_currentLevel)
@@ -36,10 +35,6 @@ void Game::NextLevel()
 		_map = Map("./map/2.txt");
 		break;
 	}
-	/*if (_currentLevel == 1)
-		_map = Map("./map/1.txt");
-	else if(_currentLevel == 2)
-		_map = Map("./map/2.txt");*/
 }
 
 void Game::GetInput()
@@ -188,11 +183,18 @@ void Game::Play()
 	} while (!_gameOver && !_levelFinished);
 
 	system("CLS");
-	if(_gameOver)
+	if (_gameOver)
+	{
 		cout << "Gameover\n";
+		Sleep(2000);
+		NewLevel();
+		_gameOver = false;
+		Play();
+	}
 	else if (_levelFinished)
 	{
-		NextLevel();
+		_currentLevel++;
+		NewLevel();
 		_levelFinished = false;
 		Play();
 	}

@@ -8,7 +8,7 @@
 class Game
 {
 	Map _map;
-	int _currentLevel = 0;
+	int _currentLevel = 1;
 	bool _gameOver;
 	bool _levelFinished;
 	bool _isJumping;
@@ -21,7 +21,7 @@ public:
 	~Game();
 
 	void init();
-	void NextLevel();
+	void NewLevel();
 
 	void GetInput();
 	void CheckPosition();
