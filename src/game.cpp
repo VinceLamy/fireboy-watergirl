@@ -17,7 +17,7 @@ Game::Game(const char* port)
 	_gameOver = _isJumping = _wasButton = _levelFinished = false;
 	_jumpHeight = 0;
 
-	comm = new Communication(port);
+	comm = new Communication(port, false);
 }
 
 Game::~Game()
@@ -44,6 +44,7 @@ void Game::GetInput()
 		data.jump = comm->rcv_msg["boutons"]["3"] == 1;
 		data.interact = comm->rcv_msg["boutons"]["2"] == 1;
 		data.switchChars = comm->rcv_msg["boutons"]["1"] == 1;
+		data.menu = comm->rcv_msg["boutons"]["0"] == 1;
 
 		size_t len;
 		data.moveRight = std::stof(std::string(comm->rcv_msg["joystick"]["x"])) < -0.5;
@@ -218,6 +219,8 @@ void Game::Play()
 {
 	_map.ReadMap();
 	_map.ShowMap();
+
+	comm->OpenPort();
 
 	do
 	{

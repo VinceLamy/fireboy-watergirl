@@ -2,10 +2,13 @@
 
 #ifdef COMM_JSON
 
-
-Communication::Communication(const char* port)
+// im_open = immediate open
+Communication::Communication(const char* port, bool im_open)
 {
-	arduino = new SerialPort(port, BAUD);
+    if (im_open)
+        arduino = new SerialPort(port, BAUD);
+    else
+        arduino = nullptr;
     Port = std::string(port);
 }
 

@@ -38,7 +38,7 @@ using json = nlohmann::json;
 class Communication
 {
 public:
-	Communication(const char* port);
+	Communication(const char* port, bool im_open);
 	~Communication();
 
 	bool SendToPort(json json_msg);
