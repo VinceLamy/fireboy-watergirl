@@ -22,6 +22,11 @@ public:
 
 	void init();
 	void NewLevel();
+	void MainMenu();
+	int AskMainMenuInput();
+	void ChooseLevel();
+	void Menu();
+	int AskMenuInput();
 
 	void GetInput();
 	void CheckPosition();

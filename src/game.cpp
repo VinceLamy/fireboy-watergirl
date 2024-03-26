@@ -5,15 +5,15 @@
 #include "conio.h"
 #include "pool.h"
 #include "Windows.h"
+#include <stdlib.h>
 #include <string>
-#undef max
 
 using namespace std;
 
 Game::Game()
 {
-	//NewLevel();
-	_map = Map("./map/2.txt");
+	MainMenu();
+	//_map = Map("./map/testCode.txt");
 
 	_gameOver = _isJumping = _wasButton = _levelFinished = false;
 	_jumpHeight = 0;
@@ -30,6 +30,9 @@ void Game::NewLevel()
 
 	switch (_currentLevel)
 	{
+	case 0:
+		_map = Map("./map/0.txt");
+		break;
 	case 1:
 		_map = Map("./map/1.txt");
 		break;
@@ -37,6 +40,109 @@ void Game::NewLevel()
 		_map = Map("./map/2.txt");
 		break;
 	}
+}
+
+void Game::MainMenu()
+{
+	int userInput = AskMainMenuInput();
+
+	switch (userInput)
+	{
+	case 1:
+		_currentLevel = 0;
+		NewLevel();
+		Play();
+	case 2:
+		NewLevel();
+		Play();
+		break;
+	case 3:
+		ChooseLevel();
+		break;
+	case 4:
+		exit(1);
+		break;
+	default:
+		break;
+	}
+}
+
+void Game::ChooseLevel()
+{
+	int userInput;
+
+	do
+	{
+		system("CLS");
+		cout << "SELECTION DE NIVEAU" << endl;
+		cout << "\nENTREZ UN ENTIER DE 1 A 5" << endl;
+		cin >> userInput;
+
+	} while (userInput < 1 || userInput > 5);
+		
+	_currentLevel = userInput;
+	NewLevel();
+	Play();
+}
+
+int Game::AskMainMenuInput()
+{
+	int userInput = 0;
+	do
+	{
+		system("CLS");
+		cout << "MENU PRINCIPAL" << endl;
+		cout << "\n1-TUTORIEL" << endl;
+		cout << "2-NOUVELLE PARTIE" << endl;
+		cout << "3-CHOISIR NIVEAU" << endl;
+		cout << "4-QUITTER\n" << endl;
+		cin.clear();
+		fflush(stdin);
+		cin >> userInput;
+	} while (userInput < 1 || userInput > 3);
+
+	return userInput;
+}
+
+void Game::Menu()
+{
+	int userInput = AskMenuInput();
+
+	switch (userInput)
+	{
+	case 1:
+		_map.ShowMap();
+		break;
+	case 2:
+		NewLevel();
+		Play();
+		break;
+	case 3:
+		_currentLevel = 1;
+		_map.Clear();
+		MainMenu();
+		break;
+	default:
+		break;
+	}
+}
+
+int Game::AskMenuInput()
+{
+	int userInput = 0;
+	do
+	{
+		system("CLS");
+		cout << "MENU" << endl;
+		cout << "\n1-CONTINUER" << endl;
+		cout << "2-RECOMMENCER" << endl;
+		cout << "3-QUITTER\n" << endl;
+		cin.clear();
+		fflush(stdin);
+		cin >> userInput;
+	} while (userInput < 1 || userInput > 3);
+
+	return userInput;
 }
 
 void Game::GetInput()
@@ -163,6 +269,10 @@ void Game::GetInput()
 		Interact();
 	}
 
+	if (GetKeyState('M') & 0x8000)
+	{
+		Menu();
+	}
 	_map.SetGrid(grid);
 }
 
@@ -192,6 +302,12 @@ void Game::Play()
 		_gameOver = false;
 		Play();
 	}
+	else if (_currentLevel == 0 && _levelFinished == true)
+	{
+		_map.Clear();
+		_currentLevel = 1;
+		MainMenu();
+	}
 	else if (_levelFinished)
 	{
 		_currentLevel++;
@@ -216,7 +332,7 @@ void Game::CheckPosition()
 			swap(grid[ActivePlayerPos.y + 1][ActivePlayerPos.x], grid[ActivePlayerPos.y][ActivePlayerPos.x]);
 			_jumpHeight--;
 
-			if (_jumpHeight == 0 || grid[ActivePlayerPos.y + 1][ActivePlayerPos.x]->GetType() != TILE)
+			if (_jumpHeight == 0 || grid[ActivePlayerPos.y + 1][ActivePlayerPos.x]->GetType() == TILE)
 			{
 				_isJumping = false;
 				_jumpHeight = 0;

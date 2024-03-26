@@ -310,6 +310,13 @@ void Map::Clear()
 	_fileName = NULL;
 	_grid.clear();
 	_lastControllers.clear();
+	_lastCodeGiver.clear();
+	_button.clear();
+	_waterGirl = NULL;
+	_fireBoy = NULL;
+	_pool.clear();
+	_gate.clear();
+	_exit.clear();
 }
 
 vector<Gate*> Map::GetGates()
