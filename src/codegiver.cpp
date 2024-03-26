@@ -13,10 +13,9 @@ CodeGiver::~CodeGiver()
 {
 }
 
-void CodeGiver::ShowCode()
+string CodeGiver::ShowCode()
 {
-	cout << _mydigits << endl;
-	Sleep(2000);
+	return _mydigits;
 }
 
 void CodeGiver::SetDigits(string digits)
