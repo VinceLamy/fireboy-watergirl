@@ -43,7 +43,8 @@ public:
 
 	bool SendToPort(json json_msg);
 	bool GetInputData();
-
+	void ClosePort();
+	void OpenPort();
 
 	json rcv_msg, send_msg;
 
@@ -54,6 +55,7 @@ private:
 	int start_cnt = 0;
 	SerialPort* arduino;
 	std::string msg;
+	std::string Port;
 
 };
 

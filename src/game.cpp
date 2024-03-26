@@ -89,7 +89,7 @@ void Game::SendResponse()
 		compteur_depart = VALEUR_TIMER;
 
 
-	comm->send_msg["seg"] = compteur_depart;
+	//comm->send_msg["seg"] = compteur_depart;
 
 	comm->send_msg["lcd"] = "Salut!";
 
@@ -330,6 +330,7 @@ void Game::CheckExits()
 		}
 	}
 }
+
 void Game::Interact()
 {
 	vector<vector<Tile*>> grid = _map.GetGrid();
@@ -344,5 +345,26 @@ void Game::Interact()
 		{
 			thisLever->SetState(CLOSED);
 		}
+		CheckGates();
+	}
+	else if (grid[ActivePlayerPos.y + 1][ActivePlayerPos.x]->GetType() == CODELOCK)
+	{
+		//comm->ClosePort();
+		CodeLock* thisCodeLock = static_cast<CodeLock*>(grid[ActivePlayerPos.y + 1][ActivePlayerPos.x]);
+		if (thisCodeLock->GetState() == OPEN)
+			return;
+		else
+		{
+			thisCodeLock->VerifyCode();
+		}
+		CheckGates();
+		comm->OpenPort();
+	}
+	else if (grid[ActivePlayerPos.y + 1][ActivePlayerPos.x]->GetType() == CODEGIVER)
+	{
+		CodeGiver* thisCodeGiver = static_cast<CodeGiver*>(grid[ActivePlayerPos.y + 1][ActivePlayerPos.x]);
+		int code = stoi(thisCodeGiver->ShowCode());
+		comm->send_msg["seg"] = code;
+		
 	}
 }

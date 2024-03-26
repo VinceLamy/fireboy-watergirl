@@ -11,7 +11,7 @@ class CodeGiver : public Tile
 public:
 	CodeGiver(int x, int y);
 	~CodeGiver();
-	void ShowCode();
+	string ShowCode();
 	void SetDigits(string digits);
 	void Show();
 

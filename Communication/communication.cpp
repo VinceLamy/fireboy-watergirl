@@ -6,6 +6,7 @@
 Communication::Communication(const char* port)
 {
 	arduino = new SerialPort(port, BAUD);
+    Port = std::string(port);
 }
 
 Communication::~Communication()
@@ -72,6 +73,20 @@ bool Communication::GetInputData()
     ++start_cnt;
 
     return false;
+}
+
+void Communication::ClosePort()
+{
+    delete arduino;
+}
+
+void Communication::OpenPort()
+{
+    if (arduino != nullptr)
+        delete arduino;
+    
+    Sleep(100);
+    arduino = new SerialPort(Port.c_str(), BAUD);
 }
 
 #endif // COMM_JSON
