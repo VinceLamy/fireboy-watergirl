@@ -16,6 +16,7 @@ Tile::Tile(int x, int y)
 
 Tile::~Tile()
 {
+	/// sert a rien
 	Clear();
 }
 
