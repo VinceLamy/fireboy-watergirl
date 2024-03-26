@@ -4,3 +4,8 @@
 !/src/*.cpp
 !/src/*.h
 !/map/*.txt
+!Communication/*.hpp
+!Communication/*.h
+!Communication/*.cpp
+!Communication/serial/*.hpp
+!Communication/serial/*.cpp
