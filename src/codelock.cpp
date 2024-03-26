@@ -3,6 +3,8 @@
 #include <time.h>
 #include <iostream>
 #include <string>
+#include <conio.h>
+#include<limits>
 
 using namespace std;
 
@@ -43,6 +45,8 @@ void CodeLock::VerifyCode()
 {
 	string playerCode;
 	cout << "Enter the 4 digits code" << endl;
+	cin.clear();
+	fflush(stdin);
 	cin >> playerCode;
 
 

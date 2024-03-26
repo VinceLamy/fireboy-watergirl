@@ -24,9 +24,6 @@ public:
 	void ShowMap();
 
 	vector<vector<Tile*>> GetGrid();
-	//const char* GetFilename;
-
-	void CheckPlatforms();
 
 	void SetGrid(vector<vector<Tile*>> g);
 	

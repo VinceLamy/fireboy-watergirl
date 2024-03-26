@@ -13,6 +13,7 @@
 class Game
 {
 	Map _map;
+	int _currentLevel = 1;
 	bool _gameOver;
 	bool _levelFinished;
 	bool _isJumping;
@@ -36,6 +37,12 @@ public:
 	~Game();
 
 	void init();
+	void NewLevel();
+	void MainMenu();
+	int AskMainMenuInput();
+	void ChooseLevel();
+	void Menu();
+	int AskMenuInput();
 
 	void GetInput();
 	void MovePlayers();
