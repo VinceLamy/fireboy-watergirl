@@ -10,7 +10,7 @@ using namespace std;
 
 Game::Game()
 {
-	_map = Map("./map/0.txt");
+	_map = Map("./map/testCode.txt");
 
 	_gameOver = _isJumping = _wasButton = _levelFinished = false;
 	_jumpHeight = 0;
@@ -271,5 +271,20 @@ void Game::Interact()
 		{
 			thisLever->SetState(CLOSED);
 		}
+	}
+	else if (grid[ActivePlayerPos.y + 1][ActivePlayerPos.x]->GetType() == CODELOCK)
+	{
+		CodeLock* thisCodeLock = static_cast<CodeLock*>(grid[ActivePlayerPos.y + 1][ActivePlayerPos.x]);
+		if (thisCodeLock->GetState() == OPEN)
+			return;
+		else
+		{
+			thisCodeLock->VerifyCode();
+		}
+	}
+	else if (grid[ActivePlayerPos.y + 1][ActivePlayerPos.x]->GetType() == CODEGIVER)
+	{
+		CodeGiver* thisCodeGiver = static_cast<CodeGiver*>(grid[ActivePlayerPos.y + 1][ActivePlayerPos.x]);
+		thisCodeGiver->ShowCode();
 	}
 }
