@@ -25,9 +25,21 @@ Game::~Game()
 void Game::NextLevel()
 {
 	_currentLevel++;
-	string a = "./map/" + to_string(_currentLevel) + ".txt";
-	const char* b = a.c_str();
-	_map = Map(b);
+	_map.Clear();
+
+	switch (_currentLevel)
+	{
+	case 1:
+		_map = Map("./map/1.txt");
+		break;
+	case 2:
+		_map = Map("./map/2.txt");
+		break;
+	}
+	/*if (_currentLevel == 1)
+		_map = Map("./map/1.txt");
+	else if(_currentLevel == 2)
+		_map = Map("./map/2.txt");*/
 }
 
 void Game::GetInput()
@@ -178,8 +190,13 @@ void Game::Play()
 	system("CLS");
 	if(_gameOver)
 		cout << "Gameover\n";
-	if (_levelFinished)
-		cout << "Good Job!!!\n";
+	else if (_levelFinished)
+	{
+		NextLevel();
+		_levelFinished = false;
+		Play();
+	}
+		
 }
 
 void Game::CheckPosition()
