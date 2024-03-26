@@ -175,7 +175,6 @@ void Game::Play()
 		GetInput();
 		CheckPosition();
 		CheckButtons();
-		CheckGates();
 		CheckExits();
 		system("CLS");
 		_map.ShowMap();
@@ -279,10 +278,12 @@ void Game::CheckButtons()
 		if (grid[coord.y - 1][coord.x]->GetType() == CHARACTER)
 		{
 			_map.GetButton()[i]->SetState(OPEN);
+			CheckGates();
 		}
 		else
 		{
 			_map.GetButton()[i]->SetState(CLOSED);
+			CheckGates();
 		}
 	}
 }
@@ -334,6 +335,7 @@ void Game::Interact()
 		{
 			thisLever->SetState(CLOSED);
 		}
+		CheckGates();
 	}
 	else if (grid[ActivePlayerPos.y + 1][ActivePlayerPos.x]->GetType() == CODELOCK)
 	{
@@ -344,6 +346,7 @@ void Game::Interact()
 		{
 			thisCodeLock->VerifyCode();
 		}
+		CheckGates();
 	}
 	else if (grid[ActivePlayerPos.y + 1][ActivePlayerPos.x]->GetType() == CODEGIVER)
 	{
