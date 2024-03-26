@@ -3,6 +3,8 @@
 #include <time.h>
 #include <iostream>
 #include <string>
+#include<limits>
+#undef max
 
 using namespace std;
 

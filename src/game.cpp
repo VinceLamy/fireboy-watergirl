@@ -6,12 +6,14 @@
 #include "pool.h"
 #include "Windows.h"
 #include <string>
+#undef max
 
 using namespace std;
 
 Game::Game()
 {
-	NewLevel();
+	//NewLevel();
+	_map = Map("./map/2.txt");
 
 	_gameOver = _isJumping = _wasButton = _levelFinished = false;
 	_jumpHeight = 0;
