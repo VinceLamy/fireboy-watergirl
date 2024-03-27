@@ -239,7 +239,7 @@ void Game::SendResponse()
 
 void Game::MovePlayers()
 {
-	vector<vector<Tile*>> grid = _map.GetGrid();
+	vector<vector<Tile*>> &grid = *_map.GetGrid();
 	Coordinate ActivePlayerPos = _map.GetActiveCharacter()->GetPosition();
 	chrono::duration<double> elapsed_time = chrono::system_clock::now() - _start;
 
@@ -363,7 +363,6 @@ void Game::MovePlayers()
 	{
 		Menu();
 	}
-	_map.SetGrid(grid);
 }
 
 void Game::Play()
@@ -415,7 +414,7 @@ void Game::Play()
 
 void Game::CheckPosition()
 {
-	vector<vector<Tile*>> grid = _map.GetGrid();
+	vector<vector<Tile*>> &grid = *_map.GetGrid();
 	Coordinate ActivePlayerPos = _map.GetActiveCharacter()->GetPosition();
 	chrono::duration<double> elapsed_time = chrono::system_clock::now() - _start;
 
@@ -469,8 +468,6 @@ void Game::CheckPosition()
 		_isJumping = false;
 		_jumpHeight = 0;
 	}
-
-	_map.SetGrid(grid);
 }
 void Game::CheckGates()
 {
@@ -481,7 +478,7 @@ void Game::CheckGates()
 }
 void Game::CheckButtons()
 {
-	vector<vector<Tile*>> grid = _map.GetGrid();
+	vector<vector<Tile*>> &grid = *_map.GetGrid();
 	Coordinate coord;
 	for (int i = 0; i < _map.GetButton().size(); i++)
 	{
@@ -501,7 +498,7 @@ void Game::CheckButtons()
 }
 void Game::CheckExits()
 {
-	vector<vector<Tile*>> grid = _map.GetGrid();
+	vector<vector<Tile*>> &grid = *_map.GetGrid();
 	Coordinate coord;
 	for (int i = 0; i < _map.GetExit().size(); i++)
 	{
@@ -533,7 +530,7 @@ void Game::CheckExits()
 
 void Game::Interact()
 {
-	vector<vector<Tile*>> grid = _map.GetGrid();
+	vector<vector<Tile*>> &grid = *_map.GetGrid();
 	Coordinate ActivePlayerPos = _map.GetActiveCharacter()->GetPosition();
 
 	if (grid[ActivePlayerPos.y + 1][ActivePlayerPos.x]->GetType() == LEVER)
@@ -558,13 +555,20 @@ void Game::Interact()
 			thisCodeLock->VerifyCode();
 		}
 		CheckGates();
-		comm->OpenPort();
+		if(_manette)
+			comm->OpenPort();
 	}
 	else if (grid[ActivePlayerPos.y + 1][ActivePlayerPos.x]->GetType() == CODEGIVER)
 	{
 		CodeGiver* thisCodeGiver = static_cast<CodeGiver*>(grid[ActivePlayerPos.y + 1][ActivePlayerPos.x]);
 		int code = stoi(thisCodeGiver->ShowCode());
-		comm->send_msg["seg"] = code;
+		if (!_manette)
+		{
+			cout << code << endl;
+			Sleep(2000);
+		}
+		if(_manette)
+			comm->send_msg["seg"] = code;
 		
 	}
 }

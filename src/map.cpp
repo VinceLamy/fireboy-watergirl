@@ -30,9 +30,9 @@ Map::~Map()
 	Clear();
 }
 
-vector<vector<Tile*>> Map::GetGrid()
+vector<vector<Tile*>>* Map::GetGrid()
 {
-	return _grid;
+	return &_grid;
 }
 
 void Map::ReadMap()
@@ -172,11 +172,6 @@ void Map::ShowMap()
 		}
 		cout << endl;
 	}
-}
-
-void Map::SetGrid(vector<vector<Tile*>> g)
-{
-	_grid = g;
 }
 
 void Map::AddTile(int x, int y)
