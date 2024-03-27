@@ -14,13 +14,13 @@ Game::Game() {}
 
 Game::Game(const char* port)
 {
+	comm = new Communication(port, false);
+
 	MainMenu();
 	//_map = Map("./map/testCode.txt");
   
 	_gameOver = _isJumping = _wasButton = _levelFinished = false;
 	_jumpHeight = 0;
-
-	comm = new Communication(port, false);
 }
 
 Game::~Game()
@@ -115,7 +115,7 @@ void Game::Menu()
 	switch (userInput)
 	{
 	case 1:
-		_map.ShowMap();
+		ResumeMap();
 		break;
 	case 2:
 		NewLevel();
@@ -129,6 +129,14 @@ void Game::Menu()
 	default:
 		break;
 	}
+
+	comm->OpenPort();
+}
+
+void Game::ResumeMap()
+{
+	//comm->OpenPort();
+	_map.ShowMap();
 }
 
 int Game::AskMenuInput()
@@ -155,6 +163,7 @@ void Game::GetInput()
 	data.jump = false;
 	data.interact = false;
 	data.switchChars = false;
+	data.menu = false;
 
 	data.moveRight = false;
 	data.moveLeft = false;
@@ -168,7 +177,7 @@ void Game::GetInput()
 		data.jump = comm->rcv_msg["boutons"]["3"] == 1;
 		data.interact = comm->rcv_msg["boutons"]["2"] == 1;
 		data.switchChars = comm->rcv_msg["boutons"]["1"] == 1;
-		data.menu = comm->rcv_msg["boutons"]["0"] == 1;
+		data.menu = comm->rcv_msg["boutons"]["4"] == 1 || GetKeyState('R') & 0x8000;
 
 		size_t len;
 		data.moveRight = std::stof(std::string(comm->rcv_msg["joystick"]["x"])) < -0.5;
@@ -194,24 +203,24 @@ void Game::SendResponse()
 
 	int deltaT = 0;
 
-	if (parse_status)
-		deltaT = comm->rcv_msg["dt"].template get<int>();
-	else
-	{
-		deltaT = 50;
-	}
+	//if (parse_status)
+	//	deltaT = comm->rcv_msg["dt"].template get<int>();
+	//else
+	//{
+	//	deltaT = 50;
+	//}
 
-	dt += deltaT;
+	//dt += deltaT;
 
-	if (dt >= 1000)
-	{
-		--compteur_depart;
-		dt = 0;
-	}
+	//if (dt >= 1000)
+	//{
+	//	--compteur_depart;
+	//	dt = 0;
+	//}
 
 
-	if (compteur_depart <= 0)
-		compteur_depart = VALEUR_TIMER;
+	//if (compteur_depart <= 0)
+	//	compteur_depart = VALEUR_TIMER;
 
 
 	//comm->send_msg["seg"] = compteur_depart;
@@ -346,7 +355,7 @@ void Game::MovePlayers()
 		Interact();
 	}
 
-	if (GetKeyState('M') & 0x8000)
+	if (data.menu)
 	{
 		Menu();
 	}
@@ -534,7 +543,6 @@ void Game::Interact()
 	}
 	else if (grid[ActivePlayerPos.y + 1][ActivePlayerPos.x]->GetType() == CODELOCK)
 	{
-		//comm->ClosePort();
 		CodeLock* thisCodeLock = static_cast<CodeLock*>(grid[ActivePlayerPos.y + 1][ActivePlayerPos.x]);
 		if (thisCodeLock->GetState() == OPEN)
 			return;

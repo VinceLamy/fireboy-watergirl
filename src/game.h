@@ -56,7 +56,7 @@ public:
 	void Play();
 
 	void Show();
-
+	void ResumeMap();
 };
 
 #endif CARACTER_H

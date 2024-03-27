@@ -57,6 +57,7 @@ private:
 	std::string msg;
 	std::string Port;
 
+	bool ArduinoIsOn();
 };
 
 #endif // COMM_JSON

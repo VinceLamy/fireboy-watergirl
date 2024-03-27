@@ -92,4 +92,9 @@ void Communication::OpenPort()
     arduino = new SerialPort(Port.c_str(), BAUD);
 }
 
+bool Communication::ArduinoIsOn()
+{
+    return arduino != nullptr;
+}
+
 #endif // COMM_JSON
