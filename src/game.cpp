@@ -80,6 +80,8 @@ void Game::ChooseLevel()
 		system("CLS");
 		cout << "SELECTION DE NIVEAU" << endl;
 		cout << "\nENTREZ UN ENTIER DE 1 A 5" << endl;
+		cin.clear();
+		fflush(stdin);
 		cin >> userInput;
 
 	} while (userInput < 1 || userInput > 5);
