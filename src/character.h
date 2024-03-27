@@ -1,6 +1,10 @@
 #ifndef CARACTER_H
 #define CARACTER_H
 
+#define RESET   "\033[0m"
+#define RED     "\033[31m"
+#define CYAN    "\033[36m"
+
 #include "tile.h"
 
 class Character : public Tile

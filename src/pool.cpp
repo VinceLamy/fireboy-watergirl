@@ -28,14 +28,14 @@ void Pool::Show()
 {
 	if (_element == WATER)
 	{
-		cout << '-';
+		cout << CYAN << '~' << RESET;
 	}
 	else if (_element == FIRE)
 	{
-		cout << '+';
+		cout << RED << '~' << RESET;
 	}
 	else if (_element == GOO)
 	{
-		cout << '~';
+		cout << GREEN << '~' << RESET;
 	}
 }

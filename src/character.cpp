@@ -62,10 +62,11 @@ void Character::Show()
 {
 	if (_element == WATER)
 	{
-		cout << 'E';
+		
+		cout << CYAN << 'E' << RESET;
 	}
 	else if (_element == FIRE)
 	{
-		cout << 'F';
+		cout << RED << 'F' << RESET;
 	}
 }

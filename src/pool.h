@@ -1,6 +1,11 @@
 #ifndef POOL_H
 #define POOL_H
 
+#define RESET   "\033[0m"
+#define RED     "\033[31m"
+#define CYAN    "\033[36m"
+#define GREEN   "\033[32m"
+
 #include "tile.h"
 
 class Pool : public Tile
