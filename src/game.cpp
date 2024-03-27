@@ -143,6 +143,7 @@ void Game::Menu()
 		comm->OpenPort();
 }
 
+
 int Game::AskMenuInput()
 {
 	int userInput = 0;
@@ -160,7 +161,6 @@ int Game::AskMenuInput()
 
 	return userInput;
 }
-
 void Game::GetInput()
 {
 	if (_manette)
@@ -210,11 +210,11 @@ void Game::GetInput()
 
 		if (data.interact || data.switchChars)
 			Sleep(50);
-		if (data.jump || data.interact || data.moveRight || data.moveLeft)
-			_updated = true;
 	}
-}
 
+	if (data.jump || data.interact || data.moveRight || data.moveLeft)
+		_updated = true;
+}
 void Game::SendResponse()
 {
 	if (comm->rcv_msg["boutons"]["1"] == 1)
@@ -262,7 +262,6 @@ void Game::SendResponse()
 	comm->SendToPort(comm->send_msg);
 
 }
-
 void Game::MovePlayers()
 {
 	vector<vector<Tile*>> &grid = *_map.GetGrid();
@@ -413,7 +412,6 @@ void Game::MovePlayers()
 		Menu();
 	}
 }
-
 void Game::Play()
 {
 	_map.ReadMap();
@@ -429,6 +427,7 @@ void Game::Play()
 		CheckPosition();
 		CheckButtons();
 		CheckExits();
+		CheckPools();
 		if(_manette)
 			SendResponse();
 		if (_updated)
@@ -537,7 +536,6 @@ void Game::CheckPosition()
 		_jumpHeight = 0;
 	}
 }
-
 void Game::CheckGates()
 {
 	for (int i = 0; i < _map.GetGates().size(); i++)
@@ -545,6 +543,7 @@ void Game::CheckGates()
 		_map.GetGates()[i]->CheckControllers();
 	}
 }
+
 void Game::CheckButtons()
 {
 	vector<vector<Tile*>> &grid = *_map.GetGrid();
@@ -565,6 +564,24 @@ void Game::CheckButtons()
 		}
 	}
 }
+
+void Game::CheckPools(){
+	// Personnage actif
+	int x = _map.GetActiveCharacter()->GetPosition().x;
+	int y = _map.GetActiveCharacter()->GetPosition().y;
+
+	// Arrête la fonction si le personnage n'est pas au-dessus d'une pool
+	if (_map.GetPoolAt(x, y + 1) == nullptr) {
+		return;
+	}
+
+	// Termine la partie si l'élément n'est pas le même que celui du personnage
+	if (_map.GetPoolAt(x, y + 1)->GetElement() != _map.GetActiveCharacter()->getElement()) {
+		_gameOver = true;
+	}
+
+}
+
 void Game::CheckExits()
 {
 	vector<vector<Tile*>> &grid = *_map.GetGrid();
@@ -596,7 +613,6 @@ void Game::CheckExits()
 		}
 	}
 }
-
 void Game::Interact()
 {
 	vector<vector<Tile*>> &grid = *_map.GetGrid();
