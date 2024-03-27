@@ -30,10 +30,12 @@ class Game
 	int compteur_depart = VALEUR_TIMER;
 	int dt = 0;
 
+	bool _manette;
+
 
 public:
-	Game();
-	Game(const char* port);
+	Game(bool manette);
+	Game(bool manette, const char* port);
 	~Game();
 
 	void init();

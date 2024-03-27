@@ -10,17 +10,24 @@
 
 using namespace std;
 
-Game::Game() {}
 
-Game::Game(const char* port)
+Game::Game(bool manette)
 {
-	comm = new Communication(port, false);
-
-	MainMenu();
-	//_map = Map("./map/testCode.txt");
-  
 	_gameOver = _isJumping = _wasButton = _levelFinished = false;
 	_jumpHeight = 0;
+	_manette = manette;
+	MainMenu();
+}
+
+Game::Game(bool manette, const char* port)
+{
+	_gameOver = _isJumping = _wasButton = _levelFinished = false;
+	_jumpHeight = 0;
+	if (manette)
+		comm = new Communication(port, false);
+	_manette = manette;
+	MainMenu();
+	//_map = Map("./map/testCode.txt");
 }
 
 Game::~Game()
@@ -80,6 +87,8 @@ void Game::ChooseLevel()
 		system("CLS");
 		cout << "SELECTION DE NIVEAU" << endl;
 		cout << "\nENTREZ UN ENTIER DE 1 A 5" << endl;
+		cin.clear();
+		fflush(stdin);
 		cin >> userInput;
 
 	} while (userInput < 1 || userInput > 5);
@@ -103,7 +112,7 @@ int Game::AskMainMenuInput()
 		cin.clear();
 		fflush(stdin);
 		cin >> userInput;
-	} while (userInput < 1 || userInput > 3);
+	} while (userInput < 1 || userInput > 4);
 
 	return userInput;
 }
@@ -115,7 +124,7 @@ void Game::Menu()
 	switch (userInput)
 	{
 	case 1:
-		ResumeMap();
+		_map.ShowMap();
 		break;
 	case 2:
 		NewLevel();
@@ -130,14 +139,10 @@ void Game::Menu()
 		break;
 	}
 
-	comm->OpenPort();
+	if (_manette)
+		comm->OpenPort();
 }
 
-void Game::ResumeMap()
-{
-	//comm->OpenPort();
-	_map.ShowMap();
-}
 
 int Game::AskMenuInput()
 {
@@ -159,29 +164,51 @@ int Game::AskMenuInput()
 
 void Game::GetInput()
 {
-
-	data.jump = false;
-	data.interact = false;
-	data.switchChars = false;
-	data.menu = false;
-
-	data.moveRight = false;
-	data.moveLeft = false;
-
-	parse_status = comm->GetInputData();
-
-	if (parse_status)
+	if (_manette)
 	{
+		data.jump = false;
+		data.interact = false;
+		data.switchChars = false;
+		data.menu = false;
 
-		//std::cout << "jump" << std::endl;
-		data.jump = comm->rcv_msg["boutons"]["3"] == 1;
-		data.interact = comm->rcv_msg["boutons"]["2"] == 1;
-		data.switchChars = comm->rcv_msg["boutons"]["1"] == 1;
-		data.menu = comm->rcv_msg["boutons"]["4"] == 1 || GetKeyState('R') & 0x8000;
+		data.moveRight = false;
+		data.moveLeft = false;
+
+		parse_status = comm->GetInputData();
+
+		if (parse_status)
+		{
+
+			//std::cout << "jump" << std::endl;
+			data.jump = comm->rcv_msg["boutons"]["3"] == 1;
+			data.interact = comm->rcv_msg["boutons"]["2"] == 1;
+			data.switchChars = comm->rcv_msg["boutons"]["1"] == 1;
+			data.menu = comm->rcv_msg["boutons"]["4"] == 1;
+
+			size_t len;
+			data.moveRight = std::stof(std::string(comm->rcv_msg["joystick"]["x"])) < -0.5;
+			data.moveLeft = std::stof(std::string(comm->rcv_msg["joystick"]["x"])) > 0.5;
+		}
+	}
+	else if (!_manette)
+	{
+		data.jump = false;
+		data.interact = false;
+		data.switchChars = false;
+		data.menu = false;
+
+		data.moveRight = false;
+		data.moveLeft = false;
+
+		data.jump = GetKeyState('W') & 0x8000;
+		data.interact = GetKeyState('E') & 0x8000;
+		data.switchChars = GetKeyState('Q') & 0x8000;
+		data.menu = GetKeyState('M') & 0x8000;
 
 		size_t len;
-		data.moveRight = std::stof(std::string(comm->rcv_msg["joystick"]["x"])) < -0.5;
-		data.moveLeft = std::stof(std::string(comm->rcv_msg["joystick"]["x"])) > 0.5;
+		data.moveRight = GetKeyState('D') & 0x8000;
+		data.moveLeft = GetKeyState('A') & 0x8000;
+		
 	}
 }
 
@@ -233,9 +260,13 @@ void Game::SendResponse()
 
 }
 
+// NE PAS METTRE FONCTIONS CLAVIER ICI >:(
+// JUSTE FONCTIONS DEPLACEMENT
+// FONCTIONS CLAVIERS VONT DANS GetInput() >:(
+
 void Game::MovePlayers()
 {
-	vector<vector<Tile*>> grid = _map.GetGrid();
+	vector<vector<Tile*>> &grid = *_map.GetGrid();
 	Coordinate ActivePlayerPos = _map.GetActiveCharacter()->GetPosition();
 	chrono::duration<double> elapsed_time = chrono::system_clock::now() - _start;
 
@@ -359,15 +390,14 @@ void Game::MovePlayers()
 	{
 		Menu();
 	}
-	_map.SetGrid(grid);
 }
 
 void Game::Play()
 {
 	_map.ReadMap();
 	_map.ShowMap();
-
-	comm->OpenPort();
+	if(_manette)
+		comm->OpenPort();
 
 	do
 	{
@@ -376,10 +406,11 @@ void Game::Play()
 		CheckPosition();
 		CheckButtons();
 		CheckExits();
-		SendResponse();
+		if(_manette)
+			SendResponse();
 		system("CLS");
 		_map.ShowMap();
-		Sleep(50);
+		Sleep(10);
 	} while (!_gameOver && !_levelFinished);
 
 	system("CLS");
@@ -409,7 +440,7 @@ void Game::Play()
 
 void Game::CheckPosition()
 {
-	vector<vector<Tile*>> grid = _map.GetGrid();
+	vector<vector<Tile*>> &grid = *_map.GetGrid();
 	Coordinate ActivePlayerPos = _map.GetActiveCharacter()->GetPosition();
 	chrono::duration<double> elapsed_time = chrono::system_clock::now() - _start;
 
@@ -463,8 +494,6 @@ void Game::CheckPosition()
 		_isJumping = false;
 		_jumpHeight = 0;
 	}
-
-	_map.SetGrid(grid);
 }
 void Game::CheckGates()
 {
@@ -475,7 +504,7 @@ void Game::CheckGates()
 }
 void Game::CheckButtons()
 {
-	vector<vector<Tile*>> grid = _map.GetGrid();
+	vector<vector<Tile*>> &grid = *_map.GetGrid();
 	Coordinate coord;
 	for (int i = 0; i < _map.GetButton().size(); i++)
 	{
@@ -495,7 +524,7 @@ void Game::CheckButtons()
 }
 void Game::CheckExits()
 {
-	vector<vector<Tile*>> grid = _map.GetGrid();
+	vector<vector<Tile*>> &grid = *_map.GetGrid();
 	Coordinate coord;
 	for (int i = 0; i < _map.GetExit().size(); i++)
 	{
@@ -525,9 +554,10 @@ void Game::CheckExits()
 	}
 }
 
+
 void Game::Interact()
 {
-	vector<vector<Tile*>> grid = _map.GetGrid();
+	vector<vector<Tile*>> &grid = *_map.GetGrid();
 	Coordinate ActivePlayerPos = _map.GetActiveCharacter()->GetPosition();
 
 	if (grid[ActivePlayerPos.y + 1][ActivePlayerPos.x]->GetType() == LEVER)
@@ -551,13 +581,20 @@ void Game::Interact()
 			thisCodeLock->VerifyCode();
 		}
 		CheckGates();
-		comm->OpenPort();
+		if(_manette)
+			comm->OpenPort();
 	}
 	else if (grid[ActivePlayerPos.y + 1][ActivePlayerPos.x]->GetType() == CODEGIVER)
 	{
 		CodeGiver* thisCodeGiver = static_cast<CodeGiver*>(grid[ActivePlayerPos.y + 1][ActivePlayerPos.x]);
 		int code = stoi(thisCodeGiver->ShowCode());
-		comm->send_msg["seg"] = code;
+		if (!_manette)
+		{
+			cout << code << endl;
+			Sleep(2000);
+		}
+		if(_manette)
+			comm->send_msg["seg"] = code;
 		
 	}
 }

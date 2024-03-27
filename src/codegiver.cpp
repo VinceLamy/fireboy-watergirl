@@ -11,6 +11,7 @@ CodeGiver::CodeGiver(int x, int y)
 
 CodeGiver::~CodeGiver()
 {
+	Clear();
 }
 
 string CodeGiver::ShowCode()
@@ -26,4 +27,9 @@ void CodeGiver::SetDigits(string digits)
 void CodeGiver::Show()
 {
 	cout << '@';
+}
+
+void CodeGiver::Clear()
+{
+	_mydigits = "";
 }

@@ -12,9 +12,8 @@ int main()
 {
 	std::string port = "COM4";
 
-	//	SerialPort* arduino = new SerialPort(port.c_str(), BAUD);
-	Game game(port.c_str());
-	game.Play();
-
+	//Game game(false); //Utiliser pour clavier
+	Game game(true, port.c_str()); //Utiliser pour manette
+	
 	return 0;
 }

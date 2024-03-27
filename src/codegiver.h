@@ -14,6 +14,7 @@ public:
 	string ShowCode();
 	void SetDigits(string digits);
 	void Show();
+	void Clear();
 
 private:
 	string _mydigits;

@@ -23,9 +23,7 @@ public:
 	void ReadMap();
 	void ShowMap();
 
-	vector<vector<Tile*>> GetGrid();
-
-	void SetGrid(vector<vector<Tile*>> g);
+	vector<vector<Tile*>>* GetGrid();
 	
 	void AddTile(int x, int y);
 	void AddCharacter(int x, int y, Element e);
