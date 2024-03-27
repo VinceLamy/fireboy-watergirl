@@ -10,13 +10,19 @@
 
 using namespace std;
 
-Game::Game() {}
+Game::Game(bool manette)
+{
+	MainMenu();
+	_manette = manette;
+	_gameOver = _isJumping = _wasButton = _levelFinished = false;
+	_jumpHeight = 0;
+}
 
-Game::Game(const char* port)
+Game::Game(bool manette, const char* port)
 {
 	MainMenu();
 	//_map = Map("./map/testCode.txt");
-  
+	_manette = manette;
 	_gameOver = _isJumping = _wasButton = _levelFinished = false;
 	_jumpHeight = 0;
 
@@ -153,28 +159,33 @@ int Game::AskMenuInput()
 
 void Game::GetInput()
 {
-
-	data.jump = false;
-	data.interact = false;
-	data.switchChars = false;
-
-	data.moveRight = false;
-	data.moveLeft = false;
-
-	parse_status = comm->GetInputData();
-
-	if (parse_status)
+	if (_manette)
 	{
+		data.jump = false;
+		data.interact = false;
+		data.switchChars = false;
 
-		//std::cout << "jump" << std::endl;
-		data.jump = comm->rcv_msg["boutons"]["3"] == 1;
-		data.interact = comm->rcv_msg["boutons"]["2"] == 1;
-		data.switchChars = comm->rcv_msg["boutons"]["1"] == 1;
-		data.menu = comm->rcv_msg["boutons"]["0"] == 1;
+		data.moveRight = false;
+		data.moveLeft = false;
 
-		size_t len;
-		data.moveRight = std::stof(std::string(comm->rcv_msg["joystick"]["x"])) < -0.5;
-		data.moveLeft = std::stof(std::string(comm->rcv_msg["joystick"]["x"])) > 0.5;
+		parse_status = comm->GetInputData();
+
+		if (parse_status)
+		{
+
+			//std::cout << "jump" << std::endl;
+			data.jump = comm->rcv_msg["boutons"]["3"] == 1;
+			data.interact = comm->rcv_msg["boutons"]["2"] == 1;
+			data.switchChars = comm->rcv_msg["boutons"]["1"] == 1;
+			data.menu = comm->rcv_msg["boutons"]["0"] == 1;
+
+			size_t len;
+			data.moveRight = std::stof(std::string(comm->rcv_msg["joystick"]["x"])) < -0.5;
+			data.moveLeft = std::stof(std::string(comm->rcv_msg["joystick"]["x"])) > 0.5;
+		}
+	}
+	else if (!_manette)
+	{
 	}
 }
 
@@ -242,7 +253,7 @@ void Game::MovePlayers()
 		}
 	}
 
-	if (data.jump)
+	if (data.jump || GetKeyState('W') & 0x8000)
 	{
 		if (_isJumping == false)
 		{
@@ -273,7 +284,7 @@ void Game::MovePlayers()
 			}
 		}
 	}
-	if (data.moveLeft)
+	if (data.moveLeft || GetKeyState('A') & 0x8000)
 	{
 		if (grid[ActivePlayerPos.y][ActivePlayerPos.x - 1]->GetType() == GATE)
 		{
@@ -305,7 +316,7 @@ void Game::MovePlayers()
 			swap(grid[ActivePlayerPos.y][ActivePlayerPos.x - 1], grid[ActivePlayerPos.y][ActivePlayerPos.x]);
 		}
 	}
-	if (data.moveRight)
+	if (data.moveRight || GetKeyState('D') & 0x8000)
 	{
 		if (grid[ActivePlayerPos.y][ActivePlayerPos.x + 1]->GetType() == GATE)
 		{
@@ -338,12 +349,12 @@ void Game::MovePlayers()
 		}
 	}
 
-	if (data.switchChars)
+	if (data.switchChars || GetKeyState('Q') & 0x8000)
 	{
 		_map.SwitchCharacter();
 	}
 
-	if (data.interact)
+	if (data.interact || GetKeyState('E') & 0x8000)
 	{
 		Interact();
 	}
@@ -359,17 +370,19 @@ void Game::Play()
 {
 	_map.ReadMap();
 	_map.ShowMap();
-
-	comm->OpenPort();
+	if(_manette)
+		comm->OpenPort();
 
 	do
 	{
-		GetInput();
+		if(_manette)
+			GetInput();
 		MovePlayers();
 		CheckPosition();
 		CheckButtons();
 		CheckExits();
-		SendResponse();
+		if(_manette)
+			SendResponse();
 		system("CLS");
 		_map.ShowMap();
 		Sleep(50);

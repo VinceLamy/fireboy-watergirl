@@ -13,7 +13,7 @@ int main()
 	std::string port = "COM4";
 
 	//	SerialPort* arduino = new SerialPort(port.c_str(), BAUD);
-	Game game(port.c_str());
+	Game game(true, port.c_str());
 	game.Play();
 
 	return 0;
