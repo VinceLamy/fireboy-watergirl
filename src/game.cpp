@@ -142,8 +142,6 @@ void Game::Menu()
 	if (_manette)
 		comm->OpenPort();
 }
-
-
 int Game::AskMenuInput()
 {
 	int userInput = 0;
@@ -161,7 +159,6 @@ int Game::AskMenuInput()
 
 	return userInput;
 }
-
 void Game::GetInput()
 {
 	if (_manette)
@@ -211,11 +208,11 @@ void Game::GetInput()
 
 		if (data.interact || data.switchChars)
 			Sleep(50);
-		if (data.jump || data.interact || data.moveRight || data.moveLeft)
-			_updated = true;
 	}
-}
 
+	if (data.jump || data.interact || data.moveRight || data.moveLeft)
+		_updated = true;
+}
 void Game::SendResponse()
 {
 	if (comm->rcv_msg["boutons"]["1"] == 1)
@@ -263,7 +260,6 @@ void Game::SendResponse()
 	comm->SendToPort(comm->send_msg);
 
 }
-
 void Game::MovePlayers()
 {
 	vector<vector<Tile*>> &grid = *_map.GetGrid();
@@ -414,7 +410,6 @@ void Game::MovePlayers()
 		Menu();
 	}
 }
-
 void Game::Play()
 {
 	_map.ReadMap();
@@ -469,8 +464,6 @@ void Game::Play()
 	}
 		
 }
-
-
 void Game::CheckPosition()
 {
 	vector<vector<Tile*>>& grid = *_map.GetGrid();
@@ -539,7 +532,6 @@ void Game::CheckPosition()
 		_jumpHeight = 0;
 	}
 }
-
 void Game::CheckGates()
 {
 	for (int i = 0; i < _map.GetGates().size(); i++)
@@ -598,7 +590,6 @@ void Game::CheckExits()
 		}
 	}
 }
-
 void Game::Interact()
 {
 	vector<vector<Tile*>> &grid = *_map.GetGrid();
