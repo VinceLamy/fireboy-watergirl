@@ -141,6 +141,7 @@ void Game::Menu()
 int Game::AskMenuInput()
 {
 	int userInput = 0;
+
 	do
 	{
 		system("CLS");
@@ -149,7 +150,7 @@ int Game::AskMenuInput()
 		cout << "2-RECOMMENCER" << endl;
 		cout << "3-QUITTER\n" << endl;
 		cin.clear();
-		fflush(stdin);
+		cin.ignore(1000);
 		cin >> userInput;
 	} while (userInput < 1 || userInput > 3);
 
@@ -163,6 +164,7 @@ void Game::GetInput()
 		data.jump = false;
 		data.interact = false;
 		data.switchChars = false;
+		data.menu = false;
 
 		data.moveRight = false;
 		data.moveLeft = false;
@@ -185,6 +187,15 @@ void Game::GetInput()
 	}
 	else if (!_manette)
 	{
+		data.jump = GetAsyncKeyState('W') & 0x8000;
+		data.switchChars = GetAsyncKeyState('Q') & 0x8000;
+		data.interact = GetAsyncKeyState('E') & 0x8000;
+		data.menu = GetAsyncKeyState('M') & 0x8000;
+
+		data.moveLeft = GetKeyState('A') & 0x8000;
+		data.moveRight = GetKeyState('D') & 0x8000;
+
+
 	}
 }
 
@@ -252,7 +263,7 @@ void Game::MovePlayers()
 		}
 	}
 
-	if (data.jump || GetKeyState('W') & 0x8000)
+	if (data.jump)
 	{
 		if (_isJumping == false)
 		{
@@ -283,7 +294,7 @@ void Game::MovePlayers()
 			}
 		}
 	}
-	if (data.moveLeft || GetKeyState('A') & 0x8000)
+	if (data.moveLeft)
 	{
 		if (grid[ActivePlayerPos.y][ActivePlayerPos.x - 1]->GetType() == GATE)
 		{
@@ -315,7 +326,7 @@ void Game::MovePlayers()
 			swap(grid[ActivePlayerPos.y][ActivePlayerPos.x - 1], grid[ActivePlayerPos.y][ActivePlayerPos.x]);
 		}
 	}
-	if (data.moveRight || GetKeyState('D') & 0x8000)
+	if (data.moveRight)
 	{
 		if (grid[ActivePlayerPos.y][ActivePlayerPos.x + 1]->GetType() == GATE)
 		{
@@ -348,17 +359,17 @@ void Game::MovePlayers()
 		}
 	}
 
-	if (data.switchChars || GetKeyState('Q') & 0x8000)
+	if (data.switchChars)
 	{
 		_map.SwitchCharacter();
 	}
 
-	if (data.interact || GetKeyState('E') & 0x8000)
+	if (data.interact)
 	{
 		Interact();
 	}
 
-	if (GetKeyState('M') & 0x8000)
+	if (data.menu)
 	{
 		Menu();
 	}
@@ -373,8 +384,7 @@ void Game::Play()
 
 	do
 	{
-		if(_manette)
-			GetInput();
+		GetInput();
 		MovePlayers();
 		CheckPosition();
 		CheckButtons();
