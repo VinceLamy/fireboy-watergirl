@@ -400,7 +400,7 @@ void Game::MovePlayers()
 		}
 	}
 
-	if (data.switchChars)
+	if (data.switchChars && !_isJumping)
 	{
 		_map.SwitchCharacter();
 	}
