@@ -89,10 +89,5 @@ void CodeLock::Clear()
 	_myCode.second = 0;
 	_myCode.third = 0;
 	_myCode.fourth = 0;
-	for (int i = 0; i < _codeGiver.size(); i++)
-	{
-		delete _codeGiver[i];
-	}
-	_codeType = 0;
 }
 

@@ -29,7 +29,6 @@ public:
 private:
 	CodeDigits _myCode;
 	vector<CodeGiver*> _codeGiver;
-	int _codeType;
 };
 
 #endif CODELOCK_H

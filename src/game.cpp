@@ -77,13 +77,14 @@ void Game::ChooseLevel()
 {
 	int userInput;
 
+	system("CLS");
+	cout << "SELECTION DE NIVEAU" << endl;
+	cout << "\nENTREZ UN ENTIER DE 1 A 5" << endl;
+	cin.clear();
+	fflush(stdin);
+
 	do
 	{
-		system("CLS");
-		cout << "SELECTION DE NIVEAU" << endl;
-		cout << "\nENTREZ UN ENTIER DE 1 A 5" << endl;
-		cin.clear();
-		fflush(stdin);
 		cin >> userInput;
 
 	} while (userInput < 1 || userInput > 5);
@@ -96,16 +97,18 @@ void Game::ChooseLevel()
 int Game::AskMainMenuInput()
 {
 	int userInput = 0;
+
+	system("CLS");
+	cout << "MENU PRINCIPAL" << endl;
+	cout << "\n1-TUTORIEL" << endl;
+	cout << "2-NOUVELLE PARTIE" << endl;
+	cout << "3-CHOISIR NIVEAU" << endl;
+	cout << "4-QUITTER\n" << endl;
+	cin.clear();
+	fflush(stdin);
+
 	do
 	{
-		system("CLS");
-		cout << "MENU PRINCIPAL" << endl;
-		cout << "\n1-TUTORIEL" << endl;
-		cout << "2-NOUVELLE PARTIE" << endl;
-		cout << "3-CHOISIR NIVEAU" << endl;
-		cout << "4-QUITTER\n" << endl;
-		cin.clear();
-		fflush(stdin);
 		cin >> userInput;
 	} while (userInput < 1 || userInput > 4);
 
@@ -141,16 +144,20 @@ void Game::Menu()
 
 int Game::AskMenuInput()
 {
-	int userInput = 0;
+	int userInput;
+
+	system("CLS");
+
+	cout << "MENU" << endl;
+	cout << "\n1-CONTINUER" << endl;
+	cout << "2-RECOMMENCER" << endl;
+	cout << "3-QUITTER\n" << endl;
+
+	cin.clear();
+	fflush(stdin);
+
 	do
 	{
-		system("CLS");
-		cout << "MENU" << endl;
-		cout << "\n1-CONTINUER" << endl;
-		cout << "2-RECOMMENCER" << endl;
-		cout << "3-QUITTER\n" << endl;
-		cin.clear();
-		fflush(stdin);
 		cin >> userInput;
 	} while (userInput < 1 || userInput > 3);
 
@@ -413,6 +420,7 @@ void Game::MovePlayers()
 
 void Game::Play()
 {
+	system("CLS");
 	_map.ReadMap();
 	_map.ShowMap();
 
