@@ -53,6 +53,7 @@ public:
 	void CheckGates();
 	void CheckButtons();
 	void CheckExits();
+	void CheckPools();
 	void Interact();
 	void SendResponse();
 
