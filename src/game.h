@@ -18,6 +18,7 @@ class Game
 	bool _levelFinished;
 	bool _isJumping;
 	bool _wasButton;
+	bool _updated;
 	chrono::time_point<chrono::system_clock> _start;
 	chrono::time_point<chrono::system_clock> _end;
 	int _jumpHeight;
