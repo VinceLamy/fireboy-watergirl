@@ -46,6 +46,8 @@ public:
 
 	Pool* GetPoolAt(int x, int y);
 
+	void Swap(Coordinate pos1, Coordinate pos2);
+
 private:
 	const char* _fileName;
 	vector<vector<Tile*>> _grid;

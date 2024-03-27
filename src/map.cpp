@@ -361,3 +361,8 @@ Pool* Map::GetPoolAt(int x, int y)
 		if (_pool[i]->GetPosition().x == coord.x && _pool[i]->GetPosition().y == coord.y)
 			return _pool[i];
 }
+
+void Map::Swap(Coordinate pos1, Coordinate pos2)
+{
+	swap(_grid[pos1.y][pos1.x], _grid[pos2.y][pos2.x]);
+}
