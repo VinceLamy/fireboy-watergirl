@@ -363,7 +363,6 @@ Pool* Map::GetPoolAt(int x, int y)
 
 	return nullptr;
 }
-}
 
 void Map::Swap(Coordinate pos1, Coordinate pos2)
 {
