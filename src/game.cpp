@@ -161,6 +161,7 @@ int Game::AskMenuInput()
 
 	return userInput;
 }
+
 void Game::GetInput()
 {
 	if (_manette)
@@ -215,6 +216,7 @@ void Game::GetInput()
 	if (data.jump || data.interact || data.moveRight || data.moveLeft)
 		_updated = true;
 }
+
 void Game::SendResponse()
 {
 	if (comm->rcv_msg["boutons"]["1"] == 1)
@@ -262,6 +264,7 @@ void Game::SendResponse()
 	comm->SendToPort(comm->send_msg);
 
 }
+
 void Game::MovePlayers()
 {
 	vector<vector<Tile*>> &grid = *_map.GetGrid();
@@ -412,6 +415,7 @@ void Game::MovePlayers()
 		Menu();
 	}
 }
+
 void Game::Play()
 {
 	_map.ReadMap();
@@ -536,6 +540,7 @@ void Game::CheckPosition()
 		_jumpHeight = 0;
 	}
 }
+
 void Game::CheckGates()
 {
 	for (int i = 0; i < _map.GetGates().size(); i++)
