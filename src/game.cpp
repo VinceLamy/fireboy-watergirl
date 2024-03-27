@@ -143,7 +143,6 @@ void Game::Menu()
 		comm->OpenPort();
 }
 
-
 int Game::AskMenuInput()
 {
 	int userInput = 0;
@@ -469,7 +468,6 @@ void Game::Play()
 	}
 		
 }
-
 
 void Game::CheckPosition()
 {
