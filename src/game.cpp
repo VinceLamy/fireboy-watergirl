@@ -326,17 +326,6 @@ void Game::MovePlayers()
 			}
 		}
 
-		if (grid[ActivePlayerPos.y + 1][ActivePlayerPos.x - 1]->GetType() == POOL)
-		{
-			Pool* pool = _map.GetPoolAt(ActivePlayerPos.x - 1, ActivePlayerPos.y + 1);
-			if (pool->GetElement() != _map.GetActiveCharacter()->getElement())
-				_gameOver = true;
-			else
-			{
-				_map.GetActiveCharacter()->SetPosition(ActivePlayerPos.x - 1, ActivePlayerPos.y);
-				swap(grid[ActivePlayerPos.y][ActivePlayerPos.x - 1], grid[ActivePlayerPos.y][ActivePlayerPos.x]);
-			}
-		}
 		if (grid[ActivePlayerPos.y][ActivePlayerPos.x - 1]->GetType() == TILE)
 		{
 			_map.GetActiveCharacter()->SetPosition(ActivePlayerPos.x - 1, ActivePlayerPos.y);
@@ -358,17 +347,6 @@ void Game::MovePlayers()
 			}
 		}
 
-		if (grid[ActivePlayerPos.y + 1][ActivePlayerPos.x + 1]->GetType() == POOL)
-		{
-			Pool* pool = _map.GetPoolAt(ActivePlayerPos.x + 1, ActivePlayerPos.y + 1);
-			if (pool->GetElement() != _map.GetActiveCharacter()->getElement())
-				_gameOver = true;
-			else
-			{
-				_map.GetActiveCharacter()->SetPosition(ActivePlayerPos.x + 1, ActivePlayerPos.y);
-				swap(grid[ActivePlayerPos.y][ActivePlayerPos.x + 1], grid[ActivePlayerPos.y][ActivePlayerPos.x]);
-			}
-		}
 		if (grid[ActivePlayerPos.y][ActivePlayerPos.x + 1]->GetType() == TILE)
 		{
 			_map.GetActiveCharacter()->SetPosition(ActivePlayerPos.x + 1, ActivePlayerPos.y);
@@ -406,6 +384,7 @@ void Game::Play()
 		CheckPosition();
 		CheckButtons();
 		CheckExits();
+		CheckPools();
 		if(_manette)
 			SendResponse();
 		system("CLS");
@@ -495,6 +474,7 @@ void Game::CheckPosition()
 		_jumpHeight = 0;
 	}
 }
+
 void Game::CheckGates()
 {
 	for (int i = 0; i < _map.GetGates().size(); i++)
@@ -502,6 +482,7 @@ void Game::CheckGates()
 		_map.GetGates()[i]->CheckControllers();
 	}
 }
+
 void Game::CheckButtons()
 {
 	vector<vector<Tile*>> &grid = *_map.GetGrid();
@@ -522,6 +503,24 @@ void Game::CheckButtons()
 		}
 	}
 }
+
+void Game::CheckPools(){
+	// Personnage actif
+	int x = _map.GetActiveCharacter()->GetPosition().x;
+	int y = _map.GetActiveCharacter()->GetPosition().y;
+
+	// Arrête la fonction si le personnage n'est pas au-dessus d'une pool
+	if (_map.GetPoolAt(x, y + 1) == nullptr) {
+		return;
+	}
+
+	// Termine la partie si l'élément n'est pas le même que celui du personnage
+	if (_map.GetPoolAt(x, y + 1)->GetElement() != _map.GetActiveCharacter()->getElement()) {
+		_gameOver = true;
+	}
+
+}
+
 void Game::CheckExits()
 {
 	vector<vector<Tile*>> &grid = *_map.GetGrid();
@@ -553,7 +552,6 @@ void Game::CheckExits()
 		}
 	}
 }
-
 
 void Game::Interact()
 {
