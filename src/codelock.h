@@ -24,6 +24,7 @@ public:
 	void VerifyCode();
 	void GenerateCode();
 	void Show();
+	void Clear();
 
 private:
 	CodeDigits _myCode;

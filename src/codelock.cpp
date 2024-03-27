@@ -19,6 +19,7 @@ CodeLock::CodeLock(int x, int y, vector<CodeGiver*> codeGiver)
 
 CodeLock::~CodeLock()
 {
+	Clear();
 }
 
 void CodeLock::GiveCode(CodeDigits code)
@@ -81,3 +82,17 @@ void CodeLock::Show()
 {
 	cout << '$';
 }
+
+void CodeLock::Clear()
+{
+	_myCode.first = 0;
+	_myCode.second = 0;
+	_myCode.third = 0;
+	_myCode.fourth = 0;
+	for (int i = 0; i < _codeGiver.size(); i++)
+	{
+		delete _codeGiver[i];
+	}
+	_codeType = 0;
+}
+

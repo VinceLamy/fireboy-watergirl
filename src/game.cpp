@@ -110,7 +110,7 @@ int Game::AskMainMenuInput()
 		cin.clear();
 		fflush(stdin);
 		cin >> userInput;
-	} while (userInput < 1 || userInput > 3);
+	} while (userInput < 1 || userInput > 4);
 
 	return userInput;
 }
@@ -526,6 +526,7 @@ void Game::CheckExits()
 		}
 	}
 }
+
 
 void Game::Interact()
 {
