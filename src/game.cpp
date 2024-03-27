@@ -259,7 +259,7 @@ void Game::SendResponse()
 
 	//comm->send_msg["seg"] = compteur_depart;
 
-	comm->send_msg["lcd"] = "Salut!";
+	comm->send_msg["lcd"] = to_string(_currentLevel);
 
 	Sleep(10);
 
@@ -426,10 +426,6 @@ void Game::Play()
 
 	if(_manette)
 		comm->OpenPort();
-
-	char buff[16];
-	sprintf(buff, "Niveau : %d", _currentLevel);
-	comm->send_msg["lcd"] = buff;
 
 	do
 	{
