@@ -12,21 +12,20 @@ using namespace std;
 
 Game::Game(bool manette)
 {
-	MainMenu();
-	_manette = manette;
 	_gameOver = _isJumping = _wasButton = _levelFinished = false;
 	_jumpHeight = 0;
+	_manette = manette;
+	MainMenu();
 }
 
 Game::Game(bool manette, const char* port)
 {
-	MainMenu();
-	//_map = Map("./map/testCode.txt");
-	_manette = manette;
 	_gameOver = _isJumping = _wasButton = _levelFinished = false;
 	_jumpHeight = 0;
-
 	comm = new Communication(port, false);
+	_manette = manette;
+	MainMenu();
+	//_map = Map("./map/testCode.txt");
 }
 
 Game::~Game()
