@@ -183,7 +183,7 @@ void Game::GetInput()
 
 			//std::cout << "jump" << std::endl;
 			data.jump = comm->rcv_msg["boutons"]["3"] == 1;
-			data.interact = comm->rcv_msg["boutons"]["2"] == 1;
+			data.interact = comm->rcv_msg["boutons"]["2"] == 1 || std::stof(std::string(comm->rcv_msg["accel"]["z"])) > 0.3;
 			data.switchChars = comm->rcv_msg["boutons"]["1"] == 1;
 			data.menu = comm->rcv_msg["boutons"]["4"] == 1;
 
@@ -426,6 +426,10 @@ void Game::Play()
 
 	if(_manette)
 		comm->OpenPort();
+
+	char buff[16];
+	sprintf(buff, "Niveau : %d", _currentLevel);
+	comm->send_msg["lcd"] = buff;
 
 	do
 	{

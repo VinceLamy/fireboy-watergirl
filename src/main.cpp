@@ -12,7 +12,6 @@ int main()
 {
 	std::string port = "COM4";
 
-	//Game game(false); //Utiliser pour clavier
 	Game game(port.c_str()); //Utiliser pour manette
 	
 	return 0;
