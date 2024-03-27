@@ -13,7 +13,7 @@ int main()
 	std::string port = "COM4";
 
 	//Game game(false); //Utiliser pour clavier
-	Game game(true, port.c_str()); //Utiliser pour manette
+	Game game(port.c_str()); //Utiliser pour manette
 	
 	return 0;
 }

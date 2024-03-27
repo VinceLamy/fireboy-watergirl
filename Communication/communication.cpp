@@ -97,4 +97,9 @@ bool Communication::ArduinoIsOn()
     return arduino != nullptr;
 }
 
+bool Communication::IsConnected()
+{
+    return arduino->isConnected();
+}
+
 #endif // COMM_JSON

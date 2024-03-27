@@ -45,6 +45,7 @@ public:
 	bool GetInputData();
 	void ClosePort();
 	void OpenPort();
+	bool IsConnected();
 
 	json rcv_msg, send_msg;
 

@@ -11,28 +11,23 @@
 using namespace std;
 
 
-Game::Game(bool manette)
-{
-	_gameOver = _isJumping = _wasButton = _levelFinished = _updated = false;
-	_jumpHeight = 0;
-	_manette = manette;
-	MainMenu();
-}
-
-Game::Game(bool manette, const char* port)
+Game::Game(const char* port)
 {
 	_gameOver = _isJumping = _wasButton = _levelFinished = false;
 	_jumpHeight = 0;
-	if (manette)
-		comm = new Communication(port, false);
-	_manette = manette;
+
+	comm = new Communication(port, true);
+
+	_manette = comm->IsConnected();
+	cout <<  _manette << endl;
 	MainMenu();
+	
 	//_map = Map("./map/testCode.txt");
 }
 
 Game::~Game()
 {
-
+	delete comm;
 }
 
 void Game::NewLevel()
