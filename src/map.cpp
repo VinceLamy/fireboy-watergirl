@@ -360,6 +360,9 @@ Pool* Map::GetPoolAt(int x, int y)
 	for (int i = 0; i < _pool.size(); i++)
 		if (_pool[i]->GetPosition().x == coord.x && _pool[i]->GetPosition().y == coord.y)
 			return _pool[i];
+
+	return nullptr;
+}
 }
 
 void Map::Swap(Coordinate pos1, Coordinate pos2)

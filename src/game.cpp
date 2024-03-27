@@ -430,6 +430,7 @@ void Game::Play()
 		CheckPosition();
 		CheckButtons();
 		CheckExits();
+		CheckPools();
 		if(_manette)
 			SendResponse();
 		if (_updated)
@@ -547,6 +548,7 @@ void Game::CheckGates()
 		_map.GetGates()[i]->CheckControllers();
 	}
 }
+
 void Game::CheckButtons()
 {
 	vector<vector<Tile*>> &grid = *_map.GetGrid();
@@ -567,6 +569,24 @@ void Game::CheckButtons()
 		}
 	}
 }
+
+void Game::CheckPools(){
+	// Personnage actif
+	int x = _map.GetActiveCharacter()->GetPosition().x;
+	int y = _map.GetActiveCharacter()->GetPosition().y;
+
+	// Arrête la fonction si le personnage n'est pas au-dessus d'une pool
+	if (_map.GetPoolAt(x, y + 1) == nullptr) {
+		return;
+	}
+
+	// Termine la partie si l'élément n'est pas le même que celui du personnage
+	if (_map.GetPoolAt(x, y + 1)->GetElement() != _map.GetActiveCharacter()->getElement()) {
+		_gameOver = true;
+	}
+
+}
+
 void Game::CheckExits()
 {
 	vector<vector<Tile*>> &grid = *_map.GetGrid();
