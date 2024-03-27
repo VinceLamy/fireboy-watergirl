@@ -16,5 +16,5 @@ Button::Button()
 
 void Button::Show()
 {
-	cout << 'B';
+	cout << YELLOW << 'B' << RESET;
 }

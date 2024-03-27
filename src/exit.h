@@ -1,6 +1,9 @@
 #ifndef EXIT_H
 #define EXIT_H
 
+#define RESET	"\033[0m"
+#define MAGENTA	"\033[35m"
+
 #include "tile.h"
 
 class Exit : public Tile

@@ -80,7 +80,7 @@ void CodeLock::GenerateCode()
 
 void CodeLock::Show()
 {
-	cout << '$';
+	cout << BRIGHTYELLOW << '$' << RESET;
 }
 
 void CodeLock::Clear()
