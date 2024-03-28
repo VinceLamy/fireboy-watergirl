@@ -1,6 +1,9 @@
 #ifndef CODEGIVER_H
 #define CODEGIVER_H
 
+#define RESET	"\033[0m"
+#define BRIGHTYELLOW	"\033[93m"
+
 #include "tile.h"
 #include <iostream>
 

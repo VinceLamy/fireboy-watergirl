@@ -6,6 +6,9 @@
 #include <iostream>
 #include <vector>
 
+#define RESET	"\033[0m"
+#define BRIGHTYELLOW	"\033[93m"
+
 using namespace std;
 
 struct CodeDigits {

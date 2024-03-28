@@ -26,7 +26,7 @@ void CodeGiver::SetDigits(string digits)
 
 void CodeGiver::Show()
 {
-	cout << '@';
+	cout << BRIGHTYELLOW << '@' << RESET;
 }
 
 void CodeGiver::Clear()

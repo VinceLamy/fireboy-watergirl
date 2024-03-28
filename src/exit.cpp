@@ -25,5 +25,5 @@ State Exit::GetState()
 
 void Exit::Show()
 {
-	cout << 'P';
+	cout << MAGENTA << 'P' << RESET;
 }
