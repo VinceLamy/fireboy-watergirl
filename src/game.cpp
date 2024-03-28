@@ -370,8 +370,7 @@ void Game::MovePlayers()
 				_map.Swap(ActivePlayerOldPos, ActivePlayerPos);
 			}
 		}
-
-		if (grid[ActivePlayerPos.y][ActivePlayerPos.x - 1]->GetType() == TILE)
+		else if (grid[ActivePlayerPos.y][ActivePlayerPos.x - 1]->GetType() == TILE)
 		{
 			ActivePlayerOldPos = _map.GetActiveCharacter()->GetPosition();
 			_map.GetActiveCharacter()->SetPosition(ActivePlayerPos.x - 1, ActivePlayerPos.y);
@@ -409,7 +408,7 @@ void Game::MovePlayers()
 				_map.Swap(ActivePlayerOldPos, ActivePlayerPos);
 			}
 		}
-		if (grid[ActivePlayerPos.y][ActivePlayerPos.x + 1]->GetType() == TILE)
+		else if (grid[ActivePlayerPos.y][ActivePlayerPos.x + 1]->GetType() == TILE)
 		{
 			ActivePlayerOldPos = _map.GetActiveCharacter()->GetPosition();
 			_map.GetActiveCharacter()->SetPosition(ActivePlayerPos.x + 1, ActivePlayerPos.y);
@@ -508,7 +507,7 @@ void Game::CheckPosition()
 			_map.Swap(ActivePlayerOldPos, ActivePlayerPos);
 			_jumpHeight--; 
 
-			if (_jumpHeight == 0 || grid[ActivePlayerPos.y + 1][ActivePlayerPos.x]->GetType() == WALL)
+			if (grid[ActivePlayerPos.y + 1][ActivePlayerPos.x]->GetType() == WALL)
 			{
 				_isJumping = false;
 				_jumpHeight = 0;
@@ -538,7 +537,7 @@ void Game::CheckPosition()
 				_map.Swap(ActivePlayerOldPos, ActivePlayerPos);
 				_jumpHeight--;
 
-				if (_jumpHeight == 0 || grid[ActivePlayerPos.y + 1][ActivePlayerPos.x]->GetType() == WALL)
+				if (grid[ActivePlayerPos.y + 1][ActivePlayerPos.x]->GetType() == WALL)
 				{
 					_isJumping = false;
 					_jumpHeight = 0;

@@ -10,7 +10,7 @@
 
 int main()
 {
-	std::string port = "COM4";
+	std::string port = "COM3";
 
 	Game game(port.c_str()); //Utiliser pour manette
 	
