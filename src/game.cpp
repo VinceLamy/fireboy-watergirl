@@ -45,6 +45,22 @@ void Game::NewLevel()
 	case 2:
 		_map = Map("./map/2.txt");
 		break;
+	case 3:
+		_map = Map("./map/3.txt");
+		break;
+	case 4:
+		_map = Map("./map/4.txt");
+		break;
+	case 5:
+		_map = Map("./map/5.txt");
+		break;
+	case 6:
+		system("CLS");
+		cout << "FELICITATION!!! MERCI D'AVOIR JOUER!!!" << endl;
+		Sleep(2000);
+		_currentLevel = 1;
+		MainMenu();
+		break;
 	}
 }
 
@@ -151,7 +167,7 @@ int Game::AskMenuInput()
 	cout << "MENU" << endl;
 	cout << "\n1-CONTINUER" << endl;
 	cout << "2-RECOMMENCER" << endl;
-	cout << "3-QUITTER\n" << endl;
+	cout << "3-MENU PRINCIPAL\n" << endl;
 
 	cin.clear();
 	fflush(stdin);
