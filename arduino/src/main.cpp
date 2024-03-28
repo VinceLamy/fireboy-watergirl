@@ -169,14 +169,11 @@ void loop()
 
 	Serial.begin(BAUD);
 	SendUpdate(&sensor_data);
-	delay(80);
+	delay(40);
 	ReadUpdate(&display_data);
 	Serial.end();
-	
-	sprintf(msg, "%s %d", display_data.lcd_data, display_data.seg);
 
-	//strncpy(display_data.lcd_data, "Hello, World!", lcd_char_buffer_size);
-	// display_data.seg = 32;
+	snprintf(msg, 16, "Niveau : %s", display_data.lcd_data);
 
 	if (strcmp(msg, prevMsg) != 0)
 	{

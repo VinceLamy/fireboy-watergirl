@@ -8,10 +8,10 @@
         {
             "name": "PlatformIO",
             "includePath": [
-                "c:/Users/Alex/Documents/PlatformIO/Projects/FireBoyAndWaterGirl/projet-s2-p05/include",
-                "c:/Users/Alex/Documents/PlatformIO/Projects/FireBoyAndWaterGirl/projet-s2-p05/src",
-                "c:/Users/Alex/Documents/PlatformIO/Projects/FireBoyAndWaterGirl/projet-s2-p05/.pio/libdeps/megaatmega2560/LiquidCrystal/src",
-                "c:/Users/Alex/Documents/PlatformIO/Projects/FireBoyAndWaterGirl/projet-s2-p05/.pio/libdeps/megaatmega2560/ArduinoJson/src",
+                "c:/Users/Alex/source/repos/fireboy-watergirl/arduino/include",
+                "c:/Users/Alex/source/repos/fireboy-watergirl/arduino/src",
+                "c:/Users/Alex/source/repos/fireboy-watergirl/arduino/.pio/libdeps/megaatmega2560/LiquidCrystal/src",
+                "c:/Users/Alex/source/repos/fireboy-watergirl/arduino/.pio/libdeps/megaatmega2560/ArduinoJson/src",
                 "C:/Users/Alex/.platformio/packages/framework-arduino-avr/cores/arduino",
                 "C:/Users/Alex/.platformio/packages/framework-arduino-avr/variants/mega",
                 "C:/Users/Alex/.platformio/packages/framework-arduino-avr/libraries/EEPROM/src",
@@ -24,10 +24,10 @@
             "browse": {
                 "limitSymbolsToIncludedHeaders": true,
                 "path": [
-                    "c:/Users/Alex/Documents/PlatformIO/Projects/FireBoyAndWaterGirl/projet-s2-p05/include",
-                    "c:/Users/Alex/Documents/PlatformIO/Projects/FireBoyAndWaterGirl/projet-s2-p05/src",
-                    "c:/Users/Alex/Documents/PlatformIO/Projects/FireBoyAndWaterGirl/projet-s2-p05/.pio/libdeps/megaatmega2560/LiquidCrystal/src",
-                    "c:/Users/Alex/Documents/PlatformIO/Projects/FireBoyAndWaterGirl/projet-s2-p05/.pio/libdeps/megaatmega2560/ArduinoJson/src",
+                    "c:/Users/Alex/source/repos/fireboy-watergirl/arduino/include",
+                    "c:/Users/Alex/source/repos/fireboy-watergirl/arduino/src",
+                    "c:/Users/Alex/source/repos/fireboy-watergirl/arduino/.pio/libdeps/megaatmega2560/LiquidCrystal/src",
+                    "c:/Users/Alex/source/repos/fireboy-watergirl/arduino/.pio/libdeps/megaatmega2560/ArduinoJson/src",
                     "C:/Users/Alex/.platformio/packages/framework-arduino-avr/cores/arduino",
                     "C:/Users/Alex/.platformio/packages/framework-arduino-avr/variants/mega",
                     "C:/Users/Alex/.platformio/packages/framework-arduino-avr/libraries/EEPROM/src",
