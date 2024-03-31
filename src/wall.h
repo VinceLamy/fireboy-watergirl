@@ -7,7 +7,6 @@ class Wall : public Tile
 {
 public:
 	Wall(int x, int y);
-	~Wall();
 	void Show();
 };
 

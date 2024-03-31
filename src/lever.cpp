@@ -7,11 +7,6 @@ Lever::Lever(int x, int y)
 {
 	SetPosition(x, y);
 	SetType(LEVER);
-	//SetState(OPEN); //Pour CheckGateTest
-}
-
-Lever::Lever()
-{
 }
 
 void Lever::Show()

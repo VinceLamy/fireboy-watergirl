@@ -13,7 +13,6 @@ class Gate : public Tile
 public:
 	Gate(int x, int y);
 	Gate(int x, int y, int size, Orientation o, vector<Gate*> slaveGates, vector<Controller*> controllers);
-	~Gate();
 
 	State GetState();
 	void SetState(State s);

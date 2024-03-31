@@ -19,10 +19,6 @@ Gate::Gate(int x, int y, int size, Orientation o, vector<Gate*> slaveGates, vect
 	SetType(GATE);
 }
 
-Gate::~Gate()
-{
-}
-
 State Gate::GetState()
 {
 	return _state;
@@ -79,6 +75,6 @@ void Gate::Show()
 	if (_state == CLOSED)
 		cout << '|';
 
-	if (_state == OPEN)
+	else if (_state == OPEN)
 		cout << ' ';
 }

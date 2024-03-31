@@ -10,7 +10,6 @@ class Lever : public Controller
 {
 public:
 	Lever(int x, int y);
-	Lever();
 	void Show();
 };
 

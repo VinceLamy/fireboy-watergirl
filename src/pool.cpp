@@ -10,10 +10,6 @@ Pool::Pool(int x, int y, Element e)
 	SetType(POOL);
 }
 
-Pool::~Pool()
-{
-}
-
 void Pool::SetElememt(Element e)
 {
 	_element = e;

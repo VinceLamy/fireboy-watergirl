@@ -12,7 +12,6 @@ class Pool : public Tile
 {
 public:
 	Pool(int x, int y, Element e);
-	~Pool();
 
 	void SetElememt(Element e);
 	Element GetElement();

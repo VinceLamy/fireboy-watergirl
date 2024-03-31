@@ -19,7 +19,6 @@ public:
 
 
 	virtual void Show();
-	void Clear();
 
 private:
 	Coordinate _position;

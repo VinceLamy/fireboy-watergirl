@@ -9,10 +9,6 @@ Wall::Wall(int x, int y)
 	SetType(WALL);
 }
 
-Wall::~Wall()
-{
-}
-
 void Wall::Show()
 {
 	cout << '#';

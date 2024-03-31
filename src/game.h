@@ -9,7 +9,6 @@
 #include "map.h"
 
 
-
 class Game
 {
 	Map _map;
@@ -21,7 +20,6 @@ class Game
 	bool _updated;
 
 	chrono::time_point<chrono::system_clock> _start;
-	chrono::time_point<chrono::system_clock> _end;
 	int _jumpHeight;
 
 	Communication* comm;
@@ -39,7 +37,6 @@ public:
 	Game(const char* port);
 	~Game();
 
-	void init();
 	void NewLevel();
 	void MainMenu();
 	int AskMainMenuInput();
@@ -58,9 +55,6 @@ public:
 	void SendResponse();
 
 	void Play();
-
-	void Show();
-	void ResumeMap();
 };
 
 #endif CARACTER_H

@@ -5,6 +5,7 @@ using namespace std;
 
 Tile::Tile()
 {
+
 }
 
 Tile::Tile(int x, int y)
@@ -16,9 +17,8 @@ Tile::Tile(int x, int y)
 
 Tile::~Tile()
 {
-	Clear();
-}
 
+}2
 Coordinate Tile::GetPosition()
 {
 	return _position;
@@ -44,10 +44,4 @@ void Tile::SetType(Type t)
 void Tile::Show()
 {
 	cout << ' ';
-}
-
-void Tile::Clear()
-{
-	_position.x = 0;
-	_position.y = 0;
 }
