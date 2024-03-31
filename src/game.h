@@ -1,12 +1,14 @@
 #ifndef GAME_H
 #define GAME_H
 
-#define VALEUR_TIMER 60;
+#define DISPLAY_OFF -1
 
 #include <chrono>
 #include "../Communication/communication.h"
 
 #include "map.h"
+
+
 
 
 class Game
@@ -16,22 +18,21 @@ class Game
 	bool _gameOver;
 	bool _levelFinished;
 	bool _isJumping;
-	bool _wasButton;
 	bool _updated;
+	bool _codegiven;
+
 
 	chrono::time_point<chrono::system_clock> _start;
 	int _jumpHeight;
+	int _code;
 
 	Communication* comm;
 	input_data data;
 
 	int etat_joueur = 0;
 	bool parse_status = false;
-	int compteur_depart = VALEUR_TIMER;
-	int dt = 0;
 
 	bool _manette;
-
 
 public:
 	Game(const char* port);

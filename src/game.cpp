@@ -13,13 +13,11 @@ using namespace std;
 
 Game::Game(const char* port)
 {
-	_gameOver = _isJumping = _wasButton = _levelFinished = false;
-	_jumpHeight = 0;
-
 	comm = new Communication(port, true);
 
 	_manette = comm->IsConnected();
 	cout <<  _manette << endl;
+
 	MainMenu();
 	
 	//_map = Map("./map/testCode.txt");
@@ -33,6 +31,9 @@ Game::~Game()
 void Game::NewLevel()
 {
 	_map.Clear();
+
+	_gameOver = _isJumping = _levelFinished = _codegiven = false;
+	_jumpHeight = 0;
 
 	switch (_currentLevel)
 	{
@@ -56,12 +57,14 @@ void Game::NewLevel()
 		break;
 	case 6:
 		system("CLS");
-		cout << "FELICITATION!!! MERCI D'AVOIR JOUER!!!" << endl;
+		cout << "FELICITATION!!! MERCI D'AVOIR JOUE!!!" << endl;
 		Sleep(2000);
 		_currentLevel = 1;
 		MainMenu();
 		break;
 	}
+
+
 }
 
 void Game::MainMenu()
@@ -82,6 +85,10 @@ void Game::MainMenu()
 		ChooseLevel();
 		break;
 	case 4:
+		system("CLS");
+		cout << "A la prochaine" << endl;
+		Sleep(1000);
+		system("CLS");
 		exit(1);
 		break;
 	default:
@@ -157,7 +164,6 @@ void Game::Menu()
 		comm->OpenPort();
 }
 
-
 int Game::AskMenuInput()
 {
 	int userInput;
@@ -196,34 +202,22 @@ void Game::GetInput()
 
 		if (parse_status)
 		{
-
-			//std::cout << "jump" << std::endl;
 			data.jump = comm->rcv_msg["boutons"]["3"] == 1;
 			data.interact = comm->rcv_msg["boutons"]["2"] == 1 || std::stof(std::string(comm->rcv_msg["accel"]["z"])) > 0.3;
 			data.switchChars = comm->rcv_msg["boutons"]["1"] == 1;
 			data.menu = comm->rcv_msg["boutons"]["4"] == 1;
 
-			size_t len;
 			data.moveRight = std::stof(std::string(comm->rcv_msg["joystick"]["x"])) < -0.5;
 			data.moveLeft = std::stof(std::string(comm->rcv_msg["joystick"]["x"])) > 0.5;
 		}
 	}
 	else if (!_manette)
 	{
-		data.jump = false;
-		data.interact = false;
-		data.switchChars = false;
-		data.menu = false;
-
-		data.moveRight = false;
-		data.moveLeft = false;
-
 		data.jump = GetAsyncKeyState('W') & 0x8000;
 		data.interact = GetAsyncKeyState('E') & 0x8000;
 		data.switchChars = GetAsyncKeyState('Q') & 0x8000;
 		data.menu = GetAsyncKeyState('M') & 0x8000;
 
-		size_t len;
 		data.moveRight = GetAsyncKeyState('D') & 0x8000;
 		data.moveLeft = GetAsyncKeyState('A') & 0x8000;
 
@@ -251,29 +245,16 @@ void Game::SendResponse()
 		}
 	}
 
-	int deltaT = 0;
-
-	//if (parse_status)
-	//	deltaT = comm->rcv_msg["dt"].template get<int>();
-	//else
-	//{
-	//	deltaT = 50;
-	//}
-
-	//dt += deltaT;
-
-	//if (dt >= 1000)
-	//{
-	//	--compteur_depart;
-	//	dt = 0;
-	//}
 
 
-	//if (compteur_depart <= 0)
-	//	compteur_depart = VALEUR_TIMER;
+	if (_codegiven) {
+		comm->send_msg["seg"] = _code;
+	}
 
+	else {
+		comm->send_msg["seg"] = DISPLAY_OFF;
+	}
 
-	//comm->send_msg["seg"] = compteur_depart;
 
 	comm->send_msg["lcd"] = to_string(_currentLevel);
 
@@ -287,6 +268,7 @@ void Game::MovePlayers()
 {
 	vector<vector<Tile*>> &grid = *_map.GetGrid();
 	Coordinate ActivePlayerPos = _map.GetActiveCharacter()->GetPosition();
+
 	chrono::duration<double> elapsed_time = chrono::system_clock::now() - _start;
 	Coordinate ActivePlayerOldPos;
 	
@@ -452,6 +434,7 @@ void Game::Play()
 		CheckPools();
 		if(_manette)
 			SendResponse();
+
 		if (_updated)
 		{
 			system("CLS");
@@ -461,8 +444,10 @@ void Game::Play()
 
 		if (_manette)
 			Sleep(10);
+
 		else
 			Sleep(50);
+
 	} while (!_gameOver && !_levelFinished);
 
 	system("CLS");
@@ -521,7 +506,7 @@ void Game::CheckPosition()
 			_map.Swap(ActivePlayerOldPos, ActivePlayerPos);
 			_jumpHeight--;
 		}
-
+		
 		_updated = true;
 	}
 	else if (grid[ActivePlayerPos.y + 1][ActivePlayerPos.x]->GetType() == GATE)
@@ -636,10 +621,12 @@ void Game::CheckExits()
 		}
 	}
 }
+
 void Game::Interact()
 {
 	vector<vector<Tile*>> &grid = *_map.GetGrid();
 	Coordinate ActivePlayerPos = _map.GetActiveCharacter()->GetPosition();
+
 
 	if (grid[ActivePlayerPos.y + 1][ActivePlayerPos.x]->GetType() == LEVER)
 	{
@@ -669,13 +656,14 @@ void Game::Interact()
 	{
 		CodeGiver* thisCodeGiver = static_cast<CodeGiver*>(grid[ActivePlayerPos.y + 1][ActivePlayerPos.x]);
 		int code = stoi(thisCodeGiver->ShowCode());
+
+		_code = code;
+		_codegiven = true;
+
 		if (!_manette)
 		{
 			cout << code << endl;
 			Sleep(2000);
 		}
-		if(_manette)
-			comm->send_msg["seg"] = code;
-		
 	}
 }

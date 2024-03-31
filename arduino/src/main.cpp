@@ -20,11 +20,13 @@
 
 #define lcd_char_buffer_size 34
 
+#define DISPLAY_OFF -1
+
 // #define debug_led_pin 45
 
 LiquidCrystal lcd(2,3,4,5,8,9);
 
-typedef struct
+struct sensor_data_t
 {
 	float accelX;
 	float accelY;
@@ -36,15 +38,16 @@ typedef struct
 	uint8_t buttons;
 	uint32_t dt;
 	uint32_t random;
-} sensor_data_t;
+};
 
-typedef struct
+
+struct display_data_t
 {
 	int seg;
 	
 	uint8_t playerChoice;
 	char lcd_data[lcd_char_buffer_size];
-} display_data_t;
+};
 
 sensor_data_t sensor_data;
 display_data_t display_data;
@@ -184,6 +187,13 @@ void loop()
 	digitalWrite(pin_fire_led, (display_data.playerChoice & 1) >> 0);
 	digitalWrite(pin_water_led, (display_data.playerChoice & 2) >> 1);
 
+	if (display_data.seg == DISPLAY_OFF){
+		PORTC = 0xFF;
+		
+	}
+
+	else{
+		
 	int decimal = display_data.seg / 10;
 	if (decimal > 10 || decimal < 0)
 		decimal = 0;
@@ -192,5 +202,8 @@ void loop()
  
 	PORTC = (decimal << 4 | unit);
 
-	delay(10);
+	delay(10);	
+	}
+
+
 }
