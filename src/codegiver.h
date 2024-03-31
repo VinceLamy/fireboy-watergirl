@@ -13,7 +13,6 @@ class CodeGiver : public Tile
 {
 public:
 	CodeGiver(int x, int y);
-	~CodeGiver();
 	string ShowCode();
 	void SetDigits(string digits);
 	void Show();

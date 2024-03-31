@@ -25,7 +25,6 @@ enum Orientation
 enum State
 {
 	CLOSED,
-	MOVING,
 	OPEN
 };
 

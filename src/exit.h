@@ -10,7 +10,6 @@ class Exit : public Tile
 {
 public:
 	Exit(int x, int y);
-	~Exit();
 
 	void SetState(State s);
 	State GetState();

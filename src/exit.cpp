@@ -9,10 +9,6 @@ Exit::Exit(int x, int y)
 	SetType(EXIT);
 }
 
-Exit::~Exit()
-{
-}
-
 void Exit::SetState(State s)
 {
 	_state = s;

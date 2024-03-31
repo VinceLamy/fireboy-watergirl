@@ -9,11 +9,6 @@ CodeGiver::CodeGiver(int x, int y)
 	SetType(CODEGIVER);
 }
 
-CodeGiver::~CodeGiver()
-{
-	Clear();
-}
-
 string CodeGiver::ShowCode()
 {
 	return _mydigits;

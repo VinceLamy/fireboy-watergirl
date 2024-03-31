@@ -22,7 +22,6 @@ class CodeLock : public Controller
 {
 public:
 	CodeLock(int x, int y, vector<CodeGiver*> codeGiver);
-	~CodeLock();
 	void GiveCode(CodeDigits code);
 	void VerifyCode();
 	void GenerateCode();

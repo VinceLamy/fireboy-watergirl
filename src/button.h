@@ -10,7 +10,6 @@ class Button : public Controller
 {
 public:
 	Button(int x, int y);
-	Button();
 	void Show();
 };
 

@@ -17,11 +17,6 @@ CodeLock::CodeLock(int x, int y, vector<CodeGiver*> codeGiver)
 	GiveCode(_myCode);
 }
 
-CodeLock::~CodeLock()
-{
-	Clear();
-}
-
 void CodeLock::GiveCode(CodeDigits code)
 {
 	if (_codeGiver.size() == 1)
