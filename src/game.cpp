@@ -231,21 +231,17 @@ void Game::GetInput()
 
 void Game::SendResponse()
 {
-	if (comm->rcv_msg["boutons"]["1"] == 1)
+
+	if (_map.GetActiveCharacter()->getElement() == WATER)
 	{
-		if (etat_joueur == 0)
-		{
-			comm->send_msg["joueur"] = 2;
-			etat_joueur = 1;
-		}
-		else if (etat_joueur == 1)
-		{
-			comm->send_msg["joueur"] = 1;
-			etat_joueur = 0;
-		}
+		comm->send_msg["joueur"] = 2;
 	}
 
-
+	else
+	{
+		comm->send_msg["joueur"] = 1;
+	}
+	
 
 	if (_codegiven) {
 		comm->send_msg["seg"] = _code;
@@ -432,6 +428,7 @@ void Game::Play()
 		CheckButtons();
 		CheckExits();
 		CheckPools();
+
 		if(_manette)
 			SendResponse();
 

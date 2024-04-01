@@ -20,7 +20,6 @@ public:
 	Element getElement();
 
 	void setState(bool state);
-	void setElement(Element element);
 
 	void Show();
 
