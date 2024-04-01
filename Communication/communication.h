@@ -2,25 +2,6 @@
 #include <string>
 #include <algorithm>
 
-typedef struct
-{
-	bool moveUp;
-	bool moveRight;
-	bool moveDown;
-	bool moveLeft;
-
-	bool switchChars;
-	bool interact;
-	bool jump;
-	bool menu;
-
-	bool accelUp;
-
-	int dt;
-	int random;
-
-} input_data;
-
 #define COMM_JSON
 
 #ifdef COMM_JSON
@@ -30,8 +11,6 @@ typedef struct
 
 #define BAUD 256000
 #define MSG_MAX_SIZE 143
-
-#define VALEUR_TIMER 60
 
 using json = nlohmann::json;
 

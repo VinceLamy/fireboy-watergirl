@@ -8,6 +8,24 @@
 
 #include "map.h"
 
+struct input_data
+{
+	bool moveUp;
+	bool moveRight;
+	bool moveDown;
+	bool moveLeft;
+
+	bool switchChars;
+	bool interact;
+	bool jump;
+	bool menu;
+
+	bool accelUp;
+
+	int random;
+
+};
+
 class Game
 {
 	Map _map;
