@@ -2,6 +2,7 @@
 #include <ArduinoJson.h>
 #include <LiquidCrystal.h>
 
+//Définition de la qté de bit envoyés par seconde
 #define BAUD 256000
 
 #define pin_joystick_x A0
@@ -21,8 +22,6 @@
 #define lcd_char_buffer_size 34
 
 #define DISPLAY_OFF -1
-
-// #define debug_led_pin 45
 
 LiquidCrystal lcd(2,3,4,5,8,9);
 
@@ -134,7 +133,7 @@ void setup()
 	sensor_data.joyX = 0;
 	sensor_data.joyY = 0;
 
-	display_data.seg = 0;
+	display_data.seg = DISPLAY_OFF;
 	display_data.playerChoice = 0;
 	strncpy(display_data.lcd_data, "", lcd_char_buffer_size);
 	delay(2000);
