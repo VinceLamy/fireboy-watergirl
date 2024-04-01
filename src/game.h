@@ -8,9 +8,6 @@
 
 #include "map.h"
 
-
-
-
 class Game
 {
 	Map _map;
@@ -29,7 +26,6 @@ class Game
 	Communication* comm;
 	input_data data;
 
-	int etat_joueur = 0;
 	bool parse_status = false;
 
 	bool _manette;

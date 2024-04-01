@@ -16,12 +16,6 @@ using namespace std;
 
 Map::Map(const char* nomNiveau)
 {
-	if (!nomNiveau)
-	{
-		cout << "ERROR : Vous devez fournir un nom de fichier!\n";
-		return;
-	}
-
 	_fileName = nomNiveau;
 }
 

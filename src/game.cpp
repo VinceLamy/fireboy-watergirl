@@ -30,6 +30,7 @@ Game::~Game()
 
 void Game::NewLevel()
 {
+	//Sert probablement à rien, puisque que tu redéfinis le niveau tout de suite après
 	_map.Clear();
 
 	_gameOver = _isJumping = _levelFinished = _codegiven = false;
@@ -63,8 +64,6 @@ void Game::NewLevel()
 		MainMenu();
 		break;
 	}
-
-
 }
 
 void Game::MainMenu()
@@ -335,19 +334,6 @@ void Game::MovePlayers()
 			}
 		}
 
-		if (grid[ActivePlayerPos.y + 1][ActivePlayerPos.x - 1]->GetType() == POOL)
-		{
-			Pool* pool = _map.GetPoolAt(ActivePlayerPos.x - 1, ActivePlayerPos.y + 1);
-			if (pool->GetElement() != _map.GetActiveCharacter()->getElement())
-				_gameOver = true;
-			else
-			{
-				ActivePlayerOldPos = _map.GetActiveCharacter()->GetPosition();
-				_map.GetActiveCharacter()->SetPosition(ActivePlayerPos.x - 1, ActivePlayerPos.y);
-				ActivePlayerPos = _map.GetActiveCharacter()->GetPosition();
-				_map.Swap(ActivePlayerOldPos, ActivePlayerPos);
-			}
-		}
 		else if (grid[ActivePlayerPos.y][ActivePlayerPos.x - 1]->GetType() == TILE)
 		{
 			ActivePlayerOldPos = _map.GetActiveCharacter()->GetPosition();
@@ -373,19 +359,6 @@ void Game::MovePlayers()
 			}
 		}
 
-		if (grid[ActivePlayerPos.y + 1][ActivePlayerPos.x + 1]->GetType() == POOL)
-		{
-			Pool* pool = _map.GetPoolAt(ActivePlayerPos.x + 1, ActivePlayerPos.y + 1);
-			if (pool->GetElement() != _map.GetActiveCharacter()->getElement())
-				_gameOver = true;
-			else
-			{
-				ActivePlayerOldPos = _map.GetActiveCharacter()->GetPosition();
-				_map.GetActiveCharacter()->SetPosition(ActivePlayerPos.x + 1, ActivePlayerPos.y);
-				ActivePlayerPos = _map.GetActiveCharacter()->GetPosition();
-				_map.Swap(ActivePlayerOldPos, ActivePlayerPos);
-			}
-		}
 		else if (grid[ActivePlayerPos.y][ActivePlayerPos.x + 1]->GetType() == TILE)
 		{
 			ActivePlayerOldPos = _map.GetActiveCharacter()->GetPosition();
