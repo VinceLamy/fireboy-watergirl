@@ -280,14 +280,19 @@ void Game::MovePlayers()
 	}
 
 	if (data.jump)
-	{
+	{ 
+		if (grid[ActivePlayerPos.y + 1][ActivePlayerPos.x]->GetType() == CHARACTER)
+		{
+			return;
+
+		}
 		if (_isJumping == false)
 		{
-			_start = chrono::system_clock::now();
-			_isJumping = true;
-
+				_start = chrono::system_clock::now();
+				_isJumping = true;
+			
 			if (grid[ActivePlayerPos.y - 2][ActivePlayerPos.x]->GetType() == GATE)
-			{
+				{
 				Gate* thisGate = static_cast<Gate*>(grid[ActivePlayerPos.y - 2][ActivePlayerPos.x]);
 				if (thisGate->GetState() == OPEN)
 				{
@@ -315,6 +320,7 @@ void Game::MovePlayers()
 				_jumpHeight++;
 			}
 		}
+		
 	}
 
 	if (data.moveLeft)
