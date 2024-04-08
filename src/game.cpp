@@ -8,7 +8,7 @@
 #include <stdlib.h>
 #include <string>
 
-using namespace std;
+//using namespace std;
 
 
 Game::Game(const char* port)
@@ -16,7 +16,7 @@ Game::Game(const char* port)
 	comm = new Communication(port, true);
 
 	_manette = comm->IsConnected();
-	cout <<  _manette << endl;
+	std::cout <<  _manette << std::endl;
 
 	MainMenu();
 	
@@ -58,7 +58,7 @@ void Game::NewLevel()
 		break;
 	case 6:
 		system("CLS");
-		cout << "FELICITATION!!! MERCI D'AVOIR JOUE!!!" << endl;
+		std::cout << "FELICITATION!!! MERCI D'AVOIR JOUE!!!" << std::endl;
 		Sleep(2000);
 		_currentLevel = 1;
 		MainMenu();
@@ -85,7 +85,7 @@ void Game::MainMenu()
 		break;
 	case 4:
 		system("CLS");
-		cout << "A la prochaine" << endl;
+		std::cout << "A la prochaine" << std::endl;
 		Sleep(1000);
 		system("CLS");
 		exit(1);
@@ -100,14 +100,14 @@ void Game::ChooseLevel()
 	int userInput;
 
 	system("CLS");
-	cout << "SELECTION DE NIVEAU" << endl;
-	cout << "\nENTREZ UN ENTIER DE 1 A 5" << endl;
-	cin.clear();
+	std::cout << "SELECTION DE NIVEAU" << std::endl;
+	std::cout << "\nENTREZ UN ENTIER DE 1 A 5" << std::endl;
+	std::cin.clear();
 	fflush(stdin);
 
 	do
 	{
-		cin >> userInput;
+		std::cin >> userInput;
 
 	} while (userInput < 1 || userInput > 5);
 		
@@ -121,17 +121,17 @@ int Game::AskMainMenuInput()
 	int userInput = 0;
 
 	system("CLS");
-	cout << "MENU PRINCIPAL" << endl;
-	cout << "\n1-TUTORIEL" << endl;
-	cout << "2-NOUVELLE PARTIE" << endl;
-	cout << "3-CHOISIR NIVEAU" << endl;
-	cout << "4-QUITTER\n" << endl;
-	cin.clear();
+	std::cout << "MENU PRINCIPAL" << std::endl;
+	std::cout << "\n1-TUTORIEL" << std::endl;
+	std::cout << "2-NOUVELLE PARTIE" << std::endl;
+	std::cout << "3-CHOISIR NIVEAU" << std::endl;
+	std::cout << "4-QUITTER\n" << std::endl;
+	std::cin.clear();
 	fflush(stdin);
 
 	do
 	{
-		cin >> userInput;
+		std::cin >> userInput;
 	} while (userInput < 1 || userInput > 4);
 
 	return userInput;
@@ -169,17 +169,17 @@ int Game::AskMenuInput()
 
 	system("CLS");
 
-	cout << "MENU" << endl;
-	cout << "\n1-CONTINUER" << endl;
-	cout << "2-RECOMMENCER" << endl;
-	cout << "3-MENU PRINCIPAL\n" << endl;
+	std::cout << "MENU" << std::endl;
+	std::cout << "\n1-CONTINUER" << std::endl;
+	std::cout << "2-RECOMMENCER" << std::endl;
+	std::cout << "3-MENU PRINCIPAL\n" << std::endl;
 
-	cin.clear();
+	std::cin.clear();
 	fflush(stdin);
 
 	do
 	{
-		cin >> userInput;
+		std::cin >> userInput;
 	} while (userInput < 1 || userInput > 3);
 
 	return userInput;
@@ -251,7 +251,7 @@ void Game::SendResponse()
 	}
 
 
-	comm->send_msg["lcd"] = to_string(_currentLevel);
+	comm->send_msg["lcd"] = std::to_string(_currentLevel);
 
 	Sleep(10);
 
@@ -261,13 +261,13 @@ void Game::SendResponse()
 
 void Game::MovePlayers()
 {
-	vector<vector<Tile*>> &grid = *_map.GetGrid();
+	std::vector<std::vector<Tile*>> &grid = *_map.GetGrid();
 	Coordinate ActivePlayerPos = _map.GetActiveCharacter()->GetPosition();
 
-	chrono::duration<double> elapsed_time = chrono::system_clock::now() - _start;
+	std::chrono::duration<double> elapsed_time = std::chrono::system_clock::now() - _start;
 	Coordinate ActivePlayerOldPos;
 	
-	if (_isJumping && elapsed_time < chrono::milliseconds{ 750 } && _jumpHeight < 3)
+	if (_isJumping && elapsed_time < std::chrono::milliseconds{ 750 } && _jumpHeight < 3)
 	{
 		if (grid[ActivePlayerPos.y - 1][ActivePlayerPos.x]->GetType() == TILE)
 		{
@@ -288,7 +288,7 @@ void Game::MovePlayers()
 		}
 		if (_isJumping == false)
 		{
-				_start = chrono::system_clock::now();
+				_start = std::chrono::system_clock::now();
 				_isJumping = true;
 			
 			if (grid[ActivePlayerPos.y - 2][ActivePlayerPos.x]->GetType() == GATE)
@@ -429,7 +429,7 @@ void Game::Play()
 	system("CLS");
 	if (_gameOver)
   {
-		cout << "Gameover\n";
+		std::cout << "Gameover\n";
 		Sleep(2000);
 		NewLevel();
 		_gameOver = false;
@@ -453,14 +453,14 @@ void Game::Play()
 
 void Game::CheckPosition()
 {
-	vector<vector<Tile*>>& grid = *_map.GetGrid();
+	std::vector<std::vector<Tile*>>& grid = *_map.GetGrid();
 	Coordinate ActivePlayerPos = _map.GetActiveCharacter()->GetPosition();
-	chrono::duration<double> elapsed_time = chrono::system_clock::now() - _start;
+	std::chrono::duration<double> elapsed_time = std::chrono::system_clock::now() - _start;
 	Coordinate ActivePlayerOldPos;
 
 	if (grid[ActivePlayerPos.y + 1][ActivePlayerPos.x]->GetType() == TILE)
 	{
-		if (_isJumping && elapsed_time > chrono::milliseconds{ 750 })
+		if (_isJumping && elapsed_time > std::chrono::milliseconds{ 750 })
 		{
 			ActivePlayerOldPos = _map.GetActiveCharacter()->GetPosition();
 			_map.GetActiveCharacter()->SetPosition(ActivePlayerPos.x, ActivePlayerPos.y + 1);
@@ -490,7 +490,7 @@ void Game::CheckPosition()
 		Gate* thisGate = static_cast<Gate*>(grid[ActivePlayerPos.y + 1][ActivePlayerPos.x]);
 		if (thisGate->GetState() == OPEN)
 		{
-			if (_isJumping && elapsed_time > chrono::milliseconds{ 750 })
+			if (_isJumping && elapsed_time > std::chrono::milliseconds{ 750 })
 			{
 				ActivePlayerOldPos = _map.GetActiveCharacter()->GetPosition();
 				_map.GetActiveCharacter()->SetPosition(ActivePlayerPos.x, ActivePlayerPos.y + 2);
@@ -530,7 +530,7 @@ void Game::CheckGates()
 
 void Game::CheckButtons()
 {
-	vector<vector<Tile*>> &grid = *_map.GetGrid();
+	std::vector<std::vector<Tile*>> &grid = *_map.GetGrid();
 	Coordinate coord;
 	for (int i = 0; i < _map.GetButton().size(); i++)
 	{
@@ -568,7 +568,7 @@ void Game::CheckPools(){
 
 void Game::CheckExits()
 {
-	vector<vector<Tile*>> &grid = *_map.GetGrid();
+	std::vector<std::vector<Tile*>> &grid = *_map.GetGrid();
 	Coordinate coord;
 	for (int i = 0; i < _map.GetExit().size(); i++)
 	{
@@ -600,7 +600,7 @@ void Game::CheckExits()
 
 void Game::Interact()
 {
-	vector<vector<Tile*>> &grid = *_map.GetGrid();
+	std::vector<std::vector<Tile*>> &grid = *_map.GetGrid();
 	Coordinate ActivePlayerPos = _map.GetActiveCharacter()->GetPosition();
 
 
@@ -638,7 +638,7 @@ void Game::Interact()
 
 		if (!_manette)
 		{
-			cout << code << endl;
+			std::cout << code << std::endl;
 			Sleep(2000);
 		}
 	}

@@ -1,7 +1,7 @@
 #include "exit.h"
 #include <iostream>
 
-using namespace	std;
+//using namespace	std;
 
 Exit::Exit(int x, int y)
 {
@@ -21,5 +21,5 @@ State Exit::GetState()
 
 void Exit::Show()
 {
-	cout << MAGENTA << 'P' << RESET;
+	std::cout << MAGENTA << 'P' << RESET;
 }

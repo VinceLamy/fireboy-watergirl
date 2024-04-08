@@ -7,19 +7,19 @@
 #include "tile.h"
 #include <iostream>
 
-using namespace std;
+//using namespace std;
 
 class CodeGiver : public Tile
 {
 public:
 	CodeGiver(int x, int y);
-	string ShowCode();
-	void SetDigits(string digits);
+	std::string ShowCode();
+	void SetDigits(std::string digits);
 	void Show();
 	void Clear();
 
 private:
-	string _mydigits;
+	std::string _mydigits;
 };
 
 #endif CODEGIVER_H

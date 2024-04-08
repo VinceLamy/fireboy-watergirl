@@ -1,7 +1,7 @@
 #include "wall.h"
 #include <iostream>
 
-using namespace	std;
+//using namespace	std;
 
 Wall::Wall(int x, int y)
 {
@@ -11,5 +11,5 @@ Wall::Wall(int x, int y)
 
 void Wall::Show()
 {
-	cout << '#';
+	std::cout << '#';
 }

@@ -1,7 +1,7 @@
 #include "codegiver.h"
 #include "Windows.h"
 
-using namespace std;
+//using namespace std;
 
 CodeGiver::CodeGiver(int x, int y)
 {
@@ -9,19 +9,19 @@ CodeGiver::CodeGiver(int x, int y)
 	SetType(CODEGIVER);
 }
 
-string CodeGiver::ShowCode()
+std::string CodeGiver::ShowCode()
 {
 	return _mydigits;
 }
 
-void CodeGiver::SetDigits(string digits)
+void CodeGiver::SetDigits(std::string digits)
 {
 	_mydigits = digits;
 }
 
 void CodeGiver::Show()
 {
-	cout << BRIGHTYELLOW << '@' << RESET;
+	std::cout << BRIGHTYELLOW << '@' << RESET;
 }
 
 void CodeGiver::Clear()

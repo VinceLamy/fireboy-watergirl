@@ -1,7 +1,7 @@
 #include "character.h"
 #include <iostream>
 
-using namespace std;
+//using namespace std;
 
 Character::Character(Element e, int x, int y, bool state)
 {
@@ -47,10 +47,10 @@ void Character::Show()
 	if (_element == WATER)
 	{
 		
-		cout << CYAN << 'E' << RESET;
+		std::cout << CYAN << 'E' << RESET;
 	}
 	else if (_element == FIRE)
 	{
-		cout << RED << 'F' << RESET;
+		std::cout << RED << 'F' << RESET;
 	}
 }

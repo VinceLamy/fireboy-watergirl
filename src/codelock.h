@@ -9,7 +9,7 @@
 #define RESET	"\033[0m"
 #define BRIGHTYELLOW	"\033[93m"
 
-using namespace std;
+//using namespace std;
 
 struct CodeDigits {
 	int first;
@@ -21,7 +21,7 @@ struct CodeDigits {
 class CodeLock : public Controller
 {
 public:
-	CodeLock(int x, int y, vector<CodeGiver*> codeGiver);
+	CodeLock(int x, int y, std::vector<CodeGiver*> codeGiver);
 	void GiveCode(CodeDigits code);
 	void VerifyCode();
 	void GenerateCode();
@@ -30,7 +30,7 @@ public:
 
 private:
 	CodeDigits _myCode;
-	vector<CodeGiver*> _codeGiver;
+	std::vector<CodeGiver*> _codeGiver;
 };
 
 #endif CODELOCK_H

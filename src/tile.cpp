@@ -1,7 +1,7 @@
 #include "tile.h"
 #include <iostream>
 
-using namespace std;
+//using namespace std;
 
 Tile::Tile()
 {
@@ -43,5 +43,5 @@ void Tile::SetType(Type t)
 
 void Tile::Show()
 {
-	cout << ' ';
+	std::cout << ' ';
 }

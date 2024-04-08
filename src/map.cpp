@@ -24,7 +24,7 @@ Map::~Map()
 	Clear();
 }
 
-vector<vector<Tile*>>* Map::GetGrid()
+std::vector<vector<Tile*>>* Map::GetGrid()
 {
 	return &_grid;
 }

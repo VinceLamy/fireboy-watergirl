@@ -6,13 +6,13 @@
 #include "lever.h"
 #include <vector>
 
-using namespace std;
+//using namespace std;
 
 class Gate : public Tile
 {
 public:
 	Gate(int x, int y);
-	Gate(int x, int y, int size, Orientation o, vector<Gate*> slaveGates, vector<Controller*> controllers);
+	Gate(int x, int y, int size, Orientation o, std::vector<Gate*> slaveGates, std::vector<Controller*> controllers);
 
 	State GetState();
 	void SetState(State s);
@@ -24,8 +24,8 @@ public:
 private:
 	int _size;
 	Orientation _orientation;
-	vector<Gate*> _slaveGates;
-	vector<Controller*> _controllers;
+	std::vector<Gate*> _slaveGates;
+	std::vector<Controller*> _controllers;
 	State _state = CLOSED;
 };
 

@@ -1,7 +1,7 @@
 #include "pool.h"
 #include <iostream>
 
-using namespace std;
+//using namespace std;
 
 Pool::Pool(int x, int y, Element e)
 {
@@ -24,14 +24,14 @@ void Pool::Show()
 {
 	if (_element == WATER)
 	{
-		cout << CYAN << '~' << RESET;
+		std::cout << CYAN << '~' << RESET;
 	}
 	else if (_element == FIRE)
 	{
-		cout << RED << '~' << RESET;
+		std::cout << RED << '~' << RESET;
 	}
 	else if (_element == GOO)
 	{
-		cout << GREEN << '~' << RESET;
+		std::cout << GREEN << '~' << RESET;
 	}
 }

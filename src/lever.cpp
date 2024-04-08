@@ -1,7 +1,7 @@
 #include "lever.h"
 #include <iostream>
 
-using namespace	std;
+//using namespace	std;
 
 Lever::Lever(int x, int y)
 {
@@ -12,7 +12,7 @@ Lever::Lever(int x, int y)
 void Lever::Show()
 {
 	if (GetState() == CLOSED)
-		cout << YELLOW << 'L' << RESET;
+		std::cout << YELLOW << 'L' << RESET;
 	if (GetState() == OPEN)
-		cout << YELLOW << '<' << RESET;
+		std::cout << YELLOW << '<' << RESET;
 }

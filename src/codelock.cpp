@@ -6,9 +6,9 @@
 #include <conio.h>
 #include<limits>
 
-using namespace std;
+//using namespace std;
 
-CodeLock::CodeLock(int x, int y, vector<CodeGiver*> codeGiver)
+CodeLock::CodeLock(int x, int y, std::vector<CodeGiver*> codeGiver)
 {
 	SetPosition(x, y);
 	SetType(CODELOCK);
@@ -21,45 +21,45 @@ void CodeLock::GiveCode(CodeDigits code)
 {
 	if (_codeGiver.size() == 1)
 	{
-		_codeGiver[0]->SetDigits(to_string(_myCode.first) + to_string(_myCode.second) + to_string(_myCode.third) + to_string(_myCode.fourth));
+		_codeGiver[0]->SetDigits(std::to_string(_myCode.first) + std::to_string(_myCode.second) + std::to_string(_myCode.third) + std::to_string(_myCode.fourth));
 	}
 	else if (_codeGiver.size() == 2)
 	{
-		_codeGiver[0]->SetDigits(to_string(_myCode.first) + to_string(_myCode.second));
-		_codeGiver[1]->SetDigits(to_string(_myCode.third) + to_string(_myCode.fourth));
+		_codeGiver[0]->SetDigits(std::to_string(_myCode.first) + std::to_string(_myCode.second));
+		_codeGiver[1]->SetDigits(std::to_string(_myCode.third) + std::to_string(_myCode.fourth));
 	}
 	else if (_codeGiver.size() == 4)
 	{
-		_codeGiver[0]->SetDigits(to_string(_myCode.first));
-		_codeGiver[1]->SetDigits(to_string(_myCode.second));
-		_codeGiver[2]->SetDigits(to_string(_myCode.third));
-		_codeGiver[3]->SetDigits(to_string(_myCode.fourth));
+		_codeGiver[0]->SetDigits(std::to_string(_myCode.first));
+		_codeGiver[1]->SetDigits(std::to_string(_myCode.second));
+		_codeGiver[2]->SetDigits(std::to_string(_myCode.third));
+		_codeGiver[3]->SetDigits(std::to_string(_myCode.fourth));
 	}
 }
 
 void CodeLock::VerifyCode()
 {
-	string playerCode;
-	cout << "Enter the 4 digits code" << endl;
-	cin.clear();
+	std::string playerCode;
+	std::cout << "Enter the 4 digits code" << std::endl;
+	std::cin.clear();
 	fflush(stdin);
-	cin >> playerCode;
+	std::cin >> playerCode;
 
 
-	string codeToCheck = to_string(_myCode.first) +
-		to_string(_myCode.second) +
-		to_string(_myCode.third) +
-		to_string(_myCode.fourth);
+	std::string codeToCheck = std::to_string(_myCode.first) +
+		std::to_string(_myCode.second) +
+		std::to_string(_myCode.third) +
+		std::to_string(_myCode.fourth);
 
 	if (playerCode == codeToCheck)
 	{
-		cout << "\nCorrect" << endl;
+		std::cout << "\nCorrect" << std::endl;
 		Sleep(2000);
 		SetState(OPEN);
 	}
 	else
 	{
-		cout << "\nIncorrect" << endl;
+		std::cout << "\nIncorrect" << std::endl;
 		Sleep(2000);
 	}
 }
@@ -75,7 +75,7 @@ void CodeLock::GenerateCode()
 
 void CodeLock::Show()
 {
-	cout << BRIGHTYELLOW << '$' << RESET;
+	std::cout << BRIGHTYELLOW << '$' << RESET;
 }
 
 void CodeLock::Clear()

@@ -37,7 +37,7 @@ class Game
 	bool _codegiven;
 
 
-	chrono::time_point<chrono::system_clock> _start;
+	std::chrono::time_point<std::chrono::system_clock> _start;
 	int _jumpHeight;
 	int _code;
 

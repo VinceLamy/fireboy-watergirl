@@ -1,7 +1,7 @@
 #include "gate.h"
 #include <iostream>
 
-using namespace	std;
+//using namespace	std;
 
 Gate::Gate(int x, int y)
 {
@@ -9,7 +9,7 @@ Gate::Gate(int x, int y)
 	SetType(GATE);
 }
 
-Gate::Gate(int x, int y, int size, Orientation o, vector<Gate*> slaveGates, vector<Controller*> controllers)
+Gate::Gate(int x, int y, int size, Orientation o, std::vector<Gate*> slaveGates, std::vector<Controller*> controllers)
 {
 	SetPosition(x, y);
 	_size = size;
@@ -73,8 +73,8 @@ void Gate::CheckControllers()
 void Gate::Show()
 {
 	if (_state == CLOSED)
-		cout << '|';
+		std::cout << '|';
 
 	else if (_state == OPEN)
-		cout << ' ';
+		std::cout << ' ';
 }

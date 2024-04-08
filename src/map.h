@@ -12,7 +12,7 @@
 #include "codelock.h"
 #include "codegiver.h"
 
-using namespace std;
+//using namespace std;
 
 class Map
 {
@@ -23,7 +23,7 @@ public:
 	void ReadMap();
 	void ShowMap();
 
-	vector<vector<Tile*>>* GetGrid();
+	std::vector<std::vector<Tile*>>* GetGrid();
 	
 	void AddTile(int x, int y);
 	void AddCharacter(int x, int y, Element e);
@@ -33,14 +33,14 @@ public:
 	void AddGate(int x, int y, int size, Orientation o);
 	void AddLever(int x, int y);
 	void AddButton(int x, int y);
-	void AddCodeLock(int x, int y, vector<CodeGiver*>);
+	void AddCodeLock(int x, int y, std::vector<CodeGiver*>);
 	void AddCodeGiver(int x, int y);
 
 	void Clear();
 
-	vector<Gate*> GetGates();
-	vector<Button*> GetButton();
-	vector<Exit*> GetExit();
+	std::vector<Gate*> GetGates();
+	std::vector<Button*> GetButton();
+	std::vector<Exit*> GetExit();
 	Character* GetActiveCharacter();
 	void SwitchCharacter();
 
@@ -50,15 +50,15 @@ public:
 
 private:
 	const char* _fileName;
-	vector<vector<Tile*>> _grid;
-	vector<Controller*> _lastControllers;
-	vector<CodeGiver*> _lastCodeGiver;
-	vector<Button*> _button;
+	std::vector<std::vector<Tile*>> _grid;
+	std::vector<Controller*> _lastControllers;
+	std::vector<CodeGiver*> _lastCodeGiver;
+	std::vector<Button*> _button;
 	Character* _waterGirl;
 	Character* _fireBoy;
-	vector<Pool*> _pool;
-	vector<Gate*> _gate;
-	vector<Exit*> _exit;
+	std::vector<Pool*> _pool;
+	std::vector<Gate*> _gate;
+	std::vector<Exit*> _exit;
 
 };
 

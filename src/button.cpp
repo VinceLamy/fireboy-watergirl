@@ -1,7 +1,7 @@
 #include "button.h"
 #include <iostream>
 
-using namespace	std;
+//using namespace	std;
 
 Button::Button(int x, int y)
 {
@@ -11,5 +11,5 @@ Button::Button(int x, int y)
 
 void Button::Show()
 {
-	cout << YELLOW << 'B' << RESET;
+	std::cout << YELLOW << 'B' << RESET;
 }
