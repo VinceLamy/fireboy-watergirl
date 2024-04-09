@@ -19,8 +19,11 @@ Game::Game(const char* port, QObject* parent) : QObject(parent)
 	std::cout <<  _manette << std::endl;
 
 	_mainMenu = new MainMenu();
+	_levelSelection = new LevelSelection();
 
 	connect(_mainMenu, &MainMenu::levelSelected, this, &Game::LoadLevel);
+	connect(_mainMenu, &MainMenu::levelSelection, this, &Game::ChooseLevel);
+	connect(_levelSelection, &LevelSelection::levelSelected, this, &Game::LoadLevel);
 	
 	ShowMainMenu();
 	
@@ -109,23 +112,25 @@ void Game::ShowMainMenu()
 
 void Game::ChooseLevel()
 {
-	int userInput;
+	//int userInput;
 
-	system("CLS");
-	std::cout << "SELECTION DE NIVEAU" << std::endl;
-	std::cout << "\nENTREZ UN ENTIER DE 1 A 5" << std::endl;
-	std::cin.clear();
-	fflush(stdin);
+	//system("CLS");
+	//std::cout << "SELECTION DE NIVEAU" << std::endl;
+	//std::cout << "\nENTREZ UN ENTIER DE 1 A 5" << std::endl;
+	//std::cin.clear();
+	//fflush(stdin);
 
-	do
-	{
-		std::cin >> userInput;
+	//do
+	//{
+	//	std::cin >> userInput;
 
-	} while (userInput < 1 || userInput > 5);
-		
-	_currentLevel = userInput;
+	//} while (userInput < 1 || userInput > 5);
+	//	
+	//_currentLevel = userInput;
 	//NewLevel();
-	Play();
+	//Play();
+
+	_mainWindow->setCentralWidget(_levelSelection);
 }
 
 int Game::AskMainMenuInput()

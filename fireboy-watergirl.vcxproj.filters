@@ -30,7 +30,7 @@
     <ClCompile Include="..\fireboy-watergirl\src\game.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\fireboy-watergirl\src\inputwindow.cpp">
+    <ClCompile Include="..\fireboy-watergirl\src\levelselection.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\fireboy-watergirl\src\main.cpp">
@@ -89,7 +89,7 @@
     <ClInclude Include="..\fireboy-watergirl\src\game.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <CustomBuild Include="..\fireboy-watergirl\src\inputwindow.h">
+    <CustomBuild Include="..\fireboy-watergirl\src\levelselection.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
     <CustomBuild Include="..\fireboy-watergirl\src\mainmenu.h">
@@ -145,10 +145,10 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="debug\moc_inputwindow.cpp">
+    <ClCompile Include="debug\moc_levelselection.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
-    <ClCompile Include="release\moc_inputwindow.cpp">
+    <ClCompile Include="release\moc_levelselection.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
     <ClCompile Include="debug\moc_mainmenu.cpp">

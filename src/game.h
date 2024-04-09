@@ -8,6 +8,7 @@
 
 #include "map.h"
 #include "mainmenu.h"
+#include "levelselection.h"
 #include <QMainWindow>
 
 struct input_data
@@ -52,6 +53,7 @@ class Game : public QObject
 
 	QMainWindow* _mainWindow;
 	MainMenu* _mainMenu;
+	LevelSelection* _levelSelection;
 
 public slots:
 	void LoadLevel(int level);

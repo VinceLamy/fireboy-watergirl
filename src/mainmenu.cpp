@@ -1,8 +1,5 @@
 #include "mainmenu.h"
 
-#define BUTTON_H_SIZE 300
-#define BUTTON_V_SIZE 50
-
 MainMenu::MainMenu(QWidget* parent) : QWidget(parent)
 {
 	InitMainMenu();
@@ -64,7 +61,7 @@ void MainMenu::Tutorial()
 
 void MainMenu::ChooseLevel()
 {
-
+	emit levelSelection();
 }
 
 void MainMenu::Quit()
@@ -76,3 +73,4 @@ int MainMenu::GetCurrentLevel()
 {
 	return _currentLevel;
 }
+

@@ -19,6 +19,7 @@ public:
 
 signals:
 	void levelSelected(int level);
+	void levelSelection();
 
 private:
 	QVBoxLayout* _layout;
