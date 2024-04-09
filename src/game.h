@@ -31,6 +31,8 @@ struct input_data
 
 class Game : public QObject
 {
+	Q_OBJECT
+
 	Map _map;
 	int _currentLevel = 1;
 	bool _gameOver;
@@ -57,12 +59,12 @@ class Game : public QObject
 
 public slots:
 	void LoadLevel(int level);
+	void ShowMainMenu();
 
 public:
 	Game(const char* port, QObject* parent = nullptr);
 	~Game();
 
-	void ShowMainMenu();
 	int AskMainMenuInput();
 	void ChooseLevel();
 	void Menu();

@@ -14,6 +14,7 @@ public:
 
 signals:
 	void levelSelected(int level);
+	void returnToMainMenu();
 
 private:
 	QVBoxLayout* _layout;
@@ -22,6 +23,7 @@ private:
 	MenuButton* _level3;
 	MenuButton* _level4;
 	MenuButton* _level5;
+	MenuButton* _back;
 	int _currentLevel;
 	void initUi();
 	void Level1();
@@ -29,5 +31,6 @@ private:
 	void Level3();
 	void Level4();
 	void Level5();
+	void Back();
 };
 #endif LEVELSELECTION_H

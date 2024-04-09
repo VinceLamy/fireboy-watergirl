@@ -15,7 +15,6 @@ class MainMenu : public QWidget
 public:
 	MainMenu(QWidget* parent = nullptr);
 	~MainMenu();
-	int GetCurrentLevel();
 
 signals:
 	void levelSelected(int level);

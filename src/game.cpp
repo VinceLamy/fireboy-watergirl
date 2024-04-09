@@ -18,14 +18,20 @@ Game::Game(const char* port, QObject* parent) : QObject(parent)
 	_manette = comm->IsConnected();
 	std::cout <<  _manette << std::endl;
 
+	_mainWindow = new QMainWindow();
 	_mainMenu = new MainMenu();
 	_levelSelection = new LevelSelection();
 
 	connect(_mainMenu, &MainMenu::levelSelected, this, &Game::LoadLevel);
 	connect(_mainMenu, &MainMenu::levelSelection, this, &Game::ChooseLevel);
 	connect(_levelSelection, &LevelSelection::levelSelected, this, &Game::LoadLevel);
+	connect(_levelSelection, &LevelSelection::returnToMainMenu, this, &Game::ShowMainMenu);
 	
-	ShowMainMenu();
+	
+	_mainWindow->resize(800, 600);
+	_mainWindow->setStyleSheet("QMainWindow {" "background-image: url(./sprite/menu/fractal-1722991_1280.png);" "}");
+	_mainWindow->setCentralWidget(_mainMenu);
+	_mainWindow->show();
 	
 	//_map = Map("./map/testCode.txt");
 }
@@ -103,11 +109,10 @@ void Game::ShowMainMenu()
 //		break;
 //	}
 
-	_mainWindow = new QMainWindow();
-	_mainWindow->resize(800, 600);
-	_mainWindow->setStyleSheet("QMainWindow {" "background-image: url(./sprite/menu/fractal-1722991_1280.png);" "}");
+	_mainMenu = new MainMenu();
+	connect(_mainMenu, &MainMenu::levelSelected, this, &Game::LoadLevel);
+	connect(_mainMenu, &MainMenu::levelSelection, this, &Game::ChooseLevel);
 	_mainWindow->setCentralWidget(_mainMenu);
-	_mainWindow->show();
 }
 
 void Game::ChooseLevel()
@@ -130,6 +135,11 @@ void Game::ChooseLevel()
 	//NewLevel();
 	//Play();
 
+	
+	
+	_levelSelection = new LevelSelection();
+	connect(_levelSelection, &LevelSelection::levelSelected, this, &Game::LoadLevel);
+	connect(_levelSelection, &LevelSelection::returnToMainMenu, this, &Game::ShowMainMenu);
 	_mainWindow->setCentralWidget(_levelSelection);
 }
 

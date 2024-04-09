@@ -69,8 +69,4 @@ void MainMenu::Quit()
 	QApplication::quit();
 }
 
-int MainMenu::GetCurrentLevel()
-{
-	return _currentLevel;
-}
 

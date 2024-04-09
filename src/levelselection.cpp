@@ -39,6 +39,11 @@ void LevelSelection::initUi()
 	connect(_level5, &QPushButton::released, this, &LevelSelection::Level5);
 	_layout->addWidget(_level5);
 	_layout->addStretch();
+
+	_back = new MenuButton("Back");
+	connect(_back, &QPushButton::released, this, &LevelSelection::Back);
+	_layout->addWidget(_back);
+	_layout->addStretch();
 }
 
 void LevelSelection::Level1()
@@ -69,4 +74,9 @@ void LevelSelection::Level5()
 {
 	int level = 5;
 	emit levelSelected(level);
+}
+
+void LevelSelection::Back()
+{
+	emit returnToMainMenu();
 }
