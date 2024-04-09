@@ -5,7 +5,7 @@
 
 MenuButton::MenuButton(QString s, QPushButton* parent) : QPushButton(parent)
 {
-	QFont buttonFont("Arial", 12, QFont::Bold);
+	QFont buttonFont("Arial", 20, QFont::Bold);
 
 	setText(s);
 	setFont(buttonFont);

@@ -15,13 +15,13 @@ void MainMenu::InitMainMenu()
 
 	_layout = new QVBoxLayout(this);
 	_littleLayout = new QVBoxLayout();
-	//_layout->setAlignment(Qt::AlignHCenter);
 	_littleLayout->setAlignment(Qt::AlignCenter);
 
 	_title = new QLabel("The Best Game");
 	_title->setAlignment(Qt::AlignHCenter);
 	_title->setFont(titleFont);
 	_title->setStyleSheet("color: #FFFFFF");
+	_layout->addSpacing(75);
 	_layout->addWidget(_title);
 	_layout->addLayout(_littleLayout);
 	_littleLayout->addStretch();
