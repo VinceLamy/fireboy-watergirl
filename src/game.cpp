@@ -28,8 +28,8 @@ Game::Game(const char* port, QObject* parent) : QObject(parent)
 	connect(_levelSelection, &LevelSelection::returnToMainMenu, this, &Game::ShowMainMenu);
 	
 	
-	_mainWindow->resize(800, 600);
-	_mainWindow->setStyleSheet("QMainWindow {" "background-image: url(./sprite/menu/fractal-1722991_1280.png);" "}");
+	_mainWindow->resize(1280, 720);
+	_mainWindow->setStyleSheet("QMainWindow {" "background-image: url(./sprite/menu/fractal-1722991_1920.jpg);" "}");
 	_mainWindow->setCentralWidget(_mainMenu);
 	_mainWindow->show();
 	

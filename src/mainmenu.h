@@ -22,6 +22,7 @@ signals:
 
 private:
 	QVBoxLayout* _layout;
+	QVBoxLayout* _littleLayout;
 	QLabel* _title;
 	MenuButton* _newGame;
 	MenuButton* _tutorial;

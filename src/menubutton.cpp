@@ -1,5 +1,5 @@
 #include "menubutton.h"
-#define BUTTON_H_SIZE 300
+#define BUTTON_H_SIZE 400
 #define BUTTON_V_SIZE 50
 
 
