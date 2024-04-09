@@ -11,14 +11,18 @@
 //using namespace std;
 
 
-Game::Game(const char* port)
+Game::Game(const char* port, QObject* parent) : QObject(parent)
 {
 	comm = new Communication(port, true);
 
 	_manette = comm->IsConnected();
 	std::cout <<  _manette << std::endl;
 
-	MainMenu();
+	_mainMenu = new MainMenu();
+
+	connect(_mainMenu, &MainMenu::levelSelected, this, &Game::LoadLevel);
+	
+	ShowMainMenu();
 	
 	//_map = Map("./map/testCode.txt");
 }
@@ -28,9 +32,10 @@ Game::~Game()
 	delete comm;
 }
 
-void Game::NewLevel()
+void Game::LoadLevel(int level)
 {
 	//Sert probablement à rien, puisque que tu redéfinis le niveau tout de suite après
+	_currentLevel = level;
 	_map.Clear();
 
 	_gameOver = _isJumping = _levelFinished = _codegiven = false;
@@ -61,38 +66,45 @@ void Game::NewLevel()
 		std::cout << "FELICITATION!!! MERCI D'AVOIR JOUE!!!" << std::endl;
 		Sleep(2000);
 		_currentLevel = 1;
-		MainMenu();
+		//MainMenu();
 		break;
 	}
+	Play();
 }
 
-void Game::MainMenu()
+void Game::ShowMainMenu()
 {
-	int userInput = AskMainMenuInput();
+//	int userInput = AskMainMenuInput();
+//
+//	switch (userInput)
+//	{
+//	case 1:
+//		_currentLevel = 0;
+//		NewLevel();
+//		Play();
+//	case 2:
+//		NewLevel();
+//		Play();
+//		break;
+//	case 3:
+//		ChooseLevel();
+//		break;
+//	case 4:
+//		system("CLS");
+//		std::cout << "A la prochaine" << std::endl;
+//		Sleep(1000);
+//		system("CLS");
+//		exit(1);
+//		break;
+//	default:
+//		break;
+//	}
 
-	switch (userInput)
-	{
-	case 1:
-		_currentLevel = 0;
-		NewLevel();
-		Play();
-	case 2:
-		NewLevel();
-		Play();
-		break;
-	case 3:
-		ChooseLevel();
-		break;
-	case 4:
-		system("CLS");
-		std::cout << "A la prochaine" << std::endl;
-		Sleep(1000);
-		system("CLS");
-		exit(1);
-		break;
-	default:
-		break;
-	}
+	_mainWindow = new QMainWindow();
+	_mainWindow->resize(800, 600);
+	_mainWindow->setStyleSheet("QMainWindow {" "background-image: url(./sprite/menu/fractal-1722991_1280.png);" "}");
+	_mainWindow->setCentralWidget(_mainMenu);
+	_mainWindow->show();
 }
 
 void Game::ChooseLevel()
@@ -112,7 +124,7 @@ void Game::ChooseLevel()
 	} while (userInput < 1 || userInput > 5);
 		
 	_currentLevel = userInput;
-	NewLevel();
+	//NewLevel();
 	Play();
 }
 
@@ -147,13 +159,13 @@ void Game::Menu()
 		_map.ShowMap();
 		break;
 	case 2:
-		NewLevel();
+		//NewLevel();
 		Play();
 		break;
 	case 3:
 		_currentLevel = 1;
 		_map.Clear();
-		MainMenu();
+		//MainMenu();
 		break;
 	default:
 		break;
@@ -431,7 +443,7 @@ void Game::Play()
   {
 		std::cout << "Gameover\n";
 		Sleep(2000);
-		NewLevel();
+		//NewLevel();
 		_gameOver = false;
 		Play();
 	}
@@ -439,12 +451,12 @@ void Game::Play()
 	{
 		_map.Clear();
 		_currentLevel = 1;
-		MainMenu();
+		//MainMenu();
 	}
 	else if (_levelFinished)
 	{
 		_currentLevel++;
-		NewLevel();
+		//NewLevel();
 		_levelFinished = false;
 		Play();
 	}

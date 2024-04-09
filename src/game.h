@@ -7,6 +7,8 @@
 #include "../Communication/communication.h"
 
 #include "map.h"
+#include "mainmenu.h"
+#include <QMainWindow>
 
 struct input_data
 {
@@ -26,7 +28,7 @@ struct input_data
 
 };
 
-class Game
+class Game : public QObject
 {
 	Map _map;
 	int _currentLevel = 1;
@@ -48,12 +50,17 @@ class Game
 
 	bool _manette;
 
+	QMainWindow* _mainWindow;
+	MainMenu* _mainMenu;
+
+public slots:
+	void LoadLevel(int level);
+
 public:
-	Game(const char* port);
+	Game(const char* port, QObject* parent = nullptr);
 	~Game();
 
-	void NewLevel();
-	void MainMenu();
+	void ShowMainMenu();
 	int AskMainMenuInput();
 	void ChooseLevel();
 	void Menu();

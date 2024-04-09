@@ -3,11 +3,12 @@
 
 #include "game.h"
 
-int main()
+int main(int argc, char** argv)
 {
-	std::string port = "COM3";
+	QApplication app(argc, argv);
 
+	std::string port = "COM3";
 	Game game(port.c_str()); //Utiliser pour manette
 	
-	return 0;
+	return app.exec();
 }
