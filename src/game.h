@@ -8,6 +8,7 @@
 
 #include "map.h"
 #include "mainmenu.h"
+#include "ingamemenu.h"
 #include "levelselection.h"
 #include <QMainWindow>
 
@@ -56,10 +57,13 @@ class Game : public QObject
 	QMainWindow* _mainWindow;
 	MainMenu* _mainMenu;
 	LevelSelection* _levelSelection;
-
+	InGameMenu* _inGameMenu;
 public slots:
 	void LoadLevel(int level);
 	void ShowMainMenu();
+	void ResumeGame();
+	void QuitToMainMenu();
+
 
 public:
 	Game(const char* port, QObject* parent = nullptr);

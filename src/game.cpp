@@ -33,6 +33,11 @@ Game::Game(const char* port, QObject* parent) : QObject(parent)
 	_mainWindow->setCentralWidget(_mainMenu);
 	_mainWindow->show();
 	
+	_inGameMenu = new InGameMenu();
+
+	connect(_inGameMenu, &InGameMenu::resumeGame, this, &Game::ResumeGame);
+	connect(_inGameMenu, &InGameMenu::quitToMainMenu, this, &Game::QuitToMainMenu);
+
 	//_map = Map("./map/testCode.txt");
 }
 
@@ -81,6 +86,17 @@ void Game::LoadLevel(int level)
 	Play();
 }
 
+void Game::ResumeGame()
+{
+	_inGameMenu->hide();
+}
+
+void Game::QuitToMainMenu()
+{
+	_inGameMenu->hide();
+	ShowMainMenu();
+}
+
 void Game::ShowMainMenu()
 {
 //	int userInput = AskMainMenuInput();
@@ -114,6 +130,7 @@ void Game::ShowMainMenu()
 	connect(_mainMenu, &MainMenu::levelSelection, this, &Game::ChooseLevel);
 	_mainWindow->setCentralWidget(_mainMenu);
 }
+
 
 void Game::ChooseLevel()
 {
