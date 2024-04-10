@@ -403,8 +403,11 @@ void Map::SendGameOverToGame()
 
 void Map::UpdateScene()
 {
-	CheckButtons();
-	CheckGates();
+	if(!_button.empty())
+		CheckButtons();
+	
+	if (!_gate.empty())
+		CheckGates();
 
 	if (_fireBoy != nullptr && _waterGirl != nullptr)
 	{
@@ -420,7 +423,9 @@ void Map::UpdateScene()
 
 		}
 	}
-	CheckExits();
+
+	if (!_exit.empty())
+		CheckExits();
 }
 
 
