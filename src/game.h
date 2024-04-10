@@ -68,6 +68,7 @@ public slots:
 	void GameOverScreen();
 	void Play();
 	void NextLevel();
+	void ControllerLoop();
 
 public:
 	Game(const char* port, QObject* parent = nullptr);

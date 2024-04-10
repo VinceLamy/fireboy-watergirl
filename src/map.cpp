@@ -387,6 +387,7 @@ void Map::CheckExits()
 
 	if (_exit[0]->GetState() == OPEN && _exit[1]->GetState() == OPEN)
 	{
+		levelFinished = true;
 		emit LevelFinished();
 	}
 }
@@ -398,29 +399,35 @@ void Map::StopTimer()
 
 void Map::SendGameOverToGame()
 {
+	levelFinished = true;
 	emit GameOver();
 }
 
 void Map::UpdateScene()
-{
-	CheckButtons();
-	CheckGates();
-
-	if (_fireBoy != nullptr && _waterGirl != nullptr)
+{	
+	if(!levelFinished)
+		CheckButtons();
+	if (!levelFinished)
+		CheckGates();
+	if (!levelFinished)
 	{
-		if (_fireBoy->getState())
+		if (_fireBoy != nullptr && _waterGirl != nullptr)
 		{
-			_fireBoy->setFocus();
-			_fireBoy->advance(0);
-		}
-		else
-		{
-			_waterGirl->setFocus();
-			_waterGirl->advance(0);
+			if (_fireBoy->getState())
+			{
+				_fireBoy->setFocus();
+				_fireBoy->advance(0);
+			}
+			else
+			{
+				_waterGirl->setFocus();
+				_waterGirl->advance(0);
 
+			}
 		}
 	}
-	CheckExits();
+	if (!levelFinished)
+		CheckExits();
 }
 
 

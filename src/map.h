@@ -58,6 +58,7 @@ public slots:
 	
 private:
 	const char* _fileName;
+	bool levelFinished = false;
 	std::vector<std::vector<Tile*>> _grid;
 	std::vector<Controller*> _lastControllers;
 	std::vector<CodeGiver*> _lastCodeGiver;

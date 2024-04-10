@@ -227,9 +227,14 @@ void Game::NextLevel()
 	LoadLevel(_currentLevel);
 }
 
+void Game::ControllerLoop()
+{
+	GetInput();
+	SendResponse();
+}
+
 void Game::Play()
 {
-	//system("CLS");
 	_map->ReadMap();
 	view.setRenderHint(QPainter::Antialiasing);
 	view.setScene(_map);
@@ -238,5 +243,7 @@ void Game::Play()
 	_mainWindow->close();
 
 	QObject::connect(&timer, &QTimer::timeout, _map, &Map::UpdateScene);
+	if(_manette)
+		QObject::connect(&timer, &QTimer::timeout, this, &Game::ControllerLoop);
 	timer.start(1000 / 60);
 }
