@@ -3,10 +3,11 @@
 
 //using namespace std;
 
-CodeGiver::CodeGiver(int x, int y)
+CodeGiver::CodeGiver(QPixmap& pixmap, qreal x, qreal y) : QGraphicsPixmapItem(pixmap)
 {
-	SetPosition(x, y);
-	SetType(CODEGIVER);
+	setPos(x, y);
+	/*SetPosition(x, y);
+	SetType(CODEGIVER);*/
 }
 
 std::string CodeGiver::ShowCode()
@@ -19,10 +20,10 @@ void CodeGiver::SetDigits(std::string digits)
 	_mydigits = digits;
 }
 
-void CodeGiver::Show()
-{
-	std::cout << BRIGHTYELLOW << '@' << RESET;
-}
+//void CodeGiver::Show()
+//{
+//	std::cout << BRIGHTYELLOW << '@' << RESET;
+//}
 
 void CodeGiver::Clear()
 {

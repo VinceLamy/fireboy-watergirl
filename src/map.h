@@ -52,6 +52,12 @@ public:
 
 	void Swap(Coordinate pos1, Coordinate pos2);
 
+signals:
+	void GameOver();
+private slots:
+	void UpdateScene();
+	void SendGameOverToGame();
+	
 private:
 	const char* _fileName;
 	std::vector<std::vector<Tile*>> _grid;
@@ -68,6 +74,17 @@ private:
 	QPixmap waterPixamp;
 	QPixmap lavaPixmap;
 	QPixmap gooPixmap;
+	QPixmap gatePixmap;
+	QPixmap fireJpPixmap;
+	QPixmap waterAlexPixmap;
+	QPixmap codeGiverPixmap;
+	QPixmap exitPixmap;
+	QPixmap buttonPixmap;
+	QPixmap leverPixmap;
+	QPixmap codeLockPixmap;
+	QPixmap backgroundPixmap;
+
+	QTimer* timer;
 
 };
 

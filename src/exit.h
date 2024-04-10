@@ -5,16 +5,17 @@
 #define MAGENTA	"\033[35m"
 
 #include "tile.h"
+#include "QtWidgets"
 
-class Exit : public Tile
+class Exit : public QGraphicsPixmapItem
 {
 public:
-	Exit(int x, int y);
+	Exit(QPixmap& pixmap, qreal x, qreal y);
 
 	void SetState(State s);
 	State GetState();
 
-	void Show();
+	//void Show();
 
 private:
 	State _state = CLOSED;

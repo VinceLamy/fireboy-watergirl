@@ -9,7 +9,7 @@
 class Button : public Controller
 {
 public:
-	Button(int x, int y);
+	Button(QPixmap& pixmap, qreal x, qreal y);
 	void Show();
 };
 

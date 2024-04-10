@@ -3,10 +3,10 @@
 
 //using namespace	std;
 
-Button::Button(int x, int y)
+Button::Button(QPixmap& pixmap, qreal x, qreal y) : Controller(pixmap, x, y)
 {
-	SetPosition(x, y);
-	SetType(BUTTON);
+	/*SetPosition(x, y);
+	SetType(BUTTON);*/
 }
 
 void Button::Show()

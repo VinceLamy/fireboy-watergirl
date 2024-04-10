@@ -57,9 +57,8 @@ void MainMenu::NewGame()
 }
 
 void MainMenu::Tutorial()
-{
-	int selectedLevel = 0;
-	emit levelSelected(selectedLevel);
+{;
+	emit ShowTutorialScreen();
 }
 
 void MainMenu::ChooseLevel()

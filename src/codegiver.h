@@ -6,16 +6,17 @@
 
 #include "tile.h"
 #include <iostream>
+#include <QtWidgets>
 
 //using namespace std;
 
-class CodeGiver : public Tile
+class CodeGiver : public QGraphicsPixmapItem
 {
 public:
-	CodeGiver(int x, int y);
+	CodeGiver(QPixmap& pixmap, qreal x, qreal y);
 	std::string ShowCode();
 	void SetDigits(std::string digits);
-	void Show();
+	/*void Show();*/
 	void Clear();
 
 private:

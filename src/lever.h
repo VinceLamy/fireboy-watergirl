@@ -9,8 +9,8 @@
 class Lever : public Controller
 {
 public:
-	Lever(int x, int y);
-	void Show();
+	Lever(QPixmap&, qreal x, qreal y);
+	/*void Show();*/
 };
 
 #endif LEVER_H

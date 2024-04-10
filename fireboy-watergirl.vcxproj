@@ -142,39 +142,38 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\fireboy-watergirl\src\character.cpp" />
     <ClCompile Include="..\fireboy-watergirl\src\game.cpp" />
     <ClCompile Include="..\fireboy-watergirl\src\levelselection.cpp" />
     <ClCompile Include="..\fireboy-watergirl\src\main.cpp" />
     <ClCompile Include="..\fireboy-watergirl\src\mainmenu.cpp" />
     <ClCompile Include="..\fireboy-watergirl\src\map.cpp" />
     <ClCompile Include="..\fireboy-watergirl\src\menubutton.cpp" />
-    <ClCompile Include="..\fireboy-watergirl\src\pool.cpp" />
-    <ClCompile Include="..\fireboy-watergirl\src\wall.cpp" />
+    <ClCompile Include="..\fireboy-watergirl\src\tutorialscreen.cpp" />
     <ClCompile Include="Communication\communication.cpp" />
     <ClCompile Include="Communication\serial\SerialPort.cpp" />
     <ClCompile Include="src\button.cpp" />
-    <ClCompile Include="src\character.cpp" />
     <ClCompile Include="src\codegiver.cpp" />
     <ClCompile Include="src\codelock.cpp" />
     <ClCompile Include="src\controller.cpp" />
     <ClCompile Include="src\exit.cpp" />
     <ClCompile Include="src\gate.cpp" />
     <ClCompile Include="src\lever.cpp" />
+    <ClCompile Include="src\pool.cpp" />
     <ClCompile Include="src\tile.cpp" />
+    <ClCompile Include="src\wall.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Communication\communication.h" />
-    <ClInclude Include="src\button.h" />
-    <ClInclude Include="src\character.h" />
-    <ClInclude Include="src\codegiver.h" />
-    <ClInclude Include="src\codelock.h" />
-    <ClInclude Include="src\controller.h" />
-    <ClInclude Include="src\coordinate.h" />
-    <ClInclude Include="src\enum.h" />
-    <ClInclude Include="src\exit.h" />
-    <ClInclude Include="src\gate.h" />
-    <ClInclude Include="src\lever.h" />
-    <ClInclude Include="src\tile.h" />
+    <CustomBuild Include="..\fireboy-watergirl\src\character.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\fireboy-watergirl\src\character.h;debug\moc_predefs.h;C:\Qt\6.6.1\msvc2019_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Qt\6.6.1\msvc2019_64\bin\moc.exe  -DUNICODE -D_UNICODE -DWIN32 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -DWIN64 -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include C:/Users/Félix-Antoine/Documents/GitHub/fireboy-watergirl/debug/moc_predefs.h -IC:/Qt/6.6.1/msvc2019_64/mkspecs/win32-msvc -IC:/Users/Félix-Antoine/Documents/GitHub/fireboy-watergirl -IC:/Users/Félix-Antoine/Documents/GitHub/fireboy-watergirl/src -IC:/Qt/6.6.1/msvc2019_64/include -IC:/Qt/6.6.1/msvc2019_64/include/QtWidgets -IC:/Qt/6.6.1/msvc2019_64/include/QtGui -IC:/Qt/6.6.1/msvc2019_64/include/QtCore -I"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\ATLMFC\include" -I"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\ucrt" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\shared" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\um" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\winrt" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\cppwinrt" ..\fireboy-watergirl\src\character.h -o debug\moc_character.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MOC ../fireboy-watergirl/src/character.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">debug\moc_character.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\fireboy-watergirl\src\character.h;release\moc_predefs.h;C:\Qt\6.6.1\msvc2019_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Qt\6.6.1\msvc2019_64\bin\moc.exe  -DUNICODE -D_UNICODE -DWIN32 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -DWIN64 -DNDEBUG -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include C:/Users/Félix-Antoine/Documents/GitHub/fireboy-watergirl/release/moc_predefs.h -IC:/Qt/6.6.1/msvc2019_64/mkspecs/win32-msvc -IC:/Users/Félix-Antoine/Documents/GitHub/fireboy-watergirl -IC:/Users/Félix-Antoine/Documents/GitHub/fireboy-watergirl/src -IC:/Qt/6.6.1/msvc2019_64/include -IC:/Qt/6.6.1/msvc2019_64/include/QtWidgets -IC:/Qt/6.6.1/msvc2019_64/include/QtGui -IC:/Qt/6.6.1/msvc2019_64/include/QtCore -I"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\ATLMFC\include" -I"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\ucrt" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\shared" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\um" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\winrt" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\cppwinrt" ..\fireboy-watergirl\src\character.h -o release\moc_character.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MOC ../fireboy-watergirl/src/character.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">release\moc_character.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
     <CustomBuild Include="..\fireboy-watergirl\src\game.h">
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\fireboy-watergirl\src\game.h;debug\moc_predefs.h;C:\Qt\6.6.1\msvc2019_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Qt\6.6.1\msvc2019_64\bin\moc.exe  -DUNICODE -D_UNICODE -DWIN32 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -DWIN64 -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include C:/Users/Félix-Antoine/Documents/GitHub/fireboy-watergirl/debug/moc_predefs.h -IC:/Qt/6.6.1/msvc2019_64/mkspecs/win32-msvc -IC:/Users/Félix-Antoine/Documents/GitHub/fireboy-watergirl -IC:/Users/Félix-Antoine/Documents/GitHub/fireboy-watergirl/src -IC:/Qt/6.6.1/msvc2019_64/include -IC:/Qt/6.6.1/msvc2019_64/include/QtWidgets -IC:/Qt/6.6.1/msvc2019_64/include/QtGui -IC:/Qt/6.6.1/msvc2019_64/include/QtCore -I"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\ATLMFC\include" -I"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\ucrt" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\shared" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\um" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\winrt" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\cppwinrt" ..\fireboy-watergirl\src\game.h -o debug\moc_game.cpp</Command>
@@ -225,19 +224,24 @@
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MOC ../fireboy-watergirl/src/menubutton.h</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">release\moc_menubutton.cpp;%(Outputs)</Outputs>
     </CustomBuild>
-    <CustomBuild Include="..\fireboy-watergirl\src\pool.h">
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\fireboy-watergirl\src\pool.h;debug\moc_predefs.h;C:\Qt\6.6.1\msvc2019_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Qt\6.6.1\msvc2019_64\bin\moc.exe  -DUNICODE -D_UNICODE -DWIN32 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -DWIN64 -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include C:/Users/Félix-Antoine/Documents/GitHub/fireboy-watergirl/debug/moc_predefs.h -IC:/Qt/6.6.1/msvc2019_64/mkspecs/win32-msvc -IC:/Users/Félix-Antoine/Documents/GitHub/fireboy-watergirl -IC:/Users/Félix-Antoine/Documents/GitHub/fireboy-watergirl/src -IC:/Qt/6.6.1/msvc2019_64/include -IC:/Qt/6.6.1/msvc2019_64/include/QtWidgets -IC:/Qt/6.6.1/msvc2019_64/include/QtGui -IC:/Qt/6.6.1/msvc2019_64/include/QtCore -I"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\ATLMFC\include" -I"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\ucrt" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\shared" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\um" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\winrt" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\cppwinrt" ..\fireboy-watergirl\src\pool.h -o debug\moc_pool.cpp</Command>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MOC ../fireboy-watergirl/src/pool.h</Message>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">debug\moc_pool.cpp;%(Outputs)</Outputs>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\fireboy-watergirl\src\pool.h;release\moc_predefs.h;C:\Qt\6.6.1\msvc2019_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Qt\6.6.1\msvc2019_64\bin\moc.exe  -DUNICODE -D_UNICODE -DWIN32 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -DWIN64 -DNDEBUG -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include C:/Users/Félix-Antoine/Documents/GitHub/fireboy-watergirl/release/moc_predefs.h -IC:/Qt/6.6.1/msvc2019_64/mkspecs/win32-msvc -IC:/Users/Félix-Antoine/Documents/GitHub/fireboy-watergirl -IC:/Users/Félix-Antoine/Documents/GitHub/fireboy-watergirl/src -IC:/Qt/6.6.1/msvc2019_64/include -IC:/Qt/6.6.1/msvc2019_64/include/QtWidgets -IC:/Qt/6.6.1/msvc2019_64/include/QtGui -IC:/Qt/6.6.1/msvc2019_64/include/QtCore -I"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\ATLMFC\include" -I"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\ucrt" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\shared" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\um" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\winrt" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\cppwinrt" ..\fireboy-watergirl\src\pool.h -o release\moc_pool.cpp</Command>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MOC ../fireboy-watergirl/src/pool.h</Message>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">release\moc_pool.cpp;%(Outputs)</Outputs>
+    <CustomBuild Include="..\fireboy-watergirl\src\tutorialscreen.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\fireboy-watergirl\src\tutorialscreen.h;debug\moc_predefs.h;C:\Qt\6.6.1\msvc2019_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Qt\6.6.1\msvc2019_64\bin\moc.exe  -DUNICODE -D_UNICODE -DWIN32 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -DWIN64 -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include C:/Users/Félix-Antoine/Documents/GitHub/fireboy-watergirl/debug/moc_predefs.h -IC:/Qt/6.6.1/msvc2019_64/mkspecs/win32-msvc -IC:/Users/Félix-Antoine/Documents/GitHub/fireboy-watergirl -IC:/Users/Félix-Antoine/Documents/GitHub/fireboy-watergirl/src -IC:/Qt/6.6.1/msvc2019_64/include -IC:/Qt/6.6.1/msvc2019_64/include/QtWidgets -IC:/Qt/6.6.1/msvc2019_64/include/QtGui -IC:/Qt/6.6.1/msvc2019_64/include/QtCore -I"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\ATLMFC\include" -I"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\ucrt" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\shared" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\um" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\winrt" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\cppwinrt" ..\fireboy-watergirl\src\tutorialscreen.h -o debug\moc_tutorialscreen.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MOC ../fireboy-watergirl/src/tutorialscreen.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">debug\moc_tutorialscreen.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\fireboy-watergirl\src\tutorialscreen.h;release\moc_predefs.h;C:\Qt\6.6.1\msvc2019_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Qt\6.6.1\msvc2019_64\bin\moc.exe  -DUNICODE -D_UNICODE -DWIN32 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -DWIN64 -DNDEBUG -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include C:/Users/Félix-Antoine/Documents/GitHub/fireboy-watergirl/release/moc_predefs.h -IC:/Qt/6.6.1/msvc2019_64/mkspecs/win32-msvc -IC:/Users/Félix-Antoine/Documents/GitHub/fireboy-watergirl -IC:/Users/Félix-Antoine/Documents/GitHub/fireboy-watergirl/src -IC:/Qt/6.6.1/msvc2019_64/include -IC:/Qt/6.6.1/msvc2019_64/include/QtWidgets -IC:/Qt/6.6.1/msvc2019_64/include/QtGui -IC:/Qt/6.6.1/msvc2019_64/include/QtCore -I"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\ATLMFC\include" -I"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\ucrt" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\shared" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\um" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\winrt" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\cppwinrt" ..\fireboy-watergirl\src\tutorialscreen.h -o release\moc_tutorialscreen.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MOC ../fireboy-watergirl/src/tutorialscreen.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">release\moc_tutorialscreen.cpp;%(Outputs)</Outputs>
     </CustomBuild>
-    <ClInclude Include="..\fireboy-watergirl\src\wall.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="debug\moc_character.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="release\moc_character.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="debug\moc_game.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
@@ -268,12 +272,6 @@
     <ClCompile Include="release\moc_menubutton.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="debug\moc_pool.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="release\moc_pool.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClCompile>
     <CustomBuild Include="debug\moc_predefs.h.cbt">
       <FileType>Document</FileType>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Qt\6.6.1\msvc2019_64\mkspecs\features\data\dummy.cpp;%(AdditionalInputs)</AdditionalInputs>
@@ -290,6 +288,27 @@
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Generate moc_predefs.h</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">release\moc_predefs.h;%(Outputs)</Outputs>
     </CustomBuild>
+    <ClCompile Include="debug\moc_tutorialscreen.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="release\moc_tutorialscreen.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Communication\communication.h" />
+    <ClInclude Include="src\button.h" />
+    <ClInclude Include="src\codegiver.h" />
+    <ClInclude Include="src\codelock.h" />
+    <ClInclude Include="src\controller.h" />
+    <ClInclude Include="src\coordinate.h" />
+    <ClInclude Include="src\enum.h" />
+    <ClInclude Include="src\exit.h" />
+    <ClInclude Include="src\gate.h" />
+    <ClInclude Include="src\lever.h" />
+    <ClInclude Include="src\pool.h" />
+    <ClInclude Include="src\tile.h" />
+    <ClInclude Include="src\wall.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />

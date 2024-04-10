@@ -27,6 +27,9 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\fireboy-watergirl\src\character.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="..\fireboy-watergirl\src\game.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -45,19 +48,19 @@
     <ClCompile Include="..\fireboy-watergirl\src\menubutton.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\fireboy-watergirl\src\pool.cpp">
+    <ClCompile Include="..\fireboy-watergirl\src\tutorialscreen.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\fireboy-watergirl\src\wall.cpp">
+    <ClCompile Include="src\pool.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\tile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\button.cpp">
+    <ClCompile Include="src\wall.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\character.cpp">
+    <ClCompile Include="src\button.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\codegiver.cpp">
@@ -86,6 +89,9 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <CustomBuild Include="..\fireboy-watergirl\src\character.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
     <CustomBuild Include="..\fireboy-watergirl\src\game.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
@@ -101,14 +107,17 @@
     <CustomBuild Include="..\fireboy-watergirl\src\menubutton.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
-    <CustomBuild Include="..\fireboy-watergirl\src\pool.h">
+    <CustomBuild Include="..\fireboy-watergirl\src\tutorialscreen.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
-    <ClInclude Include="..\fireboy-watergirl\src\wall.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="debug\moc_character.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="release\moc_character.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
     <ClCompile Include="debug\moc_game.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
@@ -139,27 +148,30 @@
     <ClCompile Include="release\moc_menubutton.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
-    <ClCompile Include="debug\moc_pool.cpp">
-      <Filter>Generated Files</Filter>
-    </ClCompile>
-    <ClCompile Include="release\moc_pool.cpp">
-      <Filter>Generated Files</Filter>
-    </ClCompile>
     <CustomBuild Include="debug\moc_predefs.h.cbt">
       <Filter>Generated Files</Filter>
     </CustomBuild>
     <CustomBuild Include="release\moc_predefs.h.cbt">
       <Filter>Generated Files</Filter>
     </CustomBuild>
+    <ClCompile Include="debug\moc_tutorialscreen.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="release\moc_tutorialscreen.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\pool.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="src\tile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\button.h">
+    <ClInclude Include="src\wall.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\character.h">
+    <ClInclude Include="src\button.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\codegiver.h">

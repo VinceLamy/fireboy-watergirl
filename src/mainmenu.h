@@ -18,6 +18,7 @@ public:
 
 signals:
 	void levelSelected(int level);
+	void ShowTutorialScreen();
 	void levelSelection();
 
 private:

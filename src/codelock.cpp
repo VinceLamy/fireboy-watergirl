@@ -8,10 +8,10 @@
 
 //using namespace std;
 
-CodeLock::CodeLock(int x, int y, std::vector<CodeGiver*> codeGiver)
+CodeLock::CodeLock(QPixmap& pixmap, qreal x, qreal y, std::vector<CodeGiver*> codeGiver) : Controller(pixmap, x, y)
 {
-	SetPosition(x, y);
-	SetType(CODELOCK);
+	/*SetPosition(x, y);
+	SetType(CODELOCK)*/;
 	GenerateCode();
 	_codeGiver = codeGiver;
 	GiveCode(_myCode);
@@ -73,10 +73,10 @@ void CodeLock::GenerateCode()
 	_myCode.fourth = rand() % 10;
 }
 
-void CodeLock::Show()
-{
-	std::cout << BRIGHTYELLOW << '$' << RESET;
-}
+//void CodeLock::Show()
+//{
+//	std::cout << BRIGHTYELLOW << '$' << RESET;
+//}
 
 void CodeLock::Clear()
 {

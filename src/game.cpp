@@ -21,11 +21,15 @@ Game::Game(const char* port, QObject* parent) : QObject(parent)
 	_mainWindow = new QMainWindow();
 	_mainMenu = new MainMenu();
 	_levelSelection = new LevelSelection();
+	_tutorialScreen = new TutorialScreen();
 
 	connect(_mainMenu, &MainMenu::levelSelected, this, &Game::LoadLevel);
 	connect(_mainMenu, &MainMenu::levelSelection, this, &Game::ChooseLevel);
+	connect(_mainMenu, &MainMenu::ShowTutorialScreen, this, &Game::ShowTutorialScreen);
 	connect(_levelSelection, &LevelSelection::levelSelected, this, &Game::LoadLevel);
 	connect(_levelSelection, &LevelSelection::returnToMainMenu, this, &Game::ShowMainMenu);
+	connect(_tutorialScreen, &TutorialScreen::BackToMainMenu, this, &Game::ShowMainMenu);
+	connect(_tutorialScreen, &TutorialScreen::StartTutorial, this, &Game::LoadLevel);
 	
 	
 	_mainWindow->resize(1280, 720);
@@ -78,7 +82,17 @@ void Game::LoadLevel(int level)
 		//MainMenu();
 		break;
 	}
+	connect(_map, &Map::GameOver, this, &Game::GameOverScreen);
 	Play();
+}
+
+void Game::ShowTutorialScreen()
+{
+	_tutorialScreen = new TutorialScreen();
+	connect(_tutorialScreen, &TutorialScreen::BackToMainMenu, this, &Game::ShowMainMenu);
+	connect(_tutorialScreen, &TutorialScreen::StartTutorial, this, &Game::LoadLevel);
+	_mainWindow->setStyleSheet("background-color: black;");
+	_mainWindow->setCentralWidget(_tutorialScreen);
 }
 
 void Game::ShowMainMenu()
@@ -112,7 +126,16 @@ void Game::ShowMainMenu()
 	_mainMenu = new MainMenu();
 	connect(_mainMenu, &MainMenu::levelSelected, this, &Game::LoadLevel);
 	connect(_mainMenu, &MainMenu::levelSelection, this, &Game::ChooseLevel);
+	connect(_mainMenu, &MainMenu::ShowTutorialScreen, this, &Game::ShowTutorialScreen);
+	_mainWindow->setStyleSheet("QMainWindow {" "background-image: url(./sprite/menu/fractal-1722991_1920.jpg);" "}");
 	_mainWindow->setCentralWidget(_mainMenu);
+}
+
+void Game::GameOverScreen()
+{
+	ShowMainMenu();
+	_mainWindow->show();
+	view.close();
 }
 
 void Game::ChooseLevel()
@@ -135,11 +158,10 @@ void Game::ChooseLevel()
 	//NewLevel();
 	//Play();
 
-	
-	
 	_levelSelection = new LevelSelection();
 	connect(_levelSelection, &LevelSelection::levelSelected, this, &Game::LoadLevel);
 	connect(_levelSelection, &LevelSelection::returnToMainMenu, this, &Game::ShowMainMenu);
+	_mainWindow->setStyleSheet("QMainWindow {" "background-image: url(./sprite/menu/fractal-1722991_1920.jpg);" "}");
 	_mainWindow->setCentralWidget(_levelSelection);
 }
 
@@ -288,7 +310,7 @@ void Game::SendResponse()
 
 void Game::MovePlayers()
 {
-	std::vector<std::vector<Tile*>> &grid = *_map->GetGrid();
+/*	std::vector<std::vector<Tile*>> &grid = *_map->GetGrid();
 	Coordinate ActivePlayerPos = _map->GetActiveCharacter()->GetPosition();
 
 	std::chrono::duration<double> elapsed_time = std::chrono::system_clock::now() - _start;
@@ -414,7 +436,7 @@ void Game::MovePlayers()
 	if (data.menu)
 	{
 		Menu();
-	}
+	}*/
 }
 
 void Game::Play()
@@ -423,11 +445,12 @@ void Game::Play()
 	_map->ReadMap();
 	view.setRenderHint(QPainter::Antialiasing);
 	view.setScene(_map);
+	view.resize(25*72, 50*21);
 	view.show();
+	_mainWindow->close();
 
-	/*QTimer timer;
-	QObject::connect(&timer, &QTimer::timeout, _map, &GameMap::advance);
-	timer.start(1000 / 60);*/
+	QObject::connect(&timer, &QTimer::timeout, _map, &Map::advance);
+	timer.start(1000 / 60);
 
 	//_map->ShowMap();
 
@@ -488,7 +511,7 @@ void Game::Play()
 
 void Game::CheckPosition()
 {
-	std::vector<std::vector<Tile*>>& grid = *_map->GetGrid();
+	/*std::vector<std::vector<Tile*>>& grid = *_map->GetGrid();
 	Coordinate ActivePlayerPos = _map->GetActiveCharacter()->GetPosition();
 	std::chrono::duration<double> elapsed_time = std::chrono::system_clock::now() - _start;
 	Coordinate ActivePlayerOldPos;
@@ -552,7 +575,7 @@ void Game::CheckPosition()
 	{
 		_isJumping = false;
 		_jumpHeight = 0;
-	}
+	}*/
 }
 
 void Game::CheckGates()
@@ -565,7 +588,7 @@ void Game::CheckGates()
 
 void Game::CheckButtons()
 {
-	std::vector<std::vector<Tile*>> &grid = *_map->GetGrid();
+	/*std::vector<std::vector<Tile*>> &grid = *_map->GetGrid();
 	Coordinate coord;
 	for (int i = 0; i < _map->GetButton().size(); i++)
 	{
@@ -581,29 +604,30 @@ void Game::CheckButtons()
 			_map->GetButton()[i]->SetState(CLOSED);
 			CheckGates();
 		}
-	}
+	}*/
 }
 
-void Game::CheckPools(){
-	// Personnage actif
-	int x = _map->GetActiveCharacter()->GetPosition().x;
-	int y = _map->GetActiveCharacter()->GetPosition().y;
+void Game::CheckPools()
+{
+	//// Personnage actif
+	//int x = _map->GetActiveCharacter()->GetPosition().x;
+	//int y = _map->GetActiveCharacter()->GetPosition().y;
 
-	// Arrête la fonction si le personnage n'est pas au-dessus d'une pool
-	if (_map->GetPoolAt(x, y + 1) == nullptr) {
-		return;
-	}
+	//// Arrête la fonction si le personnage n'est pas au-dessus d'une pool
+	//if (_map->GetPoolAt(x, y + 1) == nullptr) {
+	//	return;
+	//}
 
-	// Termine la partie si l'élément n'est pas le même que celui du personnage
-	if (_map->GetPoolAt(x, y + 1)->GetElement() != _map->GetActiveCharacter()->getElement()) {
-		_gameOver = true;
-	}
+	//// Termine la partie si l'élément n'est pas le même que celui du personnage
+	//if (_map->GetPoolAt(x, y + 1)->GetElement() != _map->GetActiveCharacter()->getElement()) {
+	//	_gameOver = true;
+	//}
 
 }
 
 void Game::CheckExits()
 {
-	std::vector<std::vector<Tile*>> &grid = *_map->GetGrid();
+	/*std::vector<std::vector<Tile*>> &grid = *_map->GetGrid();
 	Coordinate coord;
 	for (int i = 0; i < _map->GetExit().size(); i++)
 	{
@@ -630,13 +654,13 @@ void Game::CheckExits()
 		{
 			_levelFinished = true;
 		}
-	}
+	}*/
 }
 
 void Game::Interact()
 {
-	std::vector<std::vector<Tile*>> &grid = *_map->GetGrid();
-	Coordinate ActivePlayerPos = _map->GetActiveCharacter()->GetPosition();
+	/*std::vector<std::vector<Tile*>> &grid = *_map->GetGrid();
+	Coordinate ActivePlayerPos = _map->GetActiveCharacter()->GetPosition()
 
 
 	if (grid[ActivePlayerPos.y + 1][ActivePlayerPos.x]->GetType() == LEVER)
@@ -676,5 +700,5 @@ void Game::Interact()
 			std::cout << code << std::endl;
 			Sleep(2000);
 		}
-	}
+	}*/
 }

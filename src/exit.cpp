@@ -3,10 +3,11 @@
 
 //using namespace	std;
 
-Exit::Exit(int x, int y)
+Exit::Exit(QPixmap& pixmap, qreal x, qreal y) : QGraphicsPixmapItem(pixmap)
 {
-	SetPosition(x, y);
-	SetType(EXIT);
+	setPos(x, y);
+	/*SetPosition(x, y);
+	SetType(EXIT);*/
 }
 
 void Exit::SetState(State s)
@@ -19,7 +20,7 @@ State Exit::GetState()
 	return _state;
 }
 
-void Exit::Show()
-{
-	std::cout << MAGENTA << 'P' << RESET;
-}
+//void Exit::Show()
+//{
+//	std::cout << MAGENTA << 'P' << RESET;
+//}

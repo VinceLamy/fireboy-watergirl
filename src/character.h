@@ -6,11 +6,15 @@
 #define CYAN    "\033[36m"
 
 #include "tile.h"
+#include <QtWidgets>
+#include <QGraphicsPixmapItem>
+#include <QObject>
 
-class Character : public Tile
+class Character : public QObject, public QGraphicsPixmapItem
 {
+	Q_OBJECT
 public:
-	Character(Element, int = 0, int = 0, bool = false);
+	Character(const QPixmap& pixmap, Element e, qreal x, qreal y, bool = false, QObject* parent = nullptr);
 	Character(Character&);
 
 	void Activate();
@@ -21,11 +25,25 @@ public:
 
 	void setState(bool state);
 
-	void Show();
+	void keyPressEvent(QKeyEvent* event) override;
+	void keyReleaseEvent(QKeyEvent* event) override;
+	void advance(int phase) override;
+
+	/*void Show();*/
+
+signals:
+	void GameOver();
 
 private:
 	Element _element;
 	bool _state;
+	qreal dx = 0;
+	qreal dy = 0;
+	const qreal gravity = 0.5;
+	bool onGround = false;
+
+	void HorizontalCollision();
+	void VerticalCollision();
 };
 
 #endif CARACTER_H

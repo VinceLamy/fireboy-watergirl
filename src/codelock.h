@@ -21,11 +21,11 @@ struct CodeDigits {
 class CodeLock : public Controller
 {
 public:
-	CodeLock(int x, int y, std::vector<CodeGiver*> codeGiver);
+	CodeLock(QPixmap& pixmap, qreal x, qreal y, std::vector<CodeGiver*> codeGiver);
 	void GiveCode(CodeDigits code);
 	void VerifyCode();
 	void GenerateCode();
-	void Show();
+	/*void Show();*/
 	void Clear();
 
 private:

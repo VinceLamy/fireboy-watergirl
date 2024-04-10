@@ -9,6 +9,7 @@
 #include "map.h"
 #include "mainmenu.h"
 #include "levelselection.h"
+#include "tutorialscreen.h"
 #include <QMainWindow>
 
 struct input_data
@@ -56,11 +57,16 @@ class Game : public QObject
 	QMainWindow* _mainWindow;
 	MainMenu* _mainMenu;
 	LevelSelection* _levelSelection;
+	TutorialScreen* _tutorialScreen;
 	QGraphicsView view;
+	QTimer timer;
 
 public slots:
 	void LoadLevel(int level);
+	void ShowTutorialScreen();
 	void ShowMainMenu();
+	void GameOverScreen();
+	void Play();
 
 public:
 	Game(const char* port, QObject* parent = nullptr);
@@ -80,8 +86,7 @@ public:
 	void CheckPools();
 	void Interact();
 	void SendResponse();
-
-	void Play();
+	
 };
 
 #endif CARACTER_H

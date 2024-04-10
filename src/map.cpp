@@ -21,13 +21,36 @@ Map::Map(const char* nomNiveau, QObject* parent) : QGraphicsScene(parent), _file
 wallPixmap("./sprite/map/brick_brown_1.png"),
 waterPixamp("./sprite/map/dngn_deep_water.png"),
 lavaPixmap("./sprite/map/lava0.png"),
-gooPixmap("./sprite/map/dngn_deep_water_murky.png")
+gooPixmap("./sprite/map/dngn_deep_water_murky.png"),
+gatePixmap("./sprite/map/relief1.png"),
+fireJpPixmap("./sprite/map/Fire_JP.png"),
+waterAlexPixmap("./sprite/map/Water_Alex.png"),
+codeGiverPixmap("./sprite/map/dngn_altar_beogh.png"),
+exitPixmap("./sprite/map/dngn_enter_cocytus.png"),
+leverPixmap("./sprite/map/Lever.png"),
+buttonPixmap("./sprite/map/openButton.png"),
+codeLockPixmap("./sprite/map/Old Padlock - GREY - 0000.png"),
+backgroundPixmap("./sprite/map/background.png")
 {
 	wallPixmap = wallPixmap.scaled(QSize(BLOCKWIDTH, BLOCKHEIGHT));
 	waterPixamp = waterPixamp.scaled(QSize(BLOCKWIDTH, BLOCKHEIGHT));
 	lavaPixmap = lavaPixmap.scaled(QSize(BLOCKWIDTH, BLOCKHEIGHT));
 	gooPixmap = gooPixmap.scaled(QSize(BLOCKWIDTH, BLOCKHEIGHT));
+	fireJpPixmap = fireJpPixmap.scaled(QSize(BLOCKWIDTH, BLOCKHEIGHT));
+	waterAlexPixmap = waterAlexPixmap.scaled(QSize(BLOCKWIDTH, BLOCKHEIGHT));
+	codeGiverPixmap = codeGiverPixmap.scaled(QSize(2*BLOCKWIDTH, BLOCKHEIGHT + BLOCKHEIGHT/2));
+	exitPixmap = exitPixmap.scaled(QSize(2*BLOCKWIDTH, BLOCKHEIGHT + BLOCKHEIGHT/2));
+	leverPixmap = leverPixmap.scaled(QSize(2*BLOCKWIDTH, BLOCKHEIGHT + BLOCKHEIGHT/2));
+	buttonPixmap = buttonPixmap.scaled(QSize(2*BLOCKWIDTH, BLOCKHEIGHT));
+	codeLockPixmap = codeLockPixmap.scaled(QSize(2*BLOCKWIDTH, BLOCKHEIGHT + BLOCKHEIGHT/2));
+	backgroundPixmap = backgroundPixmap.scaled(QSize(2560, 1440));
+	setBackgroundBrush(backgroundPixmap);
+
 	_fileName = nomNiveau;
+
+	timer = new QTimer(this);
+	connect(timer, &QTimer::timeout, this, &Map::UpdateScene);
+	timer->start(1000 / 60);
 }
 
 Map::~Map()
@@ -189,25 +212,30 @@ void Map::AddCharacter(int x, int y, Element e)
 {
 	if (e == FIRE)
 	{
-		_fireBoy = new Character(e, x, y, true);
-		delete _grid[y][x];
-		_grid[y][x] = _fireBoy;
+		_fireBoy = new Character(fireJpPixmap, e, x*BLOCKWIDTH, y*BLOCKHEIGHT, true);
+		addItem(_fireBoy);
+		/*delete _grid[y][x];
+		_grid[y][x] = _fireBoy;*/
+		connect(_fireBoy, &Character::GameOver, this, &Map::SendGameOverToGame);
 	}
 	else if (e == WATER)
 	{
-		_waterGirl = new Character(e, x, y, false);
-		delete _grid[y][x];
-		_grid[y][x] = _waterGirl;
+		_waterGirl = new Character(waterAlexPixmap, e, x*BLOCKWIDTH, y*BLOCKHEIGHT, false);
+		addItem(_waterGirl);
+		/*delete _grid[y][x];
+		_grid[y][x] = _waterGirl;*/
+		connect(_waterGirl, &Character::GameOver, this, &Map::SendGameOverToGame);
 	}
 }
 
 void Map::AddExit(int x, int y)
 {
-	Tile* nExit = new Exit(x, y);
-	delete _grid[y][x];
+	Exit* nExit = new Exit(exitPixmap, x*BLOCKWIDTH, y*BLOCKHEIGHT - BLOCKHEIGHT - BLOCKHEIGHT/2);
+	/*delete _grid[y][x];
 	_grid[y][x] = nExit;
-	Exit* exit = static_cast<Exit*>(nExit);
-	_exit.push_back(exit);
+	Exit* exit = static_cast<Exit*>(nExit);*/
+	_exit.push_back(nExit);
+	addItem(nExit);
 }
 
 void Map::AddPool(int x, int y, Element e)
@@ -243,75 +271,86 @@ void Map::AddWall(int x, int y)
 
 void Map::AddGate(int x, int y, int size, Orientation o)
 {
-	Tile* nSlaveGate;
-	vector<Gate*> slaveGateVector;
-	Gate* nSlaveGate2;
+	/*Tile* nSlaveGate;*/
+	/*vector<Gate*> slaveGateVector;*/
+	/*Gate* nSlaveGate2;*/
+	Gate* nGate;
 	if (o == HORIZONTAL)
 	{
-		for (int i = 1; i < size; i++)
+		/*for (int i = 1; i < size; i++)
 		{
 			nSlaveGate = new Gate(x + i, y);
 			nSlaveGate2 = static_cast<Gate*>(nSlaveGate);
 			delete _grid[y][x + i];
 			_grid[y][x + i] = nSlaveGate;
 			slaveGateVector.push_back(nSlaveGate2);
-		}
+		}*/
+		gatePixmap = gatePixmap.transformed(QTransform().rotate(90));
+		gatePixmap = gatePixmap.scaled(QSize(BLOCKWIDTH*size, BLOCKWIDTH));
+		nGate = new Gate(gatePixmap, x * BLOCKWIDTH, y * BLOCKHEIGHT + BLOCKHEIGHT/4, _lastControllers);
+		addItem(nGate);
 	}
 	else if (o == VERTICAL)
 	{
-		for (int i = 1; i < size; i++)
+		/*for (int i = 1; i < size; i++)
 		{
 			nSlaveGate = new Gate(x, y - i);
 			nSlaveGate2 = static_cast<Gate*>(nSlaveGate);
 			delete _grid[y - i][x];
 			_grid[y - i][x] = nSlaveGate;
 			slaveGateVector.push_back(nSlaveGate2);
-		}
+		}*/
+		gatePixmap = gatePixmap.scaled(QSize(BLOCKWIDTH, BLOCKHEIGHT*size));
+		nGate = new Gate(gatePixmap, x * BLOCKWIDTH, (y - size + 1)* BLOCKHEIGHT, _lastControllers);
+		addItem(nGate);
 	}
-	_gate.push_back(new Gate(x, y, size, o, slaveGateVector, _lastControllers));
-	delete _grid[y][x];
-	_grid[y][x] = _gate.back();
+	_gate.push_back(nGate);
+	/*delete _grid[y][x];
+	_grid[y][x] = _gate.back();*/
 	_lastControllers.clear();
 }
 
 void Map::AddLever(int x, int y)
 {
-	Tile* nLever = new Lever(x, y);
-	delete _grid[y][x];
-	_grid[y][x] = nLever;
-	Controller* platformLever = static_cast<Controller*>(nLever);
-	_lastControllers.push_back(platformLever);
+	Lever* nLever = new Lever(leverPixmap, x*BLOCKWIDTH, y*BLOCKHEIGHT - BLOCKHEIGHT - BLOCKHEIGHT/2);
+	/*delete _grid[y][x];
+	_grid[y][x] = nLever;*/
+	Controller* connectLever = static_cast<Controller*>(nLever);
+	_lastControllers.push_back(connectLever);
+	addItem(nLever);
 }
 
 void Map::AddButton(int x, int y)
 {
-	Tile* nButton = new Button(x, y);
-	delete _grid[y][x];
-	_grid[y][x] = nButton;
-	Controller* platformButton = static_cast<Controller*>(nButton);
-	Button* thisButton = static_cast<Button*>(nButton);
-	_lastControllers.push_back(platformButton);
-	_button.push_back(thisButton);
+	Button* nButton = new Button(buttonPixmap, x*BLOCKWIDTH, y*BLOCKHEIGHT - BLOCKHEIGHT);
+	/*delete _grid[y][x];
+	_grid[y][x] = nButton;*/
+	Controller* connectButton = static_cast<Controller*>(nButton);
+	_lastControllers.push_back(connectButton);
+	_button.push_back(nButton);
+	addItem(nButton);
 
 }
 
 void Map::AddCodeLock(int x, int y, vector<CodeGiver*>)
 {
-	Tile* nCodeLock = new CodeLock(x, y, _lastCodeGiver);
-	Controller* thisCodeLock = static_cast<Controller*>(nCodeLock);
-	_lastControllers.push_back(thisCodeLock);
-	delete _grid[y][x];
-	_grid[y][x] = nCodeLock;
+	CodeLock* nCodeLock = new CodeLock(codeLockPixmap, x*BLOCKWIDTH, y*BLOCKHEIGHT - BLOCKHEIGHT - BLOCKHEIGHT / 2, _lastCodeGiver);
+	Controller* connectCodeLock = static_cast<Controller*>(nCodeLock);
+	_lastControllers.push_back(connectCodeLock);
+	/*delete _grid[y][x];
+	_grid[y][x] = nCodeLock;*/
 	_lastCodeGiver.clear();
+	addItem(nCodeLock);
 }
 
 void Map::AddCodeGiver(int x, int y)
 {
-	Tile* nCodeGiver = new CodeGiver(x, y);
-	CodeGiver* thisCodeGiver = static_cast<CodeGiver*>(nCodeGiver);
-	_lastCodeGiver.push_back(thisCodeGiver);
-	delete _grid[y][x];
-	_grid[y][x] = nCodeGiver;
+	CodeGiver* nCodeGiver = new CodeGiver(codeGiverPixmap, x * BLOCKWIDTH, y * BLOCKHEIGHT - BLOCKHEIGHT - BLOCKHEIGHT / 2);
+	/*CodeGiver* thisCodeGiver = static_cast<CodeGiver*>(nCodeGiver);*/
+	_lastCodeGiver.push_back(nCodeGiver);
+	addItem(nCodeGiver);
+	/*delete _grid[y][x];
+	_grid[y][x] = nCodeGiver;*/
 }
 
 void Map::Clear()
@@ -389,6 +428,27 @@ Pool* Map::GetPoolAt(int x, int y)
 void Map::Swap(Coordinate pos1, Coordinate pos2)
 {
 	swap(_grid[pos1.y][pos1.x], _grid[pos2.y][pos2.x]);
+}
+
+void Map::SendGameOverToGame()
+{
+	emit GameOver();
+}
+
+void Map::UpdateScene()
+{
+	if (_fireBoy != nullptr && _waterGirl != nullptr)
+	{
+		if (_fireBoy->getState())
+		{
+			_fireBoy->advance(0);
+		}
+		else
+		{
+			_waterGirl->advance(0);
+
+		}
+	}
 }
 
 
