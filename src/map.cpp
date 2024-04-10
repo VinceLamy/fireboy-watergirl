@@ -12,10 +12,21 @@
 #include "pool.h"
 #include "wall.h"
 
+#define BLOCKWIDTH 25
+#define BLOCKHEIGHT 50
+
 using namespace std;
 
-Map::Map(const char* nomNiveau)
+Map::Map(const char* nomNiveau, QObject* parent) : QGraphicsScene(parent), _fileName(nomNiveau),
+wallPixmap("./sprite/map/brick_brown_1.png"),
+waterPixamp("./sprite/map/dngn_deep_water.png"),
+lavaPixmap("./sprite/map/lava0.png"),
+gooPixmap("./sprite/map/dngn_deep_water_murky.png")
 {
+	wallPixmap = wallPixmap.scaled(QSize(BLOCKWIDTH, BLOCKHEIGHT));
+	waterPixamp = waterPixamp.scaled(QSize(BLOCKWIDTH, BLOCKHEIGHT));
+	lavaPixmap = lavaPixmap.scaled(QSize(BLOCKWIDTH, BLOCKHEIGHT));
+	gooPixmap = gooPixmap.scaled(QSize(BLOCKWIDTH, BLOCKHEIGHT));
 	_fileName = nomNiveau;
 }
 
@@ -201,17 +212,33 @@ void Map::AddExit(int x, int y)
 
 void Map::AddPool(int x, int y, Element e)
 {
-	_pool.push_back(new Pool(x, y, e));
-	delete _grid[y][x];
-	_grid[y][x] = _pool.back();
+	if (e == WATER)
+	{
+		Pool* nPool = new Pool(waterPixamp, x*BLOCKWIDTH, y*BLOCKHEIGHT, e);
+		addItem(nPool);
+	}
+	else if (e == FIRE)
+	{
+		Pool* nPool = new Pool(lavaPixmap, x * BLOCKWIDTH, y * BLOCKHEIGHT, e);
+		addItem(nPool);
+	}
+	else if (e == GOO)
+	{
+		Pool* nPool = new Pool(gooPixmap, x * BLOCKWIDTH, y * BLOCKHEIGHT, e);
+		addItem(nPool);
+	}
 
+	/*_pool.push_back(new Pool(x, y, e));
+	delete _grid[y][x];
+	_grid[y][x] = _pool.back();*/
 }
 
 void Map::AddWall(int x, int y)
 {
-	Tile* nWall = new Wall(x, y);
-	delete _grid[y][x];
-	_grid[y][x] = nWall;
+	Wall* nWall = new Wall(wallPixmap, x*BLOCKWIDTH, y*BLOCKHEIGHT);
+	addItem(nWall);
+	/*delete _grid[y][x];
+	_grid[y][x] = nWall;*/
 }
 
 void Map::AddGate(int x, int y, int size, Orientation o)
@@ -352,9 +379,9 @@ Pool* Map::GetPoolAt(int x, int y)
 	coord.x = x;
 	coord.y = y;
 
-	for (int i = 0; i < _pool.size(); i++)
+	/*for (int i = 0; i < _pool.size(); i++)
 		if (_pool[i]->GetPosition().x == coord.x && _pool[i]->GetPosition().y == coord.y)
-			return _pool[i];
+			return _pool[i];*/
 
 	return nullptr;
 }
@@ -363,3 +390,5 @@ void Map::Swap(Coordinate pos1, Coordinate pos2)
 {
 	swap(_grid[pos1.y][pos1.x], _grid[pos2.y][pos2.x]);
 }
+
+

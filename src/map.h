@@ -11,13 +11,17 @@
 #include "exit.h"
 #include "codelock.h"
 #include "codegiver.h"
+#include <string>
+#include <QWidget>
+#include <QtWidgets>
 
 //using namespace std;
 
-class Map
+class Map : public QGraphicsScene
 {
+	Q_OBJECT
 public:
-	Map(const char* nomNiveau = NULL);
+	Map(const char* nomNiveau, QObject* parent = nullptr);
 	~Map();
 
 	void ReadMap();
@@ -59,6 +63,11 @@ private:
 	std::vector<Pool*> _pool;
 	std::vector<Gate*> _gate;
 	std::vector<Exit*> _exit;
+	
+	QPixmap wallPixmap;
+	QPixmap waterPixamp;
+	QPixmap lavaPixmap;
+	QPixmap gooPixmap;
 
 };
 

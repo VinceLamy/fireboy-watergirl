@@ -3,13 +3,14 @@
 
 //using namespace	std;
 
-Wall::Wall(int x, int y)
+Wall::Wall(const QPixmap& pixmap, qreal x, qreal y) : QGraphicsPixmapItem(pixmap)
 {
-	SetPosition(x, y);
-	SetType(WALL);
+	//SetPosition(x, y);
+	//SetType(WALL);
+	setPos(x, y);
 }
 
-void Wall::Show()
-{
-	std::cout << '#';
-}
+//void Wall::Show()
+//{
+//	std::cout << '#';
+//}

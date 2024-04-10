@@ -45,7 +45,7 @@ void Game::LoadLevel(int level)
 {
 	//Sert probablement à rien, puisque que tu redéfinis le niveau tout de suite après
 	_currentLevel = level;
-	_map.Clear();
+	//_map->Clear();
 
 	_gameOver = _isJumping = _levelFinished = _codegiven = false;
 	_jumpHeight = 0;
@@ -53,22 +53,22 @@ void Game::LoadLevel(int level)
 	switch (_currentLevel)
 	{
 	case 0:
-		_map = Map("./map/0.txt");
+		_map = new Map("./map/0.txt", &view);
 		break;
 	case 1:
-		_map = Map("./map/1.txt");
+		_map = new Map("./map/1.txt", &view);
 		break;
 	case 2:
-		_map = Map("./map/2.txt");
+		_map = new Map("./map/2.txt", &view);
 		break;
 	case 3:
-		_map = Map("./map/3.txt");
+		_map = new Map("./map/3.txt", &view);
 		break;
 	case 4:
-		_map = Map("./map/4.txt");
+		_map = new Map("./map/4.txt", &view);
 		break;
 	case 5:
-		_map = Map("./map/5.txt");
+		_map =  new Map("./map/5.txt", &view);
 		break;
 	case 6:
 		system("CLS");
@@ -171,7 +171,7 @@ void Game::Menu()
 	switch (userInput)
 	{
 	case 1:
-		_map.ShowMap();
+		_map->ShowMap();
 		break;
 	case 2:
 		//NewLevel();
@@ -179,7 +179,7 @@ void Game::Menu()
 		break;
 	case 3:
 		_currentLevel = 1;
-		_map.Clear();
+		_map->Clear();
 		//MainMenu();
 		break;
 	default:
@@ -258,7 +258,7 @@ void Game::GetInput()
 void Game::SendResponse()
 {
 
-	if (_map.GetActiveCharacter()->getElement() == WATER)
+	if (_map->GetActiveCharacter()->getElement() == WATER)
 	{
 		comm->send_msg["joueur"] = 2;
 	}
@@ -288,8 +288,8 @@ void Game::SendResponse()
 
 void Game::MovePlayers()
 {
-	std::vector<std::vector<Tile*>> &grid = *_map.GetGrid();
-	Coordinate ActivePlayerPos = _map.GetActiveCharacter()->GetPosition();
+	std::vector<std::vector<Tile*>> &grid = *_map->GetGrid();
+	Coordinate ActivePlayerPos = _map->GetActiveCharacter()->GetPosition();
 
 	std::chrono::duration<double> elapsed_time = std::chrono::system_clock::now() - _start;
 	Coordinate ActivePlayerOldPos;
@@ -298,10 +298,10 @@ void Game::MovePlayers()
 	{
 		if (grid[ActivePlayerPos.y - 1][ActivePlayerPos.x]->GetType() == TILE)
 		{
-			ActivePlayerOldPos = _map.GetActiveCharacter()->GetPosition();
-			_map.GetActiveCharacter()->SetPosition(ActivePlayerPos.x, ActivePlayerPos.y - 1);
-			ActivePlayerPos = _map.GetActiveCharacter()->GetPosition();
-			_map.Swap(ActivePlayerOldPos, ActivePlayerPos);
+			ActivePlayerOldPos = _map->GetActiveCharacter()->GetPosition();
+			_map->GetActiveCharacter()->SetPosition(ActivePlayerPos.x, ActivePlayerPos.y - 1);
+			ActivePlayerPos = _map->GetActiveCharacter()->GetPosition();
+			_map->Swap(ActivePlayerOldPos, ActivePlayerPos);
 			_jumpHeight++;
 		}
 	}
@@ -323,27 +323,27 @@ void Game::MovePlayers()
 				Gate* thisGate = static_cast<Gate*>(grid[ActivePlayerPos.y - 2][ActivePlayerPos.x]);
 				if (thisGate->GetState() == OPEN)
 				{
-					ActivePlayerOldPos = _map.GetActiveCharacter()->GetPosition();
-					_map.GetActiveCharacter()->SetPosition(ActivePlayerPos.x, ActivePlayerPos.y - 3);
-					ActivePlayerPos = _map.GetActiveCharacter()->GetPosition();
-					_map.Swap(ActivePlayerOldPos, ActivePlayerPos);
+					ActivePlayerOldPos = _map->GetActiveCharacter()->GetPosition();
+					_map->GetActiveCharacter()->SetPosition(ActivePlayerPos.x, ActivePlayerPos.y - 3);
+					ActivePlayerPos = _map->GetActiveCharacter()->GetPosition();
+					_map->Swap(ActivePlayerOldPos, ActivePlayerPos);
 					_jumpHeight += 3;
 				}
 				else if (thisGate->GetState() == CLOSED)
 				{
-					ActivePlayerOldPos = _map.GetActiveCharacter()->GetPosition();
-					_map.GetActiveCharacter()->SetPosition(ActivePlayerPos.x, ActivePlayerPos.y - 1);
-					ActivePlayerPos = _map.GetActiveCharacter()->GetPosition();
-					_map.Swap(ActivePlayerOldPos, ActivePlayerPos);
+					ActivePlayerOldPos = _map->GetActiveCharacter()->GetPosition();
+					_map->GetActiveCharacter()->SetPosition(ActivePlayerPos.x, ActivePlayerPos.y - 1);
+					ActivePlayerPos = _map->GetActiveCharacter()->GetPosition();
+					_map->Swap(ActivePlayerOldPos, ActivePlayerPos);
 					_jumpHeight++;
 				}
 			}
 			else if (grid[ActivePlayerPos.y - 1][ActivePlayerPos.x]->GetType() == TILE)
 			{
-				ActivePlayerOldPos = _map.GetActiveCharacter()->GetPosition();
-				_map.GetActiveCharacter()->SetPosition(ActivePlayerPos.x, ActivePlayerPos.y - 1);
-				ActivePlayerPos = _map.GetActiveCharacter()->GetPosition();
-				_map.Swap(ActivePlayerOldPos, ActivePlayerPos);
+				ActivePlayerOldPos = _map->GetActiveCharacter()->GetPosition();
+				_map->GetActiveCharacter()->SetPosition(ActivePlayerPos.x, ActivePlayerPos.y - 1);
+				ActivePlayerPos = _map->GetActiveCharacter()->GetPosition();
+				_map->Swap(ActivePlayerOldPos, ActivePlayerPos);
 				_jumpHeight++;
 			}
 		}
@@ -360,19 +360,19 @@ void Game::MovePlayers()
 				return;
 			if (thisGate->GetState() == OPEN)
 			{
-				ActivePlayerOldPos = _map.GetActiveCharacter()->GetPosition();
-				_map.GetActiveCharacter()->SetPosition(ActivePlayerPos.x - 2, ActivePlayerPos.y);
-				ActivePlayerPos = _map.GetActiveCharacter()->GetPosition();
-				_map.Swap(ActivePlayerOldPos, ActivePlayerPos);
+				ActivePlayerOldPos = _map->GetActiveCharacter()->GetPosition();
+				_map->GetActiveCharacter()->SetPosition(ActivePlayerPos.x - 2, ActivePlayerPos.y);
+				ActivePlayerPos = _map->GetActiveCharacter()->GetPosition();
+				_map->Swap(ActivePlayerOldPos, ActivePlayerPos);
 			}
 		}
 
 		else if (grid[ActivePlayerPos.y][ActivePlayerPos.x - 1]->GetType() == TILE)
 		{
-			ActivePlayerOldPos = _map.GetActiveCharacter()->GetPosition();
-			_map.GetActiveCharacter()->SetPosition(ActivePlayerPos.x - 1, ActivePlayerPos.y);
-			ActivePlayerPos = _map.GetActiveCharacter()->GetPosition();
-			_map.Swap(ActivePlayerOldPos, ActivePlayerPos);
+			ActivePlayerOldPos = _map->GetActiveCharacter()->GetPosition();
+			_map->GetActiveCharacter()->SetPosition(ActivePlayerPos.x - 1, ActivePlayerPos.y);
+			ActivePlayerPos = _map->GetActiveCharacter()->GetPosition();
+			_map->Swap(ActivePlayerOldPos, ActivePlayerPos);
 		}
 	}
 	if (data.moveRight)
@@ -385,25 +385,25 @@ void Game::MovePlayers()
 				return;
 			if (thisGate->GetState() == OPEN)
 			{
-				ActivePlayerOldPos = _map.GetActiveCharacter()->GetPosition();
-				_map.GetActiveCharacter()->SetPosition(ActivePlayerPos.x + 2, ActivePlayerPos.y);
-				ActivePlayerPos = _map.GetActiveCharacter()->GetPosition();
-				_map.Swap(ActivePlayerOldPos, ActivePlayerPos);
+				ActivePlayerOldPos = _map->GetActiveCharacter()->GetPosition();
+				_map->GetActiveCharacter()->SetPosition(ActivePlayerPos.x + 2, ActivePlayerPos.y);
+				ActivePlayerPos = _map->GetActiveCharacter()->GetPosition();
+				_map->Swap(ActivePlayerOldPos, ActivePlayerPos);
 			}
 		}
 
 		else if (grid[ActivePlayerPos.y][ActivePlayerPos.x + 1]->GetType() == TILE)
 		{
-			ActivePlayerOldPos = _map.GetActiveCharacter()->GetPosition();
-			_map.GetActiveCharacter()->SetPosition(ActivePlayerPos.x + 1, ActivePlayerPos.y);
-			ActivePlayerPos = _map.GetActiveCharacter()->GetPosition();
-			_map.Swap(ActivePlayerOldPos, ActivePlayerPos);
+			ActivePlayerOldPos = _map->GetActiveCharacter()->GetPosition();
+			_map->GetActiveCharacter()->SetPosition(ActivePlayerPos.x + 1, ActivePlayerPos.y);
+			ActivePlayerPos = _map->GetActiveCharacter()->GetPosition();
+			_map->Swap(ActivePlayerOldPos, ActivePlayerPos);
 		}
 	}
 
 	if (data.switchChars && !_isJumping)
 	{
-		_map.SwitchCharacter();
+		_map->SwitchCharacter();
 	}
 
 	if (data.interact)
@@ -419,69 +419,77 @@ void Game::MovePlayers()
 
 void Game::Play()
 {
-	system("CLS");
-	_map.ReadMap();
-	_map.ShowMap();
+	//system("CLS");
+	_map->ReadMap();
+	view.setRenderHint(QPainter::Antialiasing);
+	view.setScene(_map);
+	view.show();
 
-	if(_manette)
-		comm->OpenPort();
+	/*QTimer timer;
+	QObject::connect(&timer, &QTimer::timeout, _map, &GameMap::advance);
+	timer.start(1000 / 60);*/
 
-	do
-	{
-		GetInput();
-		MovePlayers();
-		CheckPosition();
-		CheckButtons();
-		CheckExits();
-		CheckPools();
+	//_map->ShowMap();
 
-		if(_manette)
-			SendResponse();
+	//if(_manette)
+	//	comm->OpenPort();
 
-		if (_updated)
-		{
-			system("CLS");
-			_map.ShowMap();
-			_updated = false;
-		}
+	//do
+	//{
+	//	GetInput();
+	//	MovePlayers();
+	//	CheckPosition();
+	//	CheckButtons();
+	//	CheckExits();
+	//	CheckPools();
 
-		if (_manette)
-			Sleep(10);
+	//	if(_manette)
+	//		SendResponse();
 
-		else
-			Sleep(50);
+	//	if (_updated)
+	//	{
+	//		system("CLS");
+	//		_map->ShowMap();
+	//		_updated = false;
+	//	}
 
-	} while (!_gameOver && !_levelFinished);
+	//	if (_manette)
+	//		Sleep(10);
 
-	system("CLS");
-	if (_gameOver)
-  {
-		std::cout << "Gameover\n";
-		Sleep(2000);
-		//NewLevel();
-		_gameOver = false;
-		Play();
-	}
-	else if (_currentLevel == 0 && _levelFinished == true)
-	{
-		_map.Clear();
-		_currentLevel = 1;
-		//MainMenu();
-	}
-	else if (_levelFinished)
-	{
-		_currentLevel++;
-		//NewLevel();
-		_levelFinished = false;
-		Play();
-	}
+	//	else
+	//		Sleep(50);
+
+	//} while (!_gameOver && !_levelFinished);
+
+	//system("CLS");
+	//if (_gameOver)
+ // {
+	//	std::cout << "Gameover\n";
+	//	Sleep(2000);
+	//	//NewLevel();
+	//	_gameOver = false;
+	//	Play();
+	//}
+	//else if (_currentLevel == 0 && _levelFinished == true)
+	//{
+	//	_map->Clear();
+	//	_currentLevel = 1;
+	//	//MainMenu();
+	//}
+	//else if (_levelFinished)
+	//{
+	//	_currentLevel++;
+	//	//NewLevel();
+	//	_levelFinished = false;
+	//	Play();
+	//}
 		
 }
 
 void Game::CheckPosition()
 {
-	std::vector<std::vector<Tile*>>& grid = *_map.GetGrid();
-	Coordinate ActivePlayerPos = _map.GetActiveCharacter()->GetPosition();
+	std::vector<std::vector<Tile*>>& grid = *_map->GetGrid();
+	Coordinate ActivePlayerPos = _map->GetActiveCharacter()->GetPosition();
 	std::chrono::duration<double> elapsed_time = std::chrono::system_clock::now() - _start;
 	Coordinate ActivePlayerOldPos;
 
@@ -489,10 +497,10 @@ void Game::CheckPosition()
 	{
 		if (_isJumping && elapsed_time > std::chrono::milliseconds{ 750 })
 		{
-			ActivePlayerOldPos = _map.GetActiveCharacter()->GetPosition();
-			_map.GetActiveCharacter()->SetPosition(ActivePlayerPos.x, ActivePlayerPos.y + 1);
-			ActivePlayerPos = _map.GetActiveCharacter()->GetPosition();
-			_map.Swap(ActivePlayerOldPos, ActivePlayerPos);
+			ActivePlayerOldPos = _map->GetActiveCharacter()->GetPosition();
+			_map->GetActiveCharacter()->SetPosition(ActivePlayerPos.x, ActivePlayerPos.y + 1);
+			ActivePlayerPos = _map->GetActiveCharacter()->GetPosition();
+			_map->Swap(ActivePlayerOldPos, ActivePlayerPos);
 			_jumpHeight--; 
 
 			if (grid[ActivePlayerPos.y + 1][ActivePlayerPos.x]->GetType() == WALL)
@@ -503,10 +511,10 @@ void Game::CheckPosition()
 		}
 		else if (!_isJumping)
 		{
-			ActivePlayerOldPos = _map.GetActiveCharacter()->GetPosition();
-			_map.GetActiveCharacter()->SetPosition(ActivePlayerPos.x, ActivePlayerPos.y + 1);
-			ActivePlayerPos = _map.GetActiveCharacter()->GetPosition();
-			_map.Swap(ActivePlayerOldPos, ActivePlayerPos);
+			ActivePlayerOldPos = _map->GetActiveCharacter()->GetPosition();
+			_map->GetActiveCharacter()->SetPosition(ActivePlayerPos.x, ActivePlayerPos.y + 1);
+			ActivePlayerPos = _map->GetActiveCharacter()->GetPosition();
+			_map->Swap(ActivePlayerOldPos, ActivePlayerPos);
 			_jumpHeight--;
 		}
 		
@@ -519,10 +527,10 @@ void Game::CheckPosition()
 		{
 			if (_isJumping && elapsed_time > std::chrono::milliseconds{ 750 })
 			{
-				ActivePlayerOldPos = _map.GetActiveCharacter()->GetPosition();
-				_map.GetActiveCharacter()->SetPosition(ActivePlayerPos.x, ActivePlayerPos.y + 2);
-				ActivePlayerPos = _map.GetActiveCharacter()->GetPosition();
-				_map.Swap(ActivePlayerOldPos, ActivePlayerPos);
+				ActivePlayerOldPos = _map->GetActiveCharacter()->GetPosition();
+				_map->GetActiveCharacter()->SetPosition(ActivePlayerPos.x, ActivePlayerPos.y + 2);
+				ActivePlayerPos = _map->GetActiveCharacter()->GetPosition();
+				_map->Swap(ActivePlayerOldPos, ActivePlayerPos);
 				_jumpHeight--;
 
 				if (grid[ActivePlayerPos.y + 1][ActivePlayerPos.x]->GetType() == WALL)
@@ -533,10 +541,10 @@ void Game::CheckPosition()
 			}
 			else if (!_isJumping)
 			{
-				ActivePlayerOldPos = _map.GetActiveCharacter()->GetPosition();
-				_map.GetActiveCharacter()->SetPosition(ActivePlayerPos.x, ActivePlayerPos.y + 2);
-				ActivePlayerPos = _map.GetActiveCharacter()->GetPosition();
-				_map.Swap(ActivePlayerOldPos, ActivePlayerPos);
+				ActivePlayerOldPos = _map->GetActiveCharacter()->GetPosition();
+				_map->GetActiveCharacter()->SetPosition(ActivePlayerPos.x, ActivePlayerPos.y + 2);
+				ActivePlayerPos = _map->GetActiveCharacter()->GetPosition();
+				_map->Swap(ActivePlayerOldPos, ActivePlayerPos);
 			}
 		}
 	}
@@ -549,28 +557,28 @@ void Game::CheckPosition()
 
 void Game::CheckGates()
 {
-	for (int i = 0; i < _map.GetGates().size(); i++)
+	for (int i = 0; i < _map->GetGates().size(); i++)
 	{
-		_map.GetGates()[i]->CheckControllers();
+		_map->GetGates()[i]->CheckControllers();
 	}
 }
 
 void Game::CheckButtons()
 {
-	std::vector<std::vector<Tile*>> &grid = *_map.GetGrid();
+	std::vector<std::vector<Tile*>> &grid = *_map->GetGrid();
 	Coordinate coord;
-	for (int i = 0; i < _map.GetButton().size(); i++)
+	for (int i = 0; i < _map->GetButton().size(); i++)
 	{
-		coord = _map.GetButton()[i]->GetPosition();
+		coord = _map->GetButton()[i]->GetPosition();
 
 		if (grid[coord.y - 1][coord.x]->GetType() == CHARACTER)
 		{
-			_map.GetButton()[i]->SetState(OPEN);
+			_map->GetButton()[i]->SetState(OPEN);
 			CheckGates();
 		}
 		else
 		{
-			_map.GetButton()[i]->SetState(CLOSED);
+			_map->GetButton()[i]->SetState(CLOSED);
 			CheckGates();
 		}
 	}
@@ -578,16 +586,16 @@ void Game::CheckButtons()
 
 void Game::CheckPools(){
 	// Personnage actif
-	int x = _map.GetActiveCharacter()->GetPosition().x;
-	int y = _map.GetActiveCharacter()->GetPosition().y;
+	int x = _map->GetActiveCharacter()->GetPosition().x;
+	int y = _map->GetActiveCharacter()->GetPosition().y;
 
 	// Arrête la fonction si le personnage n'est pas au-dessus d'une pool
-	if (_map.GetPoolAt(x, y + 1) == nullptr) {
+	if (_map->GetPoolAt(x, y + 1) == nullptr) {
 		return;
 	}
 
 	// Termine la partie si l'élément n'est pas le même que celui du personnage
-	if (_map.GetPoolAt(x, y + 1)->GetElement() != _map.GetActiveCharacter()->getElement()) {
+	if (_map->GetPoolAt(x, y + 1)->GetElement() != _map->GetActiveCharacter()->getElement()) {
 		_gameOver = true;
 	}
 
@@ -595,25 +603,25 @@ void Game::CheckPools(){
 
 void Game::CheckExits()
 {
-	std::vector<std::vector<Tile*>> &grid = *_map.GetGrid();
+	std::vector<std::vector<Tile*>> &grid = *_map->GetGrid();
 	Coordinate coord;
-	for (int i = 0; i < _map.GetExit().size(); i++)
+	for (int i = 0; i < _map->GetExit().size(); i++)
 	{
-		coord = _map.GetExit()[i]->GetPosition();
+		coord = _map->GetExit()[i]->GetPosition();
 
 		if (grid[coord.y - 1][coord.x]->GetType() == CHARACTER)
 		{
-			_map.GetExit()[i]->SetState(OPEN);
+			_map->GetExit()[i]->SetState(OPEN);
 		}
 		else
 		{
-			_map.GetExit()[i]->SetState(CLOSED);
+			_map->GetExit()[i]->SetState(CLOSED);
 		}
 	}
 
-	for (int y = 0; y < _map.GetExit().size(); y++)
+	for (int y = 0; y < _map->GetExit().size(); y++)
 	{
-		if (_map.GetExit()[y]->GetState() == CLOSED)
+		if (_map->GetExit()[y]->GetState() == CLOSED)
 		{
 			_levelFinished = false;
 			return;
@@ -627,8 +635,8 @@ void Game::CheckExits()
 
 void Game::Interact()
 {
-	std::vector<std::vector<Tile*>> &grid = *_map.GetGrid();
-	Coordinate ActivePlayerPos = _map.GetActiveCharacter()->GetPosition();
+	std::vector<std::vector<Tile*>> &grid = *_map->GetGrid();
+	Coordinate ActivePlayerPos = _map->GetActiveCharacter()->GetPosition();
 
 
 	if (grid[ActivePlayerPos.y + 1][ActivePlayerPos.x]->GetType() == LEVER)

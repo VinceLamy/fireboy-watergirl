@@ -2,12 +2,13 @@
 #define WALL_H
 
 #include "tile.h"
+#include <QtWidgets>
 
-class Wall : public Tile
+class Wall : public QGraphicsPixmapItem
 {
 public:
-	Wall(int x, int y);
-	void Show();
+	Wall(const QPixmap& pixmap, qreal x, qreal y);
+	//void Show();
 };
 
 #endif WALL_H

@@ -33,7 +33,7 @@ class Game : public QObject
 {
 	Q_OBJECT
 
-	Map _map;
+	Map* _map;
 	int _currentLevel = 1;
 	bool _gameOver;
 	bool _levelFinished;
@@ -56,6 +56,7 @@ class Game : public QObject
 	QMainWindow* _mainWindow;
 	MainMenu* _mainMenu;
 	LevelSelection* _levelSelection;
+	QGraphicsView view;
 
 public slots:
 	void LoadLevel(int level);

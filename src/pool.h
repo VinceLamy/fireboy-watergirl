@@ -7,16 +7,17 @@
 #define GREEN   "\033[32m"
 
 #include "tile.h"
+#include <QtWidgets>
 
-class Pool : public Tile
+class Pool : public QGraphicsPixmapItem
 {
 public:
-	Pool(int x, int y, Element e);
+	Pool(const QPixmap& pixmap, qreal x, qreal y, Element e);
 
-	void SetElememt(Element e);
+	//void SetElememt(Element e);
 	Element GetElement();
 
-	void Show();
+	//void Show();
 
 private:
 	Element _element;
