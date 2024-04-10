@@ -1,7 +1,5 @@
 #include "game.h"
-
 #include <iostream>
-
 #include "conio.h"
 #include "pool.h"
 #include "Windows.h"
@@ -20,23 +18,22 @@ Game::Game(const char* port, QObject* parent) : QObject(parent)
 
 	_mainWindow = new QMainWindow();
 	_mainMenu = new MainMenu();
+	_inGameMenu = new InGameMenu();
 	_levelSelection = new LevelSelection();
 
 	connect(_mainMenu, &MainMenu::levelSelected, this, &Game::LoadLevel);
 	connect(_mainMenu, &MainMenu::levelSelection, this, &Game::ChooseLevel);
 	connect(_levelSelection, &LevelSelection::levelSelected, this, &Game::LoadLevel);
 	connect(_levelSelection, &LevelSelection::returnToMainMenu, this, &Game::ShowMainMenu);
-	
+	connect(_inGameMenu, &InGameMenu::resumeGame, this, &Game::ResumeGame);
+	connect(_inGameMenu, &InGameMenu::quitToMainMenu, this, &Game::ShowMainMenu);
 	
 	_mainWindow->resize(1280, 720);
 	_mainWindow->setStyleSheet("QMainWindow {" "background-image: url(./sprite/menu/fractal-1722991_1920.jpg);" "}");
 	_mainWindow->setCentralWidget(_mainMenu);
 	_mainWindow->show();
-	
-	_inGameMenu = new InGameMenu();
 
-	connect(_inGameMenu, &InGameMenu::resumeGame, this, &Game::ResumeGame);
-	connect(_inGameMenu, &InGameMenu::quitToMainMenu, this, &Game::QuitToMainMenu);
+
 
 	//_map = Map("./map/testCode.txt");
 }
@@ -91,11 +88,6 @@ void Game::ResumeGame()
 	_inGameMenu->hide();
 }
 
-void Game::QuitToMainMenu()
-{
-	_inGameMenu->hide();
-	ShowMainMenu();
-}
 
 void Game::ShowMainMenu()
 {
@@ -152,81 +144,42 @@ void Game::ChooseLevel()
 	//NewLevel();
 	//Play();
 
-	
-	
 	_levelSelection = new LevelSelection();
 	connect(_levelSelection, &LevelSelection::levelSelected, this, &Game::LoadLevel);
 	connect(_levelSelection, &LevelSelection::returnToMainMenu, this, &Game::ShowMainMenu);
 	_mainWindow->setCentralWidget(_levelSelection);
 }
 
-int Game::AskMainMenuInput()
+
+void Game::ShowInGameMenu()
 {
-	int userInput = 0;
+	//int userInput = AskMenuInput();
+	//
+	//switch (userInput)
+	//{
+	//case 1:
+	//	_map.ShowMap();
+	//	break;
+	//case 2:
+	//	//NewLevel();
+	//	Play();
+	//	break;
+	//case 3:
+	//	_currentLevel = 1;
+	//	_map.Clear();
+	//	//MainMenu();
+	//	break;
+	//default:
+	//	break;
+	//}
+	//
+	//if (_manette)
+	//	comm->OpenPort();
 
-	system("CLS");
-	std::cout << "MENU PRINCIPAL" << std::endl;
-	std::cout << "\n1-TUTORIEL" << std::endl;
-	std::cout << "2-NOUVELLE PARTIE" << std::endl;
-	std::cout << "3-CHOISIR NIVEAU" << std::endl;
-	std::cout << "4-QUITTER\n" << std::endl;
-	std::cin.clear();
-	fflush(stdin);
-
-	do
-	{
-		std::cin >> userInput;
-	} while (userInput < 1 || userInput > 4);
-
-	return userInput;
-}
-
-void Game::Menu()
-{
-	int userInput = AskMenuInput();
-
-	switch (userInput)
-	{
-	case 1:
-		_map.ShowMap();
-		break;
-	case 2:
-		//NewLevel();
-		Play();
-		break;
-	case 3:
-		_currentLevel = 1;
-		_map.Clear();
-		//MainMenu();
-		break;
-	default:
-		break;
-	}
-
-	if (_manette)
-		comm->OpenPort();
-}
-
-int Game::AskMenuInput()
-{
-	int userInput;
-
-	system("CLS");
-
-	std::cout << "MENU" << std::endl;
-	std::cout << "\n1-CONTINUER" << std::endl;
-	std::cout << "2-RECOMMENCER" << std::endl;
-	std::cout << "3-MENU PRINCIPAL\n" << std::endl;
-
-	std::cin.clear();
-	fflush(stdin);
-
-	do
-	{
-		std::cin >> userInput;
-	} while (userInput < 1 || userInput > 3);
-
-	return userInput;
+		_inGameMenu = new InGameMenu();
+		connect(_inGameMenu, &InGameMenu::resumeGame, this, &Game::ResumeGame);
+		connect(_inGameMenu, &InGameMenu::quitToMainMenu, this, &Game::ShowMainMenu);
+		_mainWindow->setCentralWidget(_inGameMenu);
 }
 
 void Game::GetInput()
@@ -430,7 +383,7 @@ void Game::MovePlayers()
 
 	if (data.menu)
 	{
-		Menu();
+		ShowInGameMenu();
 	}
 }
 

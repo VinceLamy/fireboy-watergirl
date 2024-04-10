@@ -58,22 +58,19 @@ class Game : public QObject
 	MainMenu* _mainMenu;
 	LevelSelection* _levelSelection;
 	InGameMenu* _inGameMenu;
+
 public slots:
 	void LoadLevel(int level);
 	void ShowMainMenu();
+	void ShowInGameMenu();
 	void ResumeGame();
-	void QuitToMainMenu();
 
 
 public:
 	Game(const char* port, QObject* parent = nullptr);
 	~Game();
 
-	int AskMainMenuInput();
 	void ChooseLevel();
-	void Menu();
-	int AskMenuInput();
-
 	void GetInput();
 	void MovePlayers();
 	void CheckPosition();

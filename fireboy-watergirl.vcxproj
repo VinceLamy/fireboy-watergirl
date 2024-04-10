@@ -159,6 +159,7 @@
     <ClCompile Include="src\gate.cpp" />
     <ClCompile Include="src\lever.cpp" />
     <ClCompile Include="src\ingamemenu.cpp" />
+    <ClCompile Include="src\moc_ingamemenu.cpp" />
     <ClCompile Include="src\pool.cpp" />
     <ClCompile Include="src\tile.cpp" />
     <ClCompile Include="src\wall.cpp" />
