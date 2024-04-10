@@ -7,6 +7,7 @@
 #include "Windows.h"
 #include <stdlib.h>
 #include <string>
+#include <QWidget>
 
 Game::Game(const char* port, QObject* parent) : QObject(parent)
 {
@@ -128,42 +129,52 @@ void Game::Menu()
 
 void Game::GetInput()
 {
-	if (_manette)
+	QKeyEvent* moveLeft = new QKeyEvent(QEvent::KeyPress, Qt::Key_A, Qt::NoModifier);
+	QKeyEvent* moveRight = new QKeyEvent(QEvent::KeyPress, Qt::Key_D, Qt::NoModifier);
+	QKeyEvent* Jump = new QKeyEvent(QEvent::KeyPress, Qt::Key_W, Qt::NoModifier);
+	QKeyEvent* Switch = new QKeyEvent(QEvent::KeyPress, Qt::Key_Q, Qt::NoModifier);
+	QKeyEvent* Interact = new QKeyEvent(QEvent::KeyPress, Qt::Key_E, Qt::NoModifier);
+	QKeyEvent* Menu = new QKeyEvent(QEvent::KeyPress, Qt::Key_M, Qt::NoModifier);
+	QKeyEvent* stopMoveLeft = new QKeyEvent(QEvent::KeyRelease, Qt::Key_A, Qt::NoModifier);
+	QKeyEvent* stopMoveRight = new QKeyEvent(QEvent::KeyRelease, Qt::Key_D, Qt::NoModifier);
+
+	data.jump = false;
+	data.interact = false;
+	data.switchChars = false;
+	data.menu = false;
+
+	data.moveRight = false;
+	data.moveLeft = false;
+
+	parse_status = comm->GetInputData();
+
+	if (parse_status)
 	{
-		data.jump = false;
-		data.interact = false;
-		data.switchChars = false;
-		data.menu = false;
+		data.jump = comm->rcv_msg["boutons"]["3"] == 1;
+		data.interact = comm->rcv_msg["boutons"]["2"] == 1 || std::stof(std::string(comm->rcv_msg["accel"]["z"])) > 0.3;
+		data.switchChars = comm->rcv_msg["boutons"]["1"] == 1;
+		data.menu = comm->rcv_msg["boutons"]["4"] == 1;
 
-		data.moveRight = false;
-		data.moveLeft = false;
-
-		parse_status = comm->GetInputData();
-
-		if (parse_status)
-		{
-			data.jump = comm->rcv_msg["boutons"]["3"] == 1;
-			data.interact = comm->rcv_msg["boutons"]["2"] == 1 || std::stof(std::string(comm->rcv_msg["accel"]["z"])) > 0.3;
-			data.switchChars = comm->rcv_msg["boutons"]["1"] == 1;
-			data.menu = comm->rcv_msg["boutons"]["4"] == 1;
-
-			data.moveRight = std::stof(std::string(comm->rcv_msg["joystick"]["x"])) < -0.5;
-			data.moveLeft = std::stof(std::string(comm->rcv_msg["joystick"]["x"])) > 0.5;
-		}
+		data.moveRight = std::stof(std::string(comm->rcv_msg["joystick"]["x"])) < -0.5;
+		data.moveLeft = std::stof(std::string(comm->rcv_msg["joystick"]["x"])) > 0.5;
 	}
-	else if (!_manette)
-	{
-		data.jump = GetAsyncKeyState('W') & 0x8000;
-		data.interact = GetAsyncKeyState('E') & 0x8000;
-		data.switchChars = GetAsyncKeyState('Q') & 0x8000;
-		data.menu = GetAsyncKeyState('M') & 0x8000;
 
-		data.moveRight = GetAsyncKeyState('D') & 0x8000;
-		data.moveLeft = GetAsyncKeyState('A') & 0x8000;
-
-		if (data.interact || data.switchChars)
-			Sleep(50);
-	}
+	if (data.jump)
+		QApplication::postEvent(_map, Jump);
+	if (data.interact)
+		QApplication::postEvent(_map, Interact);
+	if (data.switchChars)
+		QApplication::postEvent(_map, Switch);
+	if (data.menu)
+		QApplication::postEvent(_map, Menu);
+	if (data.moveRight)
+		QApplication::postEvent(_map, moveRight);
+	if (data.moveLeft)
+		QApplication::postEvent(_map, moveLeft);
+	if (!data.moveRight)
+		QApplication::postEvent(_map, stopMoveRight);
+	if (!data.moveLeft)
+		QApplication::postEvent(_map, stopMoveLeft);
 
 	if (data.jump || data.interact || data.moveRight || data.moveLeft)
 		_updated = true;
