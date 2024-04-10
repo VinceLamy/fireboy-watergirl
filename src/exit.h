@@ -6,6 +6,7 @@
 
 #include "tile.h"
 #include "QtWidgets"
+#include "character.h"
 
 class Exit : public QGraphicsPixmapItem
 {
@@ -14,6 +15,7 @@ public:
 
 	void SetState(State s);
 	State GetState();
+	void CheckIn();
 
 	//void Show();
 

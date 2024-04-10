@@ -9,12 +9,12 @@
 //	SetType(GATE);
 //}
 
-Gate::Gate(const QPixmap& pixmap, qreal x, qreal y, std::vector<Controller*> controllers) : QGraphicsPixmapItem(pixmap)
+Gate::Gate(const QPixmap& pixmap, int size, Orientation o, qreal x, qreal y, std::vector<Controller*> controllers) : QGraphicsPixmapItem(pixmap)
 {
 	/*SetPosition(x, y);*/
 	setPos(x, y);
-	/*_size = size;
-	_orientation = o;*/
+	_size = size;
+	_orientation = o;
 	/*_slaveGates = slaveGates;*/
 	_controllers = controllers;
 	/*SetType(GATE);*/
@@ -30,6 +30,16 @@ void Gate::SetState(State s)
 	_state = s;
 }
 
+int Gate::GetSize()
+{
+	return _size;
+}
+
+Orientation Gate::GetOrientation()
+{
+	return _orientation;
+}
+
 void Gate::CheckControllers()
 {
 	for (int i = 0; i < _controllers.size(); i++)
@@ -39,6 +49,7 @@ void Gate::CheckControllers()
 			if (_controllers[i]->GetState() == OPEN)
 			{
 				_state = OPEN;
+				return;
 
 				/*for (int y = 0; y < _slaveGates.size(); y++)
 				{
@@ -64,7 +75,7 @@ void Gate::CheckControllers()
 				{
 					_slaveGates[y]->SetState(OPEN);
 				}*/
-				break;
+				return;
 			}
 		}
 	}

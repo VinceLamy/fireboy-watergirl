@@ -12,8 +12,8 @@
 #include "pool.h"
 #include "wall.h"
 
-#define BLOCKWIDTH 25
-#define BLOCKHEIGHT 50
+#define BLOCKWIDTH 27
+#define BLOCKHEIGHT 52
 
 using namespace std;
 
@@ -23,8 +23,8 @@ waterPixamp("./sprite/map/dngn_deep_water.png"),
 lavaPixmap("./sprite/map/lava0.png"),
 gooPixmap("./sprite/map/dngn_deep_water_murky.png"),
 gatePixmap("./sprite/map/relief1.png"),
-fireJpPixmap("./sprite/map/Fire_JP.png"),
-waterAlexPixmap("./sprite/map/Water_Alex.png"),
+fireJpPixmap("./sprite/map/Fire_JP_V2.png"),
+waterAlexPixmap("./sprite/map/Water_Alex_V2.png"),
 codeGiverPixmap("./sprite/map/dngn_altar_beogh.png"),
 exitPixmap("./sprite/map/dngn_enter_cocytus.png"),
 leverPixmap("./sprite/map/Lever.png"),
@@ -55,7 +55,6 @@ backgroundPixmap("./sprite/map/background.png")
 
 Map::~Map()
 {
-	Clear();
 }
 
 std::vector<vector<Tile*>>* Map::GetGrid()
@@ -213,27 +212,26 @@ void Map::AddCharacter(int x, int y, Element e)
 	if (e == FIRE)
 	{
 		_fireBoy = new Character(fireJpPixmap, e, x*BLOCKWIDTH, y*BLOCKHEIGHT, true);
+		_fireBoy->setZValue(1);
 		addItem(_fireBoy);
-		/*delete _grid[y][x];
-		_grid[y][x] = _fireBoy;*/
 		connect(_fireBoy, &Character::GameOver, this, &Map::SendGameOverToGame);
+		connect(_fireBoy, &Character::SwitchCharacter, this, &Map::SwitchCharacter);
+		connect(_fireBoy, &Character::CheckGates, this, &Map::CheckGates);
 	}
 	else if (e == WATER)
 	{
 		_waterGirl = new Character(waterAlexPixmap, e, x*BLOCKWIDTH, y*BLOCKHEIGHT, false);
 		addItem(_waterGirl);
-		/*delete _grid[y][x];
-		_grid[y][x] = _waterGirl;*/
+		_waterGirl->setZValue(1);
 		connect(_waterGirl, &Character::GameOver, this, &Map::SendGameOverToGame);
+		connect(_waterGirl, &Character::SwitchCharacter, this, &Map::SwitchCharacter);
+		connect(_waterGirl, &Character::CheckGates, this, &Map::CheckGates);
 	}
 }
 
 void Map::AddExit(int x, int y)
 {
 	Exit* nExit = new Exit(exitPixmap, x*BLOCKWIDTH, y*BLOCKHEIGHT - BLOCKHEIGHT - BLOCKHEIGHT/2);
-	/*delete _grid[y][x];
-	_grid[y][x] = nExit;
-	Exit* exit = static_cast<Exit*>(nExit);*/
 	_exit.push_back(nExit);
 	addItem(nExit);
 }
@@ -255,66 +253,37 @@ void Map::AddPool(int x, int y, Element e)
 		Pool* nPool = new Pool(gooPixmap, x * BLOCKWIDTH, y * BLOCKHEIGHT, e);
 		addItem(nPool);
 	}
-
-	/*_pool.push_back(new Pool(x, y, e));
-	delete _grid[y][x];
-	_grid[y][x] = _pool.back();*/
 }
 
 void Map::AddWall(int x, int y)
 {
 	Wall* nWall = new Wall(wallPixmap, x*BLOCKWIDTH, y*BLOCKHEIGHT);
 	addItem(nWall);
-	/*delete _grid[y][x];
-	_grid[y][x] = nWall;*/
 }
 
 void Map::AddGate(int x, int y, int size, Orientation o)
 {
-	/*Tile* nSlaveGate;*/
-	/*vector<Gate*> slaveGateVector;*/
-	/*Gate* nSlaveGate2;*/
 	Gate* nGate;
 	if (o == HORIZONTAL)
 	{
-		/*for (int i = 1; i < size; i++)
-		{
-			nSlaveGate = new Gate(x + i, y);
-			nSlaveGate2 = static_cast<Gate*>(nSlaveGate);
-			delete _grid[y][x + i];
-			_grid[y][x + i] = nSlaveGate;
-			slaveGateVector.push_back(nSlaveGate2);
-		}*/
-		gatePixmap = gatePixmap.transformed(QTransform().rotate(90));
-		gatePixmap = gatePixmap.scaled(QSize(BLOCKWIDTH*size, BLOCKWIDTH));
-		nGate = new Gate(gatePixmap, x * BLOCKWIDTH, y * BLOCKHEIGHT + BLOCKHEIGHT/4, _lastControllers);
+		QPixmap tempPixmap = gatePixmap.transformed(QTransform().rotate(90));
+		tempPixmap = gatePixmap.scaled(QSize(BLOCKWIDTH*size, BLOCKWIDTH));
+		nGate = new Gate(tempPixmap, size, o,  x * BLOCKWIDTH, y * BLOCKHEIGHT + BLOCKHEIGHT/4, _lastControllers);
 		addItem(nGate);
 	}
 	else if (o == VERTICAL)
 	{
-		/*for (int i = 1; i < size; i++)
-		{
-			nSlaveGate = new Gate(x, y - i);
-			nSlaveGate2 = static_cast<Gate*>(nSlaveGate);
-			delete _grid[y - i][x];
-			_grid[y - i][x] = nSlaveGate;
-			slaveGateVector.push_back(nSlaveGate2);
-		}*/
-		gatePixmap = gatePixmap.scaled(QSize(BLOCKWIDTH, BLOCKHEIGHT*size));
-		nGate = new Gate(gatePixmap, x * BLOCKWIDTH, (y - size + 1)* BLOCKHEIGHT, _lastControllers);
+		QPixmap tempPixmap = gatePixmap.scaled(QSize(BLOCKWIDTH, BLOCKHEIGHT*size));
+		nGate = new Gate(tempPixmap, size, o, x * BLOCKWIDTH, (y - size + 1)* BLOCKHEIGHT, _lastControllers);
 		addItem(nGate);
 	}
 	_gate.push_back(nGate);
-	/*delete _grid[y][x];
-	_grid[y][x] = _gate.back();*/
 	_lastControllers.clear();
 }
 
 void Map::AddLever(int x, int y)
 {
 	Lever* nLever = new Lever(leverPixmap, x*BLOCKWIDTH, y*BLOCKHEIGHT - BLOCKHEIGHT - BLOCKHEIGHT/2);
-	/*delete _grid[y][x];
-	_grid[y][x] = nLever;*/
 	Controller* connectLever = static_cast<Controller*>(nLever);
 	_lastControllers.push_back(connectLever);
 	addItem(nLever);
@@ -323,8 +292,6 @@ void Map::AddLever(int x, int y)
 void Map::AddButton(int x, int y)
 {
 	Button* nButton = new Button(buttonPixmap, x*BLOCKWIDTH, y*BLOCKHEIGHT - BLOCKHEIGHT);
-	/*delete _grid[y][x];
-	_grid[y][x] = nButton;*/
 	Controller* connectButton = static_cast<Controller*>(nButton);
 	_lastControllers.push_back(connectButton);
 	_button.push_back(nButton);
@@ -337,8 +304,6 @@ void Map::AddCodeLock(int x, int y, vector<CodeGiver*>)
 	CodeLock* nCodeLock = new CodeLock(codeLockPixmap, x*BLOCKWIDTH, y*BLOCKHEIGHT - BLOCKHEIGHT - BLOCKHEIGHT / 2, _lastCodeGiver);
 	Controller* connectCodeLock = static_cast<Controller*>(nCodeLock);
 	_lastControllers.push_back(connectCodeLock);
-	/*delete _grid[y][x];
-	_grid[y][x] = nCodeLock;*/
 	_lastCodeGiver.clear();
 	addItem(nCodeLock);
 }
@@ -346,49 +311,10 @@ void Map::AddCodeLock(int x, int y, vector<CodeGiver*>)
 void Map::AddCodeGiver(int x, int y)
 {
 	CodeGiver* nCodeGiver = new CodeGiver(codeGiverPixmap, x * BLOCKWIDTH, y * BLOCKHEIGHT - BLOCKHEIGHT - BLOCKHEIGHT / 2);
-	/*CodeGiver* thisCodeGiver = static_cast<CodeGiver*>(nCodeGiver);*/
 	_lastCodeGiver.push_back(nCodeGiver);
 	addItem(nCodeGiver);
-	/*delete _grid[y][x];
-	_grid[y][x] = nCodeGiver;*/
 }
 
-void Map::Clear()
-{
-	for (int a = 0; a < _grid.size(); a++)
-	{
-		for (int b = 0; b < _grid[a].size(); b++)
-		{
-			delete _grid[a][b];
-		}
-	}
-
-	_fileName = NULL;
-	_grid.clear();
-	_lastControllers.clear();
-	_lastCodeGiver.clear();
-	_button.clear();
-	_waterGirl = NULL;
-	_fireBoy = NULL;
-	_pool.clear();
-	_gate.clear();
-	_exit.clear();
-}
-
-vector<Gate*> Map::GetGates()
-{
-	return _gate;
-}
-
-vector<Button*> Map::GetButton()
-{
-	return _button;
-}
-
-vector<Exit*> Map::GetExit()
-{
-	return _exit;
-}
 
 Character* Map::GetActiveCharacter()
 {
@@ -412,22 +338,62 @@ void Map::SwitchCharacter()
 	}
 }
 
-Pool* Map::GetPoolAt(int x, int y)
+void Map::CheckGates()
 {
-	Coordinate coord;
-	coord.x = x;
-	coord.y = y;
+	for (int i = 0; i < _gate.size(); i++)
+	{
+		_gate[i]->CheckControllers();
+	}
 
-	/*for (int i = 0; i < _pool.size(); i++)
-		if (_pool[i]->GetPosition().x == coord.x && _pool[i]->GetPosition().y == coord.y)
-			return _pool[i];*/
-
-	return nullptr;
+	for (int i = 0; i < _gate.size(); i++)
+	{
+		if (_gate[i]->GetState() == CLOSED)
+		{
+			if (_gate[i]->GetOrientation() == HORIZONTAL)
+			{
+				
+				QPixmap tempPixmap = gatePixmap.transformed(QTransform().rotate(90));
+				tempPixmap = gatePixmap.scaled(QSize(BLOCKWIDTH * _gate[i]->GetSize(), BLOCKWIDTH));
+				_gate[i]->setPixmap(tempPixmap);
+				
+			}
+			else if (_gate[i]->GetOrientation() == VERTICAL)
+			{
+				QPixmap tempPixmap = gatePixmap.scaled(QSize(BLOCKWIDTH, BLOCKHEIGHT * _gate[i]->GetSize()));
+				_gate[i]->setPixmap(tempPixmap);
+			}
+		}
+		else if (_gate[i]->GetState() == OPEN)
+		{
+			_gate[i]->setPixmap(emptyPixmap);
+		}
+	}
 }
 
-void Map::Swap(Coordinate pos1, Coordinate pos2)
+void Map::CheckButtons()
 {
-	swap(_grid[pos1.y][pos1.x], _grid[pos2.y][pos2.x]);
+	for (int i = 0; i < _button.size(); i++)
+	{
+		_button[i]->CheckOver();
+	}
+}
+
+void Map::CheckExits()
+{
+	for (int i = 0; i < _exit.size(); i++)
+	{
+		_exit[i]->CheckIn();
+	}
+
+	if (_exit[0]->GetState() == OPEN && _exit[1]->GetState() == OPEN)
+	{
+		emit LevelFinished();
+	}
+}
+
+void Map::StopTimer()
+{
+	timer->stop();
 }
 
 void Map::SendGameOverToGame()
@@ -437,18 +403,24 @@ void Map::SendGameOverToGame()
 
 void Map::UpdateScene()
 {
+	CheckButtons();
+	CheckGates();
+
 	if (_fireBoy != nullptr && _waterGirl != nullptr)
 	{
 		if (_fireBoy->getState())
 		{
+			_fireBoy->setFocus();
 			_fireBoy->advance(0);
 		}
 		else
 		{
+			_waterGirl->setFocus();
 			_waterGirl->advance(0);
 
 		}
 	}
+	CheckExits();
 }
 
 

@@ -67,25 +67,18 @@ public slots:
 	void ShowMainMenu();
 	void GameOverScreen();
 	void Play();
+	void NextLevel();
 
 public:
 	Game(const char* port, QObject* parent = nullptr);
 	~Game();
 
-	int AskMainMenuInput();
 	void ChooseLevel();
 	void Menu();
-	int AskMenuInput();
 
 	void GetInput();
-	void MovePlayers();
-	void CheckPosition();
-	void CheckGates();
-	void CheckButtons();
-	void CheckExits();
-	void CheckPools();
-	void Interact();
 	void SendResponse();
+	
 	
 };
 

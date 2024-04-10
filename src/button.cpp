@@ -13,3 +13,32 @@ void Button::Show()
 {
 	std::cout << YELLOW << 'B' << RESET;
 }
+
+void Button::CheckOver()
+{
+    bool characterOver = false;
+
+	QList<QGraphicsItem*> collidingItemsList = collidingItems(Qt::IntersectsItemShape);
+    for (QGraphicsItem* item : collidingItemsList)
+    {
+        QList<QGraphicsItem*> collidingItemsList = collidingItems(Qt::IntersectsItemShape);
+        for (QGraphicsItem* item : collidingItemsList)
+        {
+            if (dynamic_cast<Character*>(item) != nullptr)
+            {
+                characterOver = true;
+                break;
+            }
+        }
+    }
+
+    if (characterOver)
+    {
+        SetState(OPEN);
+    }
+    else
+    {
+        SetState(CLOSED);
+    }
+	
+}

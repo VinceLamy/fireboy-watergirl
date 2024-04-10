@@ -13,11 +13,12 @@ class Gate : public QGraphicsPixmapItem
 {
 public:
 	/*Gate(int x, int y);*/
-	Gate(const QPixmap& pixmap, qreal x, qreal y, std::vector<Controller*> controllers);
+	Gate(const QPixmap& pixmap, int size, Orientation o, qreal x, qreal y, std::vector<Controller*> controllers);
 
 	State GetState();
 	void SetState(State s);
-
+	int GetSize();
+	Orientation GetOrientation();
 	void CheckControllers();
 
 	void Show();

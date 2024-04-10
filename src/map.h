@@ -40,23 +40,21 @@ public:
 	void AddCodeLock(int x, int y, std::vector<CodeGiver*>);
 	void AddCodeGiver(int x, int y);
 
-	void Clear();
-
-	std::vector<Gate*> GetGates();
-	std::vector<Button*> GetButton();
-	std::vector<Exit*> GetExit();
 	Character* GetActiveCharacter();
-	void SwitchCharacter();
 
-	Pool* GetPoolAt(int x, int y);
-
-	void Swap(Coordinate pos1, Coordinate pos2);
+	void StopTimer();
 
 signals:
 	void GameOver();
-private slots:
+	void LevelFinished();
+
+public slots:
 	void UpdateScene();
 	void SendGameOverToGame();
+	void SwitchCharacter();
+	void CheckGates();
+	void CheckButtons();
+	void CheckExits();
 	
 private:
 	const char* _fileName;
@@ -83,6 +81,7 @@ private:
 	QPixmap leverPixmap;
 	QPixmap codeLockPixmap;
 	QPixmap backgroundPixmap;
+	QPixmap emptyPixmap;
 
 	QTimer* timer;
 

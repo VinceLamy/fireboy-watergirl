@@ -33,17 +33,24 @@ public:
 
 signals:
 	void GameOver();
+	void SwitchCharacter();
+	void CheckGates();
 
 private:
 	Element _element;
 	bool _state;
 	qreal dx = 0;
 	qreal dy = 0;
-	const qreal gravity = 0.5;
+	const qreal gravity = 0.4;
 	bool onGround = false;
 
 	void HorizontalCollision();
 	void VerticalCollision();
+
+	void Interact();
+
+	QPixmap openLeverPixmap;
+	QPixmap closedLeverPixmap;
 };
 
 #endif CARACTER_H
