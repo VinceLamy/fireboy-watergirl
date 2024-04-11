@@ -340,32 +340,37 @@ void Map::SwitchCharacter()
 
 void Map::CheckGates()
 {
+	
 	for (int i = 0; i < _gate.size(); i++)
 	{
-		_gate[i]->CheckControllers();
+			if (&_gate != nullptr)
+				_gate[i]->CheckControllers();
 	}
 
-	for (int i = 0; i < _gate.size(); i++)
+	if (&_gate != nullptr)
 	{
-		if (_gate[i]->GetState() == CLOSED)
+		for (int i = 0; i < _gate.size(); i++)
 		{
-			if (_gate[i]->GetOrientation() == HORIZONTAL)
+			if (_gate[i]->GetState() == CLOSED)
 			{
-				
-				QPixmap tempPixmap = gatePixmap.transformed(QTransform().rotate(90));
-				tempPixmap = gatePixmap.scaled(QSize(BLOCKWIDTH * _gate[i]->GetSize(), BLOCKWIDTH));
-				_gate[i]->setPixmap(tempPixmap);
-				
+				if (_gate[i]->GetOrientation() == HORIZONTAL)
+				{
+
+					QPixmap tempPixmap = gatePixmap.transformed(QTransform().rotate(90));
+					tempPixmap = gatePixmap.scaled(QSize(BLOCKWIDTH * _gate[i]->GetSize(), BLOCKWIDTH));
+					_gate[i]->setPixmap(tempPixmap);
+
+				}
+				else if (_gate[i]->GetOrientation() == VERTICAL)
+				{
+					QPixmap tempPixmap = gatePixmap.scaled(QSize(BLOCKWIDTH, BLOCKHEIGHT * _gate[i]->GetSize()));
+					_gate[i]->setPixmap(tempPixmap);
+				}
 			}
-			else if (_gate[i]->GetOrientation() == VERTICAL)
+			else if (_gate[i]->GetState() == OPEN)
 			{
-				QPixmap tempPixmap = gatePixmap.scaled(QSize(BLOCKWIDTH, BLOCKHEIGHT * _gate[i]->GetSize()));
-				_gate[i]->setPixmap(tempPixmap);
+				_gate[i]->setPixmap(emptyPixmap);
 			}
-		}
-		else if (_gate[i]->GetState() == OPEN)
-		{
-			_gate[i]->setPixmap(emptyPixmap);
 		}
 	}
 }
@@ -374,7 +379,8 @@ void Map::CheckButtons()
 {
 	for (int i = 0; i < _button.size(); i++)
 	{
-		_button[i]->CheckOver();
+		if(&_button != nullptr)
+			_button[i]->CheckOver();
 	}
 }
 
@@ -382,13 +388,17 @@ void Map::CheckExits()
 {
 	for (int i = 0; i < _exit.size(); i++)
 	{
-		_exit[i]->CheckIn();
+		if(&_exit != nullptr)
+			_exit[i]->CheckIn();
 	}
 
-	if (_exit[0]->GetState() == OPEN && _exit[1]->GetState() == OPEN)
+	if (&_exit != nullptr)
 	{
-		levelFinished = true;
-		emit LevelFinished();
+		if (_exit[0]->GetState() == OPEN && _exit[1]->GetState() == OPEN)
+		{
+			levelFinished = true;
+			emit LevelFinished();
+		}
 	}
 }
 
