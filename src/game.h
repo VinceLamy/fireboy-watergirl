@@ -37,15 +37,10 @@ class Game : public QObject
 
 	Map* _map;
 	int _currentLevel = 1;
-	bool _gameOver;
 	bool _levelFinished;
-	bool _isJumping;
 	bool _updated;
 	bool _codegiven;
 
-
-	std::chrono::time_point<std::chrono::system_clock> _start;
-	int _jumpHeight;
 	int _code;
 
 	Communication* comm;
@@ -87,8 +82,6 @@ public:
 	void GetInput();
 	void SendResponse();
 	void CreateInputEvent();
-	
-	
 };
 
 #endif CARACTER_H

@@ -64,9 +64,7 @@ Game::~Game()
 void Game::LoadLevel(int level)
 {
 	_currentLevel = level;
-
-	_gameOver = _isJumping = _levelFinished = _codegiven = false;
-	_jumpHeight = 0;
+	_codegiven = false;
 
 	switch (_currentLevel)
 	{
@@ -146,7 +144,6 @@ void Game::GameOverScreen()
 		comm->ClosePort();
 	}
 	view.close();
-	/*_map->StopTimer();*/
 	delete _map;
 	ShowMainMenu();
 	_mainWindow->show();
@@ -237,7 +234,6 @@ void Game::NextLevel()
 		comm->ClosePort();
 	}
 	view.close();
-	/*_map->StopTimer();*/
 	delete _map;
 	if (_currentLevel == 0)
 	{
