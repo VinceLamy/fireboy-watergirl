@@ -35,13 +35,14 @@ signals:
 	void GameOver();
 	void SwitchCharacter();
 	void CheckGates();
+	void OpenInGameMenu();
 
 private:
 	Element _element;
 	bool _state;
 	qreal dx = 0;
 	qreal dy = 0;
-	const qreal gravity = 0.4;
+	const qreal gravity = 0.2;
 	bool onGround = false;
 
 	void HorizontalCollision();

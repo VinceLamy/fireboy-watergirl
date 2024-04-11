@@ -67,7 +67,7 @@ void Character::keyPressEvent(QKeyEvent* event)
 	case Qt::Key_W:
 		if (onGround)
 		{
-			dy = -13.5;
+			dy = -8.25;
 			onGround = false;
 		}
 		break;
@@ -77,6 +77,10 @@ void Character::keyPressEvent(QKeyEvent* event)
 		break;
 	case Qt::Key_E:
 		Interact();
+		break;
+	case Qt::Key_M:
+		emit OpenInGameMenu();
+		break;
 	default:
 		break;
 	}
@@ -221,8 +225,6 @@ void Character::VerticalCollision()
 				setPos(x(), item->pos().y() - 8);
 				dy = 0;
 				onGround = true;
-				/*button->SetState(OPEN);
-				emit CheckGates();*/
 			}
 		}
 	}
