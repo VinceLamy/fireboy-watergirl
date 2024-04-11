@@ -8,6 +8,7 @@
 
 #include "map.h"
 #include "mainmenu.h"
+#include "ingamemenu.h"
 #include "levelselection.h"
 #include "tutorialscreen.h"
 #include <QMainWindow>
@@ -61,6 +62,7 @@ class Game : public QObject
 	QGraphicsView view;
 	QTimer timer;
 	QTimer controllerTimer;
+	InGameMenu* _inGameMenu;
 
 public slots:
 	void LoadLevel(int level);
@@ -71,6 +73,10 @@ public slots:
 	void NextLevel();
 	void ControllerLoop();
 	void SendDigitsToController(const QString& s);
+	void ShowInGameMenu();
+	void ResumeGame();
+	void RestartGame();
+
 
 public:
 	Game(const char* port, QObject* parent = nullptr);

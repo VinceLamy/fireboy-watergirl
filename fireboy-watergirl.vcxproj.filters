@@ -87,6 +87,12 @@
     <ClCompile Include="Communication\serial\SerialPort.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\ingamemenu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\moc_ingamemenu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\fireboy-watergirl\src\character.h">
@@ -205,6 +211,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Communication\communication.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ingamemenu.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

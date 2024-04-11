@@ -1,7 +1,5 @@
 #include "game.h"
-
 #include <iostream>
-
 #include "conio.h"
 #include "pool.h"
 #include "Windows.h"
@@ -9,7 +7,8 @@
 #include <string>
 #include <QWidget>
 
-Game::Game(const char* port, QObject* parent) : QObject(parent)
+Game::Game(const char* port, QObject* parent) 
+	: QObject(parent)
 {
 	comm = new Communication(port, true);
 
@@ -18,6 +17,7 @@ Game::Game(const char* port, QObject* parent) : QObject(parent)
 
 	_mainWindow = new QMainWindow();
 	_mainMenu = new MainMenu();
+	_inGameMenu = new InGameMenu();
 	_levelSelection = new LevelSelection();
 	_tutorialScreen = new TutorialScreen();
 
@@ -30,12 +30,18 @@ Game::Game(const char* port, QObject* parent) : QObject(parent)
 	connect(_levelSelection, &LevelSelection::returnToMainMenu, this, &Game::ShowMainMenu);
 	connect(_tutorialScreen, &TutorialScreen::BackToMainMenu, this, &Game::ShowMainMenu);
 	connect(_tutorialScreen, &TutorialScreen::StartTutorial, this, &Game::LoadLevel);
-
-
+	connect(_inGameMenu, &InGameMenu::resumeGame, this, &Game::ResumeGame);
+	connect(_inGameMenu, &InGameMenu::quitToMainMenu, this, &Game::ShowMainMenu);
+	connect(_inGameMenu, &InGameMenu::restartGame, this, &Game::RestartGame);
+	
 	_mainWindow->resize(1280, 720);
 	_mainWindow->setStyleSheet("QMainWindow {" "background-image: url(./sprite/menu/fractal-1722991_1920.jpg);" "}");
 	_mainWindow->setCentralWidget(_mainMenu);
 	_mainWindow->show();
+
+	_mainWindow->setStyleSheet("QMainWindow {" "background-image: url(./sprite/menu/fractal-1722991_1920.jpg);" "}");
+	_mainWindow->setCentralWidget(_mainMenu);
+
 }
 
 Game::~Game()
@@ -93,6 +99,17 @@ void Game::ShowTutorialScreen()
 	_mainWindow->setCentralWidget(_tutorialScreen);
 }
 
+void Game::ResumeGame()
+{
+	_inGameMenu->hide();
+}
+
+void Game::RestartGame()
+{
+	LoadLevel(_currentLevel); 
+}
+
+
 void Game::ShowMainMenu()
 {
 	_mainMenu = new MainMenu();
@@ -117,6 +134,7 @@ void Game::GameOverScreen()
 	ShowMainMenu();
 	_mainWindow->show();
 }
+
 
 void Game::ChooseLevel()
 {
