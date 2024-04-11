@@ -77,7 +77,6 @@ public slots:
 	void ResumeGame();
 	void RestartGame();
 
-
 public:
 	Game(const char* port, QObject* parent = nullptr);
 	~Game();
