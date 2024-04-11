@@ -181,4 +181,7 @@ void InGameMenu::quitToMainMenu()
 {
     QMetaObject::activate(this, &staticMetaObject, 1, nullptr);
 }
+void InGameMenu::restartGame()
+{
+}
 QT_WARNING_POP

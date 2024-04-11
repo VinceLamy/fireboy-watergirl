@@ -9,7 +9,8 @@
 //using namespace std;
 
 
-Game::Game(const char* port, QObject* parent) : QObject(parent)
+Game::Game(const char* port, QObject* parent) 
+	: QObject(parent)
 {
 	comm = new Communication(port, true);
 
@@ -27,13 +28,15 @@ Game::Game(const char* port, QObject* parent) : QObject(parent)
 	connect(_levelSelection, &LevelSelection::returnToMainMenu, this, &Game::ShowMainMenu);
 	connect(_inGameMenu, &InGameMenu::resumeGame, this, &Game::ResumeGame);
 	connect(_inGameMenu, &InGameMenu::quitToMainMenu, this, &Game::ShowMainMenu);
+	connect(_inGameMenu, &InGameMenu::restartGame, this, &Game::RestartGame);
 	
 	_mainWindow->resize(1280, 720);
 	_mainWindow->setStyleSheet("QMainWindow {" "background-image: url(./sprite/menu/fractal-1722991_1920.jpg);" "}");
 	_mainWindow->setCentralWidget(_mainMenu);
 	_mainWindow->show();
 
-
+	//_mainWindow->setStyleSheet("QMainWindow {" "background-image: url(./sprite/menu/fractal-1722991_1920.jpg);" "}");
+	//_mainWindow->setCentralWidget(_inGameMenu);
 
 	//_map = Map("./map/testCode.txt");
 }
@@ -86,6 +89,11 @@ void Game::LoadLevel(int level)
 void Game::ResumeGame()
 {
 	_inGameMenu->hide();
+}
+
+void Game::RestartGame()
+{
+	LoadLevel(_currentLevel); 
 }
 
 

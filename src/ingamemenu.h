@@ -16,11 +16,13 @@ public:
 signals:
     void resumeGame();
     void quitToMainMenu();
+    void restartGame();
 
 private:
     QVBoxLayout* layout;
     QPushButton* resumeButton;
     QPushButton* quitToMainButton;
+    QPushButton* restartButton;
 
     void setupUI();
     void connectSignalsSlots();
