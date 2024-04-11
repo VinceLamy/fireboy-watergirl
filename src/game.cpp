@@ -266,9 +266,17 @@ void Game::CreateInputEvent()
 	if (data.jump)
 		QApplication::postEvent(_map, Jump);
 	if (data.interact)
+	{
 		QApplication::postEvent(_map, Interact);
+		if (_manette)
+			Sleep(20);
+	}
 	if (data.switchChars)
+	{
 		QApplication::postEvent(_map, Switch);
+		if (_manette)
+			Sleep(20);
+	}
 	if (data.menu)
 		QApplication::postEvent(_map, Menu);
 	if (data.moveRight)

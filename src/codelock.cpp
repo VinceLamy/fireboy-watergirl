@@ -6,12 +6,9 @@
 #include <conio.h>
 #include<limits>
 
-//using namespace std;
 
 CodeLock::CodeLock(QPixmap& pixmap, qreal x, qreal y, std::vector<CodeGiver*> codeGiver) : Controller(pixmap, x, y)
 {
-	/*SetPosition(x, y);
-	SetType(CODELOCK)*/;
 	GenerateCode();
 	_codeGiver = codeGiver;
 	GiveCode(_myCode);
@@ -21,7 +18,10 @@ void CodeLock::GiveCode(CodeDigits code)
 {
 	if (_codeGiver.size() == 1)
 	{
-		_codeGiver[0]->SetDigits(std::to_string(_myCode.first) + std::to_string(_myCode.second) + std::to_string(_myCode.third) + std::to_string(_myCode.fourth));
+		_codeGiver[0]->SetDigits(std::to_string(_myCode.first) +
+			std::to_string(_myCode.second) +
+			std::to_string(_myCode.third) +
+			std::to_string(_myCode.fourth));
 	}
 	else if (_codeGiver.size() == 2)
 	{
@@ -72,11 +72,6 @@ void CodeLock::GenerateCode()
 	_myCode.third = rand() % 10;
 	_myCode.fourth = rand() % 10;
 }
-
-//void CodeLock::Show()
-//{
-//	std::cout << BRIGHTYELLOW << '$' << RESET;
-//}
 
 void CodeLock::Clear()
 {
