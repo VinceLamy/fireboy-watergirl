@@ -135,6 +135,15 @@ void Game::ShowMainMenu()
 	_mainWindow->setCentralWidget(_mainMenu);
 }
 
+void Game::ShowGameOverMenu()
+{
+	_gameOverMenu = new GameOverMenu(_currentLevel);
+	connect(_gameOverMenu, &GameOverMenu::levelSelected, this, &Game::LoadLevel);
+	connect(_gameOverMenu, &GameOverMenu::BackToMainMenu, this, &Game::ShowMainMenu);
+	_mainWindow->setStyleSheet("QMainWindow {" "background-image: url(./sprite/menu/fractal-1722991_1920.jpg);" "}");
+	_mainWindow->setCentralWidget(_gameOverMenu);
+}
+
 void Game::GameOverScreen()
 {
 	timer.stop();
@@ -145,7 +154,7 @@ void Game::GameOverScreen()
 	}
 	view.close();
 	delete _map;
-	ShowMainMenu();
+	ShowGameOverMenu();
 	_mainWindow->show();
 }
 

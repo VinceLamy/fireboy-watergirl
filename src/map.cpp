@@ -425,12 +425,14 @@ void Map::SendGameOverToGame()
 }
 
 void Map::UpdateScene()
-{	
-	if(!levelFinished)
+{
+	if(!_button.empty())
 		CheckButtons();
-	if (!levelFinished)
+	
+	if (!_gate.empty())
 		CheckGates();
-	if (!levelFinished)
+
+	if (_fireBoy != nullptr && _waterGirl != nullptr)
 	{
 		if (_fireBoy != nullptr && _waterGirl != nullptr)
 		{
@@ -447,7 +449,8 @@ void Map::UpdateScene()
 			}
 		}
 	}
-	if (!levelFinished)
+
+	if (!_exit.empty())
 		CheckExits();
 }
 
