@@ -48,9 +48,6 @@ backgroundPixmap("./sprite/map/background.png")
 
 	_fileName = nomNiveau;
 
-	timer = new QTimer(this);
-	connect(timer, &QTimer::timeout, this, &Map::UpdateScene);
-	timer->start(1000 / 60);
 }
 
 Map::~Map()
@@ -402,10 +399,10 @@ void Map::CheckExits()
 	}
 }
 
-void Map::StopTimer()
-{
-	timer->stop();
-}
+//void Map::StopTimer()
+//{
+//	timer->stop();
+//}
 
 void Map::SendGameOverToGame()
 {

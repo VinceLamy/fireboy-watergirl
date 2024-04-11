@@ -42,7 +42,7 @@ public:
 
 	Character* GetActiveCharacter();
 
-	void StopTimer();
+	/*void StopTimer();*/
 
 signals:
 	void GameOver();
@@ -83,8 +83,6 @@ private:
 	QPixmap codeLockPixmap;
 	QPixmap backgroundPixmap;
 	QPixmap emptyPixmap;
-
-	QTimer* timer;
 
 };
 

@@ -59,15 +59,15 @@ void Character::keyPressEvent(QKeyEvent* event)
 	switch (event->key())
 	{
 	case Qt::Key_A:
-		dx = -4;
+		dx = -5;
 		break;
 	case Qt::Key_D:
-		dx = 4;
+		dx = 5;
 		break;
 	case Qt::Key_W:
 		if (onGround)
 		{
-			dy = -8.25;
+			dy = -8.5;
 			onGround = false;
 		}
 		break;

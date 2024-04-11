@@ -106,7 +106,7 @@ void Game::GameOverScreen()
 {
 	timer.stop();
 	view.close();
-	_map->StopTimer();
+	/*_map->StopTimer();*/
 	delete _map;
 	ShowMainMenu();
 	_mainWindow->show();
@@ -215,7 +215,7 @@ void Game::NextLevel()
 {
 	timer.stop();
 	view.close();
-	_map->StopTimer();
+	/*_map->StopTimer();*/
 	delete _map;
 	if (_currentLevel == 0)
 	{
