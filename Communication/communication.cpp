@@ -80,7 +80,8 @@ bool Communication::GetInputData()
 
 void Communication::ClosePort()
 {
-    delete arduino;
+    if(arduino != nullptr)
+        delete arduino;
 }
 
 void Communication::OpenPort()

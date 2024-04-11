@@ -60,6 +60,7 @@ class Game : public QObject
 	TutorialScreen* _tutorialScreen;
 	QGraphicsView view;
 	QTimer timer;
+	QTimer controllerTimer;
 
 public slots:
 	void LoadLevel(int level);
@@ -69,7 +70,7 @@ public slots:
 	void Play();
 	void NextLevel();
 	void ControllerLoop();
-	void SendDigitsToController(std::string s);
+	void SendDigitsToController(const QString& s);
 
 public:
 	Game(const char* port, QObject* parent = nullptr);
@@ -80,6 +81,7 @@ public:
 
 	void GetInput();
 	void SendResponse();
+	void CreateInputEvent();
 	
 	
 };

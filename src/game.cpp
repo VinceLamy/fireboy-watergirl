@@ -80,7 +80,7 @@ void Game::LoadLevel(int level)
 	}
 	connect(_map, &Map::GameOver, this, &Game::GameOverScreen);
 	connect(_map, &Map::LevelFinished, this, &Game::NextLevel);
-	connect(_map, &Map::SendDigitsToGame, this, &Game::SendDigitsToController);
+	connect(_map, &Map::SendingDigits, this, &Game::SendDigitsToController);
 	Play();
 }
 
@@ -106,6 +106,11 @@ void Game::ShowMainMenu()
 void Game::GameOverScreen()
 {
 	timer.stop();
+	if (_manette)
+	{
+		controllerTimer.stop();
+		comm->ClosePort();
+	}
 	view.close();
 	/*_map->StopTimer();*/
 	delete _map;
@@ -130,15 +135,6 @@ void Game::Menu()
 
 void Game::GetInput()
 {
-	QKeyEvent* moveLeft = new QKeyEvent(QEvent::KeyPress, Qt::Key_A, Qt::NoModifier);
-	QKeyEvent* moveRight = new QKeyEvent(QEvent::KeyPress, Qt::Key_D, Qt::NoModifier);
-	QKeyEvent* Jump = new QKeyEvent(QEvent::KeyPress, Qt::Key_W, Qt::NoModifier);
-	QKeyEvent* Switch = new QKeyEvent(QEvent::KeyPress, Qt::Key_Q, Qt::NoModifier);
-	QKeyEvent* Interact = new QKeyEvent(QEvent::KeyPress, Qt::Key_E, Qt::NoModifier);
-	QKeyEvent* Menu = new QKeyEvent(QEvent::KeyPress, Qt::Key_M, Qt::NoModifier);
-	QKeyEvent* stopMoveLeft = new QKeyEvent(QEvent::KeyRelease, Qt::Key_A, Qt::NoModifier);
-	QKeyEvent* stopMoveRight = new QKeyEvent(QEvent::KeyRelease, Qt::Key_D, Qt::NoModifier);
-
 	data.jump = false;
 	data.interact = false;
 	data.switchChars = false;
@@ -160,22 +156,7 @@ void Game::GetInput()
 		data.moveLeft = std::stof(std::string(comm->rcv_msg["joystick"]["x"])) > 0.5;
 	}
 
-	if (data.jump)
-		QApplication::postEvent(_map, Jump);
-	if (data.interact)
-		QApplication::postEvent(_map, Interact);
-	if (data.switchChars)
-		QApplication::postEvent(_map, Switch);
-	if (data.menu)
-		QApplication::postEvent(_map, Menu);
-	if (data.moveRight)
-		QApplication::postEvent(_map, moveRight);
-	if (data.moveLeft)
-		QApplication::postEvent(_map, moveLeft);
-	if (!data.moveRight)
-		QApplication::postEvent(_map, stopMoveRight);
-	if (!data.moveLeft)
-		QApplication::postEvent(_map, stopMoveLeft);
+
 
 	if (data.jump || data.interact || data.moveRight || data.moveLeft)
 		_updated = true;
@@ -215,6 +196,11 @@ void Game::SendResponse()
 void Game::NextLevel()
 {
 	timer.stop();
+	if (_manette)
+	{
+		controllerTimer.stop();
+		comm->ClosePort();
+	}
 	view.close();
 	/*_map->StopTimer();*/
 	delete _map;
@@ -231,12 +217,42 @@ void Game::NextLevel()
 void Game::ControllerLoop()
 {
 	GetInput();
+	CreateInputEvent();
 	SendResponse();
 }
 
-void Game::SendDigitsToController(std::string s)
+void Game::CreateInputEvent()
 {
+	QKeyEvent* moveLeft = new QKeyEvent(QEvent::KeyPress, Qt::Key_A, Qt::NoModifier);
+	QKeyEvent* moveRight = new QKeyEvent(QEvent::KeyPress, Qt::Key_D, Qt::NoModifier);
+	QKeyEvent* Jump = new QKeyEvent(QEvent::KeyPress, Qt::Key_W, Qt::NoModifier);
+	QKeyEvent* Switch = new QKeyEvent(QEvent::KeyPress, Qt::Key_Q, Qt::NoModifier);
+	QKeyEvent* Interact = new QKeyEvent(QEvent::KeyPress, Qt::Key_E, Qt::NoModifier);
+	QKeyEvent* Menu = new QKeyEvent(QEvent::KeyPress, Qt::Key_M, Qt::NoModifier);
+	QKeyEvent* stopMoveLeft = new QKeyEvent(QEvent::KeyRelease, Qt::Key_A, Qt::NoModifier);
+	QKeyEvent* stopMoveRight = new QKeyEvent(QEvent::KeyRelease, Qt::Key_D, Qt::NoModifier);
 
+	if (data.jump)
+		QApplication::postEvent(_map, Jump);
+	if (data.interact)
+		QApplication::postEvent(_map, Interact);
+	if (data.switchChars)
+		QApplication::postEvent(_map, Switch);
+	if (data.menu)
+		QApplication::postEvent(_map, Menu);
+	if (data.moveRight)
+		QApplication::postEvent(_map, moveRight);
+	if (data.moveLeft)
+		QApplication::postEvent(_map, moveLeft);
+	if (!data.moveRight && !data.moveLeft)
+		QApplication::postEvent(_map, stopMoveRight);
+}
+
+void Game::SendDigitsToController(const QString& s)
+{
+	int code = s.toInt();
+
+	_code = code;
 	_codegiven = true;
 }
 
@@ -252,8 +268,13 @@ void Game::Play()
 	view.show();
 	_mainWindow->close();
 
+	if (_manette)
+		QObject::connect(&controllerTimer, &QTimer::timeout, this, &Game::ControllerLoop);
+
 	QObject::connect(&timer, &QTimer::timeout, _map, &Map::UpdateScene);
-	if(_manette)
-		QObject::connect(&timer, &QTimer::timeout, this, &Game::ControllerLoop);
+	
+	if (_manette)
+		controllerTimer.start(1000 / 15);
+
 	timer.start(1000 / 60);
 }

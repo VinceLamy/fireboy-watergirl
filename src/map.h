@@ -48,7 +48,7 @@ public:
 signals:
 	void GameOver();
 	void LevelFinished();
-	void SendingDigits(std::string);
+	void SendingDigits(const QString& s);
 
 public slots:
 	void UpdateScene();
@@ -57,7 +57,7 @@ public slots:
 	void CheckGates();
 	void CheckButtons();
 	void CheckExits();
-	void SendDigitsToGame(std::string s);
+	void SendDigitsToGame(const QString& s);
 	
 private:
 	const char* _fileName;

@@ -12,7 +12,8 @@ CodeGiver::CodeGiver(QPixmap& pixmap, qreal x, qreal y, QObject* parent) : QObje
 
 void CodeGiver::ShowCode()
 {
-	emit SendingCode(_mydigits);
+	QString s = QString::fromStdString(_mydigits);
+	emit SendingCode(s);
 }
 
 void CodeGiver::SetDigits(std::string digits)

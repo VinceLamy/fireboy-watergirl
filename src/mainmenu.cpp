@@ -24,7 +24,7 @@ void MainMenu::InitMainMenu()
 	_bigLayout = new QHBoxLayout(this);
 	_littleLayout->setAlignment(Qt::AlignCenter);
 
-	_title = new QLabel("The Best Game");
+	_title = new QLabel("Fire JP & Water Alex");
 	_title->setAlignment(Qt::AlignHCenter);
 	_title->setFont(titleFont);
 	_title->setStyleSheet("color: #FFFFFF");

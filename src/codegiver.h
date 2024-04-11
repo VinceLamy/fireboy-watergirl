@@ -21,7 +21,7 @@ public:
 	void Clear();
 
 signals:
-	void SendingCode(std::string);
+	void SendingCode(const QString& s);
 
 private:
 	std::string _mydigits;

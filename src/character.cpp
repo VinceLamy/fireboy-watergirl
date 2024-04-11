@@ -225,7 +225,7 @@ void Character::VerticalCollision()
 
 			if (charRect.bottom() > buttonRect.top() && dy > 0)
 			{
-				setPos(x(), item->pos().y() - 8);
+				setPos(x(), item->pos().y() - 6);
 				dy = 0;
 				onGround = true;
 			}
