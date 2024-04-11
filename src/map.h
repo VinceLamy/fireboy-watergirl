@@ -39,14 +39,17 @@ public:
 	void AddButton(int x, int y);
 	void AddCodeLock(int x, int y, std::vector<CodeGiver*>);
 	void AddCodeGiver(int x, int y);
+	
 
 	Character* GetActiveCharacter();
 
-	void StopTimer();
+	/*void StopTimer();*/
 
 signals:
 	void GameOver();
 	void LevelFinished();
+	void SendingDigits(const QString& s);
+	void OpenInGameMenu();
 
 public slots:
 	void UpdateScene();
@@ -55,9 +58,12 @@ public slots:
 	void CheckGates();
 	void CheckButtons();
 	void CheckExits();
+	void SendDigitsToGame(const QString& s);
+	void GoingToOpenInGameMenu();
 	
 private:
 	const char* _fileName;
+	bool levelFinished = false;
 	std::vector<std::vector<Tile*>> _grid;
 	std::vector<Controller*> _lastControllers;
 	std::vector<CodeGiver*> _lastCodeGiver;
@@ -82,8 +88,6 @@ private:
 	QPixmap codeLockPixmap;
 	QPixmap backgroundPixmap;
 	QPixmap emptyPixmap;
-
-	QTimer* timer;
 
 };
 

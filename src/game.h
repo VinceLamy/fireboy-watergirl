@@ -9,6 +9,7 @@
 #include "map.h"
 #include "mainmenu.h"
 #include "gameovermenu.h"
+#include "ingamemenu.h"
 #include "levelselection.h"
 #include "tutorialscreen.h"
 #include <QMainWindow>
@@ -37,15 +38,10 @@ class Game : public QObject
 
 	Map* _map;
 	int _currentLevel = 1;
-	bool _gameOver;
 	bool _levelFinished;
-	bool _isJumping;
 	bool _updated;
 	bool _codegiven;
 
-
-	std::chrono::time_point<std::chrono::system_clock> _start;
-	int _jumpHeight;
 	int _code;
 
 	Communication* comm;
@@ -62,6 +58,8 @@ class Game : public QObject
 	TutorialScreen* _tutorialScreen;
 	QGraphicsView view;
 	QTimer timer;
+	QTimer controllerTimer;
+	InGameMenu* _inGameMenu;
 
 public slots:
 	void LoadLevel(int level);
@@ -76,6 +74,11 @@ public slots:
 	void GameOverScreen();
 	void Play();
 	void NextLevel();
+	void ControllerLoop();
+	void SendDigitsToController(const QString& s);
+	void ShowInGameMenu();
+	void ResumeGame();
+	void RestartGame();
 
 public:
 	Game(const char* port, QObject* parent = nullptr);
@@ -86,8 +89,7 @@ public:
 
 	void GetInput();
 	void SendResponse();
-	
-	
+	void CreateInputEvent();
 };
 
 #endif CARACTER_H

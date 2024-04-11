@@ -12,8 +12,8 @@
 #include "pool.h"
 #include "wall.h"
 
-#define BLOCKWIDTH 27
-#define BLOCKHEIGHT 52
+#define BLOCKWIDTH 20
+#define BLOCKHEIGHT 36
 
 using namespace std;
 
@@ -48,9 +48,6 @@ backgroundPixmap("./sprite/map/background.png")
 
 	_fileName = nomNiveau;
 
-	timer = new QTimer(this);
-	connect(timer, &QTimer::timeout, this, &Map::UpdateScene);
-	timer->start(1000 / 60);
 }
 
 Map::~Map()
@@ -217,6 +214,7 @@ void Map::AddCharacter(int x, int y, Element e)
 		connect(_fireBoy, &Character::GameOver, this, &Map::SendGameOverToGame);
 		connect(_fireBoy, &Character::SwitchCharacter, this, &Map::SwitchCharacter);
 		connect(_fireBoy, &Character::CheckGates, this, &Map::CheckGates);
+		connect(_fireBoy, &Character::OpenInGameMenu, this, &Map::GoingToOpenInGameMenu);
 	}
 	else if (e == WATER)
 	{
@@ -226,6 +224,7 @@ void Map::AddCharacter(int x, int y, Element e)
 		connect(_waterGirl, &Character::GameOver, this, &Map::SendGameOverToGame);
 		connect(_waterGirl, &Character::SwitchCharacter, this, &Map::SwitchCharacter);
 		connect(_waterGirl, &Character::CheckGates, this, &Map::CheckGates);
+		connect(_waterGirl, &Character::OpenInGameMenu, this, &Map::GoingToOpenInGameMenu);
 	}
 }
 
@@ -313,6 +312,7 @@ void Map::AddCodeGiver(int x, int y)
 	CodeGiver* nCodeGiver = new CodeGiver(codeGiverPixmap, x * BLOCKWIDTH, y * BLOCKHEIGHT - BLOCKHEIGHT - BLOCKHEIGHT / 2);
 	_lastCodeGiver.push_back(nCodeGiver);
 	addItem(nCodeGiver);
+	connect(nCodeGiver, &CodeGiver::SendingCode, this, &Map::SendDigitsToGame);
 }
 
 
@@ -340,32 +340,37 @@ void Map::SwitchCharacter()
 
 void Map::CheckGates()
 {
+	
 	for (int i = 0; i < _gate.size(); i++)
 	{
-		_gate[i]->CheckControllers();
+			if (&_gate != nullptr)
+				_gate[i]->CheckControllers();
 	}
 
-	for (int i = 0; i < _gate.size(); i++)
+	if (&_gate != nullptr)
 	{
-		if (_gate[i]->GetState() == CLOSED)
+		for (int i = 0; i < _gate.size(); i++)
 		{
-			if (_gate[i]->GetOrientation() == HORIZONTAL)
+			if (_gate[i]->GetState() == CLOSED)
 			{
-				
-				QPixmap tempPixmap = gatePixmap.transformed(QTransform().rotate(90));
-				tempPixmap = gatePixmap.scaled(QSize(BLOCKWIDTH * _gate[i]->GetSize(), BLOCKWIDTH));
-				_gate[i]->setPixmap(tempPixmap);
-				
+				if (_gate[i]->GetOrientation() == HORIZONTAL)
+				{
+
+					QPixmap tempPixmap = gatePixmap.transformed(QTransform().rotate(90));
+					tempPixmap = gatePixmap.scaled(QSize(BLOCKWIDTH * _gate[i]->GetSize(), BLOCKWIDTH));
+					_gate[i]->setPixmap(tempPixmap);
+
+				}
+				else if (_gate[i]->GetOrientation() == VERTICAL)
+				{
+					QPixmap tempPixmap = gatePixmap.scaled(QSize(BLOCKWIDTH, BLOCKHEIGHT * _gate[i]->GetSize()));
+					_gate[i]->setPixmap(tempPixmap);
+				}
 			}
-			else if (_gate[i]->GetOrientation() == VERTICAL)
+			else if (_gate[i]->GetState() == OPEN)
 			{
-				QPixmap tempPixmap = gatePixmap.scaled(QSize(BLOCKWIDTH, BLOCKHEIGHT * _gate[i]->GetSize()));
-				_gate[i]->setPixmap(tempPixmap);
+				_gate[i]->setPixmap(emptyPixmap);
 			}
-		}
-		else if (_gate[i]->GetState() == OPEN)
-		{
-			_gate[i]->setPixmap(emptyPixmap);
 		}
 	}
 }
@@ -374,7 +379,8 @@ void Map::CheckButtons()
 {
 	for (int i = 0; i < _button.size(); i++)
 	{
-		_button[i]->CheckOver();
+		if(&_button != nullptr)
+			_button[i]->CheckOver();
 	}
 }
 
@@ -382,22 +388,39 @@ void Map::CheckExits()
 {
 	for (int i = 0; i < _exit.size(); i++)
 	{
-		_exit[i]->CheckIn();
+		if(&_exit != nullptr)
+			_exit[i]->CheckIn();
 	}
 
-	if (_exit[0]->GetState() == OPEN && _exit[1]->GetState() == OPEN)
+	if (&_exit != nullptr)
 	{
-		emit LevelFinished();
+		if (_exit[0]->GetState() == OPEN && _exit[1]->GetState() == OPEN)
+		{
+			levelFinished = true;
+			emit LevelFinished();
+		}
 	}
 }
 
-void Map::StopTimer()
+void Map::SendDigitsToGame(const QString& s)
 {
-	timer->stop();
+	emit SendingDigits(s);
 }
+
+void Map::GoingToOpenInGameMenu()
+{
+	emit OpenInGameMenu();
+}
+
+
+//void Map::StopTimer()
+//{
+//	timer->stop();
+//}
 
 void Map::SendGameOverToGame()
 {
+	levelFinished = true;
 	emit GameOver();
 }
 
@@ -411,16 +434,19 @@ void Map::UpdateScene()
 
 	if (_fireBoy != nullptr && _waterGirl != nullptr)
 	{
-		if (_fireBoy->getState())
+		if (_fireBoy != nullptr && _waterGirl != nullptr)
 		{
-			_fireBoy->setFocus();
-			_fireBoy->advance(0);
-		}
-		else
-		{
-			_waterGirl->setFocus();
-			_waterGirl->advance(0);
+			if (_fireBoy->getState())
+			{
+				_fireBoy->setFocus();
+				_fireBoy->advance(0);
+			}
+			else
+			{
+				_waterGirl->setFocus();
+				_waterGirl->advance(0);
 
+			}
 		}
 	}
 

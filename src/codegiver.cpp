@@ -3,16 +3,17 @@
 
 //using namespace std;
 
-CodeGiver::CodeGiver(QPixmap& pixmap, qreal x, qreal y) : QGraphicsPixmapItem(pixmap)
+CodeGiver::CodeGiver(QPixmap& pixmap, qreal x, qreal y, QObject* parent) : QObject(parent), QGraphicsPixmapItem(pixmap)
 {
 	setPos(x, y);
 	/*SetPosition(x, y);
 	SetType(CODEGIVER);*/
 }
 
-std::string CodeGiver::ShowCode()
+void CodeGiver::ShowCode()
 {
-	return _mydigits;
+	QString s = QString::fromStdString(_mydigits);
+	emit SendingCode(s);
 }
 
 void CodeGiver::SetDigits(std::string digits)

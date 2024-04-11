@@ -8,6 +8,9 @@
 #include "codelock.h"
 #include "codegiver.h"
 
+#define BLOCKWIDTH 20
+#define BLOCKHEIGHT 36
+
 //using namespace std;
 
 Character::Character(const QPixmap& pixmap, Element e, qreal x, qreal y, bool state, QObject* parent) : QGraphicsPixmapItem(pixmap), QObject(parent),
@@ -19,7 +22,7 @@ openLeverPixmap("./sprite/map/Lever.png")
 	/*SetType(CHARACTER);*/
 	setState(state);
 	setFlag(QGraphicsItem::ItemIsFocusable);
-	openLeverPixmap = openLeverPixmap.scaled(QSize(2 * 27, 52 + 52 / 2));
+	openLeverPixmap = openLeverPixmap.scaled(QSize(2 * BLOCKWIDTH, BLOCKHEIGHT + BLOCKHEIGHT / 2));
 	closedLeverPixmap = openLeverPixmap.transformed(QTransform().scale(-1, 1));
 }
 
@@ -59,15 +62,15 @@ void Character::keyPressEvent(QKeyEvent* event)
 	switch (event->key())
 	{
 	case Qt::Key_A:
-		dx = -4;
+		dx = -5;
 		break;
 	case Qt::Key_D:
-		dx = 4;
+		dx = 5;
 		break;
 	case Qt::Key_W:
 		if (onGround)
 		{
-			dy = -13.5;
+			dy = -7.5;
 			onGround = false;
 		}
 		break;
@@ -77,6 +80,10 @@ void Character::keyPressEvent(QKeyEvent* event)
 		break;
 	case Qt::Key_E:
 		Interact();
+		break;
+	case Qt::Key_M:
+		emit OpenInGameMenu();
+		break;
 	default:
 		break;
 	}
@@ -218,11 +225,9 @@ void Character::VerticalCollision()
 
 			if (charRect.bottom() > buttonRect.top() && dy > 0)
 			{
-				setPos(x(), item->pos().y() - 8);
+				setPos(x(), item->pos().y() - 6);
 				dy = 0;
 				onGround = true;
-				/*button->SetState(OPEN);
-				emit CheckGates();*/
 			}
 		}
 	}

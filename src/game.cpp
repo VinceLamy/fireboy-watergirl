@@ -1,14 +1,14 @@
 #include "game.h"
-
 #include <iostream>
-
 #include "conio.h"
 #include "pool.h"
 #include "Windows.h"
 #include <stdlib.h>
 #include <string>
+#include <QWidget>
 
-Game::Game(const char* port, QObject* parent) : QObject(parent)
+Game::Game(const char* port, QObject* parent) 
+	: QObject(parent)
 {
 	comm = new Communication(port, true);
 
@@ -17,6 +17,7 @@ Game::Game(const char* port, QObject* parent) : QObject(parent)
 
 	_mainWindow = new QMainWindow();
 	_mainMenu = new MainMenu();
+	_inGameMenu = new InGameMenu();
 	_levelSelection = new LevelSelection();
 	_tutorialScreen = new TutorialScreen();
 
@@ -29,11 +30,29 @@ Game::Game(const char* port, QObject* parent) : QObject(parent)
 	connect(_levelSelection, &LevelSelection::returnToMainMenu, this, &Game::ShowMainMenu);
 	connect(_tutorialScreen, &TutorialScreen::BackToMainMenu, this, &Game::ShowMainMenu);
 	connect(_tutorialScreen, &TutorialScreen::StartTutorial, this, &Game::LoadLevel);
-
-
+	connect(_inGameMenu, &InGameMenu::resumeGame, this, &Game::ResumeGame);
+	connect(_inGameMenu, &InGameMenu::quitToMainMenu, this, &Game::ShowMainMenu);
+	connect(_inGameMenu, &InGameMenu::restartGame, this, &Game::RestartGame);
+	
 	_mainWindow->resize(1280, 720);
 	_mainWindow->setStyleSheet("QMainWindow {" "background-image: url(./sprite/menu/fractal-1722991_1920.jpg);" "}");
 	_mainWindow->setCentralWidget(_mainMenu);
+	_mainWindow->show();
+
+}
+
+void Game::ShowInGameMenu()
+{
+	timer.stop();
+	if (_manette)
+		controllerTimer.stop();
+	view.close();
+	_inGameMenu = new InGameMenu();
+	connect(_inGameMenu, &InGameMenu::resumeGame, this, &Game::ResumeGame);
+	connect(_inGameMenu, &InGameMenu::quitToMainMenu, this, &Game::ShowMainMenu);
+	connect(_inGameMenu, &InGameMenu::restartGame, this, &Game::RestartGame);
+	_mainWindow->setStyleSheet("background-color: black;");
+	_mainWindow->setCentralWidget(_inGameMenu);
 	_mainWindow->show();
 }
 
@@ -45,9 +64,7 @@ Game::~Game()
 void Game::LoadLevel(int level)
 {
 	_currentLevel = level;
-
-	_gameOver = _isJumping = _levelFinished = _codegiven = false;
-	_jumpHeight = 0;
+	_codegiven = false;
 
 	switch (_currentLevel)
 	{
@@ -79,6 +96,8 @@ void Game::LoadLevel(int level)
 	}
 	connect(_map, &Map::GameOver, this, &Game::GameOverScreen);
 	connect(_map, &Map::LevelFinished, this, &Game::NextLevel);
+	connect(_map, &Map::SendingDigits, this, &Game::SendDigitsToController);
+	connect(_map, &Map::OpenInGameMenu, this, &Game::ShowInGameMenu);
 	Play();
 }
 
@@ -90,6 +109,21 @@ void Game::ShowTutorialScreen()
 	_mainWindow->setStyleSheet("background-color: black;");
 	_mainWindow->setCentralWidget(_tutorialScreen);
 }
+
+void Game::ResumeGame()
+{
+	_mainWindow->close();
+	if (_manette)
+		controllerTimer.start(1000 / 15);
+	timer.start(1000 / 60);
+	view.show();
+}
+
+void Game::RestartGame()
+{
+	LoadLevel(_currentLevel); 
+}
+
 
 void Game::ShowMainMenu()
 {
@@ -113,12 +147,17 @@ void Game::ShowGameOverMenu()
 void Game::GameOverScreen()
 {
 	timer.stop();
+	if (_manette)
+	{
+		controllerTimer.stop();
+		comm->ClosePort();
+	}
 	view.close();
-	_map->StopTimer();
 	delete _map;
 	ShowGameOverMenu();
 	_mainWindow->show();
 }
+
 
 void Game::ChooseLevel()
 {
@@ -137,42 +176,28 @@ void Game::Menu()
 
 void Game::GetInput()
 {
-	if (_manette)
+	data.jump = false;
+	data.interact = false;
+	data.switchChars = false;
+	data.menu = false;
+
+	data.moveRight = false;
+	data.moveLeft = false;
+
+	parse_status = comm->GetInputData();
+
+	if (parse_status)
 	{
-		data.jump = false;
-		data.interact = false;
-		data.switchChars = false;
-		data.menu = false;
+		data.jump = comm->rcv_msg["boutons"]["3"] == 1;
+		data.interact = comm->rcv_msg["boutons"]["2"] == 1 || std::stof(std::string(comm->rcv_msg["accel"]["z"])) > 0.3;
+		data.switchChars = comm->rcv_msg["boutons"]["1"] == 1;
+		data.menu = comm->rcv_msg["boutons"]["4"] == 1;
 
-		data.moveRight = false;
-		data.moveLeft = false;
-
-		parse_status = comm->GetInputData();
-
-		if (parse_status)
-		{
-			data.jump = comm->rcv_msg["boutons"]["3"] == 1;
-			data.interact = comm->rcv_msg["boutons"]["2"] == 1 || std::stof(std::string(comm->rcv_msg["accel"]["z"])) > 0.3;
-			data.switchChars = comm->rcv_msg["boutons"]["1"] == 1;
-			data.menu = comm->rcv_msg["boutons"]["4"] == 1;
-
-			data.moveRight = std::stof(std::string(comm->rcv_msg["joystick"]["x"])) < -0.5;
-			data.moveLeft = std::stof(std::string(comm->rcv_msg["joystick"]["x"])) > 0.5;
-		}
+		data.moveRight = std::stof(std::string(comm->rcv_msg["joystick"]["x"])) < -0.5;
+		data.moveLeft = std::stof(std::string(comm->rcv_msg["joystick"]["x"])) > 0.5;
 	}
-	else if (!_manette)
-	{
-		data.jump = GetAsyncKeyState('W') & 0x8000;
-		data.interact = GetAsyncKeyState('E') & 0x8000;
-		data.switchChars = GetAsyncKeyState('Q') & 0x8000;
-		data.menu = GetAsyncKeyState('M') & 0x8000;
 
-		data.moveRight = GetAsyncKeyState('D') & 0x8000;
-		data.moveLeft = GetAsyncKeyState('A') & 0x8000;
 
-		if (data.interact || data.switchChars)
-			Sleep(50);
-	}
 
 	if (data.jump || data.interact || data.moveRight || data.moveLeft)
 		_updated = true;
@@ -212,8 +237,12 @@ void Game::SendResponse()
 void Game::NextLevel()
 {
 	timer.stop();
+	if (_manette)
+	{
+		controllerTimer.stop();
+		comm->ClosePort();
+	}
 	view.close();
-	_map->StopTimer();
 	delete _map;
 	if (_currentLevel == 0)
 	{
@@ -225,9 +254,53 @@ void Game::NextLevel()
 	LoadLevel(_currentLevel);
 }
 
+void Game::ControllerLoop()
+{
+	GetInput();
+	CreateInputEvent();
+	SendResponse();
+}
+
+void Game::CreateInputEvent()
+{
+	QKeyEvent* moveLeft = new QKeyEvent(QEvent::KeyPress, Qt::Key_A, Qt::NoModifier);
+	QKeyEvent* moveRight = new QKeyEvent(QEvent::KeyPress, Qt::Key_D, Qt::NoModifier);
+	QKeyEvent* Jump = new QKeyEvent(QEvent::KeyPress, Qt::Key_W, Qt::NoModifier);
+	QKeyEvent* Switch = new QKeyEvent(QEvent::KeyPress, Qt::Key_Q, Qt::NoModifier);
+	QKeyEvent* Interact = new QKeyEvent(QEvent::KeyPress, Qt::Key_E, Qt::NoModifier);
+	QKeyEvent* Menu = new QKeyEvent(QEvent::KeyPress, Qt::Key_M, Qt::NoModifier);
+	QKeyEvent* stopMoveLeft = new QKeyEvent(QEvent::KeyRelease, Qt::Key_A, Qt::NoModifier);
+	QKeyEvent* stopMoveRight = new QKeyEvent(QEvent::KeyRelease, Qt::Key_D, Qt::NoModifier);
+
+	if (data.jump)
+		QApplication::postEvent(_map, Jump);
+	if (data.interact)
+		QApplication::postEvent(_map, Interact);
+	if (data.switchChars)
+		QApplication::postEvent(_map, Switch);
+	if (data.menu)
+		QApplication::postEvent(_map, Menu);
+	if (data.moveRight)
+		QApplication::postEvent(_map, moveRight);
+	if (data.moveLeft)
+		QApplication::postEvent(_map, moveLeft);
+	if (!data.moveRight && !data.moveLeft)
+		QApplication::postEvent(_map, stopMoveRight);
+}
+
+void Game::SendDigitsToController(const QString& s)
+{
+	int code = s.toInt();
+
+	_code = code;
+	_codegiven = true;
+}
+
 void Game::Play()
 {
-	//system("CLS");
+	if (_manette)
+		comm->OpenPort();
+
 	_map->ReadMap();
 	view.setRenderHint(QPainter::Antialiasing);
 	view.setScene(_map);
@@ -235,6 +308,13 @@ void Game::Play()
 	view.show();
 	_mainWindow->close();
 
+	if (_manette)
+		QObject::connect(&controllerTimer, &QTimer::timeout, this, &Game::ControllerLoop);
+
 	QObject::connect(&timer, &QTimer::timeout, _map, &Map::UpdateScene);
+	
+	if (_manette)
+		controllerTimer.start(1000 / 15);
+
 	timer.start(1000 / 60);
 }
