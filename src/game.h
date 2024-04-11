@@ -64,6 +64,7 @@ public slots:
 	void ShowMainMenu();
 	void ShowInGameMenu();
 	void ResumeGame();
+	void RestartGame();
 
 
 public:
