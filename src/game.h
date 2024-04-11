@@ -69,6 +69,7 @@ public slots:
 	void Play();
 	void NextLevel();
 	void ControllerLoop();
+	void SendDigitsToController(std::string s);
 
 public:
 	Game(const char* port, QObject* parent = nullptr);

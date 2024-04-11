@@ -30,6 +30,9 @@
     <ClCompile Include="..\fireboy-watergirl\src\character.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\fireboy-watergirl\src\codegiver.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="..\fireboy-watergirl\src\game.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -63,9 +66,6 @@
     <ClCompile Include="src\button.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\codegiver.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\codelock.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -92,6 +92,9 @@
     <CustomBuild Include="..\fireboy-watergirl\src\character.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
+    <CustomBuild Include="..\fireboy-watergirl\src\codegiver.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
     <CustomBuild Include="..\fireboy-watergirl\src\game.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
@@ -116,6 +119,12 @@
       <Filter>Generated Files</Filter>
     </ClCompile>
     <ClCompile Include="release\moc_character.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="debug\moc_codegiver.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="release\moc_codegiver.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
     <ClCompile Include="debug\moc_game.cpp">
@@ -172,9 +181,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\button.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\codegiver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\codelock.h">

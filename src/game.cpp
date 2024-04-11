@@ -80,6 +80,7 @@ void Game::LoadLevel(int level)
 	}
 	connect(_map, &Map::GameOver, this, &Game::GameOverScreen);
 	connect(_map, &Map::LevelFinished, this, &Game::NextLevel);
+	connect(_map, &Map::SendDigitsToGame, this, &Game::SendDigitsToController);
 	Play();
 }
 
@@ -231,6 +232,12 @@ void Game::ControllerLoop()
 {
 	GetInput();
 	SendResponse();
+}
+
+void Game::SendDigitsToController(std::string s)
+{
+
+	_codegiven = true;
 }
 
 void Game::Play()

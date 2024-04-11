@@ -10,14 +10,18 @@
 
 //using namespace std;
 
-class CodeGiver : public QGraphicsPixmapItem
+class CodeGiver : public QObject, public QGraphicsPixmapItem
 {
+	Q_OBJECT
 public:
-	CodeGiver(QPixmap& pixmap, qreal x, qreal y);
-	std::string ShowCode();
+	CodeGiver(QPixmap& pixmap, qreal x, qreal y, QObject* parent = nullptr);
+	void ShowCode();
 	void SetDigits(std::string digits);
 	/*void Show();*/
 	void Clear();
+
+signals:
+	void SendingCode(std::string);
 
 private:
 	std::string _mydigits;

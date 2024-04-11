@@ -310,6 +310,7 @@ void Map::AddCodeGiver(int x, int y)
 	CodeGiver* nCodeGiver = new CodeGiver(codeGiverPixmap, x * BLOCKWIDTH, y * BLOCKHEIGHT - BLOCKHEIGHT - BLOCKHEIGHT / 2);
 	_lastCodeGiver.push_back(nCodeGiver);
 	addItem(nCodeGiver);
+	connect(nCodeGiver, &CodeGiver::SendingCode, &Map::SendDigitsToGame)
 }
 
 
@@ -398,6 +399,12 @@ void Map::CheckExits()
 		}
 	}
 }
+
+void Map::SendDigitsToGame(std::string s)
+{
+	emit SendingDigits(s);
+}
+
 
 //void Map::StopTimer()
 //{

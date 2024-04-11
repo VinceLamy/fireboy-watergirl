@@ -39,6 +39,7 @@ public:
 	void AddButton(int x, int y);
 	void AddCodeLock(int x, int y, std::vector<CodeGiver*>);
 	void AddCodeGiver(int x, int y);
+	
 
 	Character* GetActiveCharacter();
 
@@ -47,6 +48,7 @@ public:
 signals:
 	void GameOver();
 	void LevelFinished();
+	void SendingDigits(std::string);
 
 public slots:
 	void UpdateScene();
@@ -55,6 +57,7 @@ public slots:
 	void CheckGates();
 	void CheckButtons();
 	void CheckExits();
+	void SendDigitsToGame(std::string s);
 	
 private:
 	const char* _fileName;
