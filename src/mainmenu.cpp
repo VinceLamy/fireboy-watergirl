@@ -12,9 +12,16 @@ MainMenu::~MainMenu()
 void MainMenu::InitMainMenu()
 {
 	QFont titleFont("Arial", 50, QFont::Bold);
+	QPixmap fireJpPixmap("./sprite/map/Fire_JP_V2.png");
+	QPixmap waterAlexPixmap("./sprite/map/Water_Alex_V2.png");
+	_water = new QLabel();
+	_fire = new QLabel();
+	_water->setPixmap(waterAlexPixmap);
+	_fire->setPixmap(fireJpPixmap);
 
-	_layout = new QVBoxLayout(this);
+	_layout = new QVBoxLayout();
 	_littleLayout = new QVBoxLayout();
+	_bigLayout = new QHBoxLayout(this);
 	_littleLayout->setAlignment(Qt::AlignCenter);
 
 	_title = new QLabel("The Best Game");
@@ -46,8 +53,16 @@ void MainMenu::InitMainMenu()
 	connect(_quit, &QPushButton::released, this, &MainMenu::Quit);
 	_littleLayout->addWidget(_quit);
 	_littleLayout->addStretch();
+	
+	_bigLayout->addStretch();
+	_bigLayout->addWidget(_fire);
+	_bigLayout->addStretch();
+	_bigLayout->addLayout(_layout);
+	_bigLayout->addStretch();
+	_bigLayout->addWidget(_water);
+	_bigLayout->addStretch();
 
-	this->setLayout(_layout);
+	this->setLayout(_bigLayout);
 }
 
 void MainMenu::NewGame()

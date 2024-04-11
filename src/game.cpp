@@ -235,6 +235,9 @@ void Game::ControllerLoop()
 
 void Game::Play()
 {
+	if (_manette)
+		comm->OpenPort();
+
 	_map->ReadMap();
 	view.setRenderHint(QPainter::Antialiasing);
 	view.setScene(_map);
