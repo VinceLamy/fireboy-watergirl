@@ -8,6 +8,7 @@
 
 #include "map.h"
 #include "mainmenu.h"
+#include "gameovermenu.h"
 #include "levelselection.h"
 #include "tutorialscreen.h"
 #include <QMainWindow>
@@ -56,6 +57,7 @@ class Game : public QObject
 
 	QMainWindow* _mainWindow;
 	MainMenu* _mainMenu;
+	GameOverMenu* _gameOverMenu;
 	LevelSelection* _levelSelection;
 	TutorialScreen* _tutorialScreen;
 	QGraphicsView view;
@@ -65,6 +67,12 @@ public slots:
 	void LoadLevel(int level);
 	void ShowTutorialScreen();
 	void ShowMainMenu();
+	void ShowGameOverMenu();
+	
+	//void TransitionScreen();
+	//void EndGameScreen();
+	//void CodeLockScreen();
+
 	void GameOverScreen();
 	void Play();
 	void NextLevel();
