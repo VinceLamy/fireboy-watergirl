@@ -49,6 +49,7 @@ signals:
 	void GameOver();
 	void LevelFinished();
 	void SendingDigits(const QString& s);
+	void OpenInGameMenu();
 
 public slots:
 	void UpdateScene();
@@ -58,6 +59,7 @@ public slots:
 	void CheckButtons();
 	void CheckExits();
 	void SendDigitsToGame(const QString& s);
+	void GoingToOpenInGameMenu();
 	
 private:
 	const char* _fileName;

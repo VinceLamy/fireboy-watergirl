@@ -13,15 +13,19 @@ InGameMenu::~InGameMenu()
 void InGameMenu::setupUI()
 {
     layout = new QVBoxLayout(this);
+    layout->setAlignment(Qt::AlignCenter);
 
-    resumeButton = new QPushButton("Resume", this);
-    quitToMainButton = new QPushButton("Quit to Main Menu", this);
-    restartButton = new QPushButton("Restart", this);
+    resumeButton = new MenuButton("Resume");
+    quitToMainButton = new MenuButton("Main Menu");
+    restartButton = new MenuButton("Restart");
 
     layout->addStretch();
     layout->addWidget(resumeButton);
-    layout->addWidget(quitToMainButton);
+    layout->addStretch();
     layout->addWidget(restartButton);
+    layout->addStretch();
+    layout->addWidget(quitToMainButton);
+    layout->addStretch();
     setLayout(layout);
 }
 

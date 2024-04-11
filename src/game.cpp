@@ -39,9 +39,21 @@ Game::Game(const char* port, QObject* parent)
 	_mainWindow->setCentralWidget(_mainMenu);
 	_mainWindow->show();
 
-	_mainWindow->setStyleSheet("QMainWindow {" "background-image: url(./sprite/menu/fractal-1722991_1920.jpg);" "}");
-	_mainWindow->setCentralWidget(_mainMenu);
+}
 
+void Game::ShowInGameMenu()
+{
+	timer.stop();
+	if (_manette)
+		controllerTimer.stop();
+	view.close();
+	_inGameMenu = new InGameMenu();
+	connect(_inGameMenu, &InGameMenu::resumeGame, this, &Game::ResumeGame);
+	connect(_inGameMenu, &InGameMenu::quitToMainMenu, this, &Game::ShowMainMenu);
+	connect(_inGameMenu, &InGameMenu::restartGame, this, &Game::RestartGame);
+	_mainWindow->setStyleSheet("background-color: black;");
+	_mainWindow->setCentralWidget(_inGameMenu);
+	_mainWindow->show();
 }
 
 Game::~Game()
@@ -87,6 +99,7 @@ void Game::LoadLevel(int level)
 	connect(_map, &Map::GameOver, this, &Game::GameOverScreen);
 	connect(_map, &Map::LevelFinished, this, &Game::NextLevel);
 	connect(_map, &Map::SendingDigits, this, &Game::SendDigitsToController);
+	connect(_map, &Map::OpenInGameMenu, this, &Game::ShowInGameMenu);
 	Play();
 }
 
@@ -101,7 +114,11 @@ void Game::ShowTutorialScreen()
 
 void Game::ResumeGame()
 {
-	_inGameMenu->hide();
+	_mainWindow->close();
+	if (_manette)
+		controllerTimer.start(1000 / 15);
+	timer.start(1000 / 60);
+	view.show();
 }
 
 void Game::RestartGame()

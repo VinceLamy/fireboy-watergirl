@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QPushButton>
+#include "menubutton.h"
 
 class InGameMenu : public QWidget
 {
@@ -20,9 +21,9 @@ signals:
 
 private:
     QVBoxLayout* layout;
-    QPushButton* resumeButton;
-    QPushButton* quitToMainButton;
-    QPushButton* restartButton;
+    MenuButton* resumeButton;
+    MenuButton* quitToMainButton;
+    MenuButton* restartButton;
 
     void setupUI();
     void connectSignalsSlots();
