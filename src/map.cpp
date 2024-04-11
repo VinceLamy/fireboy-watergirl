@@ -12,8 +12,8 @@
 #include "pool.h"
 #include "wall.h"
 
-#define BLOCKWIDTH 27
-#define BLOCKHEIGHT 52
+#define BLOCKWIDTH 20
+#define BLOCKHEIGHT 36
 
 using namespace std;
 

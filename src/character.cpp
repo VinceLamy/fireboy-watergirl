@@ -8,6 +8,9 @@
 #include "codelock.h"
 #include "codegiver.h"
 
+#define BLOCKWIDTH 20
+#define BLOCKHEIGHT 36
+
 //using namespace std;
 
 Character::Character(const QPixmap& pixmap, Element e, qreal x, qreal y, bool state, QObject* parent) : QGraphicsPixmapItem(pixmap), QObject(parent),
@@ -19,7 +22,7 @@ openLeverPixmap("./sprite/map/Lever.png")
 	/*SetType(CHARACTER);*/
 	setState(state);
 	setFlag(QGraphicsItem::ItemIsFocusable);
-	openLeverPixmap = openLeverPixmap.scaled(QSize(2 * 27, 52 + 52 / 2));
+	openLeverPixmap = openLeverPixmap.scaled(QSize(2 * BLOCKWIDTH, BLOCKHEIGHT + BLOCKHEIGHT / 2));
 	closedLeverPixmap = openLeverPixmap.transformed(QTransform().scale(-1, 1));
 }
 
@@ -67,7 +70,7 @@ void Character::keyPressEvent(QKeyEvent* event)
 	case Qt::Key_W:
 		if (onGround)
 		{
-			dy = -8.5;
+			dy = -7.5;
 			onGround = false;
 		}
 		break;
