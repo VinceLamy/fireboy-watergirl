@@ -30,6 +30,9 @@
     <ClCompile Include="Communication\serial\SerialPort.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="betweenlevelmenu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="src\button.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -39,6 +42,9 @@
     <ClCompile Include="src\codegiver.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="codeinputmenu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="src\codelock.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -46,6 +52,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\controller.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="endgamemenu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\exit.cpp">
@@ -58,6 +67,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\gate.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ingamemenu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\keyboardhandler.cpp">
@@ -98,15 +110,21 @@
     <ClInclude Include="Communication\serial\SerialPort.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <CustomBuild Include="betweenlevelmenu.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
     <ClInclude Include="src\button.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <CustomBuild Include="src\character.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
-    <ClInclude Include="src\codegiver.h">
+    <CustomBuild Include="src\codegiver.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
+    </CustomBuild>
+    <CustomBuild Include="codeinputmenu.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
     <ClInclude Include="src\codelock.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -119,6 +137,9 @@
     <ClInclude Include="src\coordinate.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <CustomBuild Include="endgamemenu.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
     <ClInclude Include="src\enum.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -134,6 +155,9 @@
     <ClInclude Include="src\gate.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <CustomBuild Include="src\ingamemenu.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
     <CustomBuild Include="src\keyboardhandler.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
@@ -166,10 +190,34 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="debug\moc_betweenlevelmenu.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="release\moc_betweenlevelmenu.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
     <ClCompile Include="debug\moc_character.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
     <ClCompile Include="release\moc_character.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="debug\moc_codegiver.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="release\moc_codegiver.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="debug\moc_codeinputmenu.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="release\moc_codeinputmenu.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="debug\moc_endgamemenu.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="release\moc_endgamemenu.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
     <ClCompile Include="debug\moc_game.cpp">
@@ -182,6 +230,12 @@
       <Filter>Generated Files</Filter>
     </ClCompile>
     <ClCompile Include="release\moc_gameovermenu.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="debug\moc_ingamemenu.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="release\moc_ingamemenu.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
     <ClCompile Include="debug\moc_keyboardhandler.cpp">

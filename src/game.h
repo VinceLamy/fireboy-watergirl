@@ -10,6 +10,9 @@
 #include "mainmenu.h"
 #include "gameovermenu.h"
 #include "ingamemenu.h"
+#include "betweenlevelmenu.h"
+#include "endgamemenu.h"
+#include "codeinputmenu.h"
 #include "levelselection.h"
 #include "tutorialscreen.h"
 #include <QMainWindow>
@@ -54,6 +57,9 @@ class Game : public QObject
 	QMainWindow* _mainWindow;
 	MainMenu* _mainMenu;
 	GameOverMenu* _gameOverMenu;
+	BetweenLevelMenu* _betweenLevelMenu;
+	EndGameMenu* _endGameMenu;
+	CodeInputMenu* _codeInputMenu;
 	LevelSelection* _levelSelection;
 	TutorialScreen* _tutorialScreen;
 	QGraphicsView view;
@@ -61,17 +67,17 @@ class Game : public QObject
 	QTimer controllerTimer;
 	InGameMenu* _inGameMenu;
 
+	QString _numberEntered;
+
 public slots:
 	void LoadLevel(int level);
 	void ShowTutorialScreen();
 	void ShowMainMenu();
 	void ShowGameOverMenu();
-	
-	//void TransitionScreen();
-	//void EndGameScreen();
-	//void CodeLockScreen();
-
+	void ShowEndGameMenu();
+	void VerifyCode(QString number);
 	void GameOverScreen();
+	void BetweenLevelScreen();
 	void Play();
 	void NextLevel();
 	void ControllerLoop();

@@ -450,7 +450,7 @@ void Map::UpdateScene()
 		}
 	}
 
-	if (!_exit.empty())
+	if (!_exit.empty() && !levelFinished)
 		CheckExits();
 }
 
