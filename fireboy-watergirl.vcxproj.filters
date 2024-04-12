@@ -63,7 +63,7 @@
     <ClCompile Include="src\game.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="gameovermenu.cpp">
+    <ClCompile Include="src\gameovermenu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\gate.cpp">
@@ -149,9 +149,9 @@
     <CustomBuild Include="src\game.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
-    <ClInclude Include="gameovermenu.h">
+    <CustomBuild Include="src\gameovermenu.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
+    </CustomBuild>
     <ClInclude Include="src\gate.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -224,6 +224,12 @@
       <Filter>Generated Files</Filter>
     </ClCompile>
     <ClCompile Include="release\moc_game.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="debug\moc_gameovermenu.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="release\moc_gameovermenu.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
     <ClCompile Include="debug\moc_ingamemenu.cpp">

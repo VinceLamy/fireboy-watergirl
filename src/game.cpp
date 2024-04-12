@@ -196,7 +196,6 @@ void Game::GameOverScreen()
 	}
 	view.close();
 	delete _map;
-	ShowMainMenu();
 	_mainWindow->show();
 }
 
@@ -369,19 +368,10 @@ void Game::SendDigitsToController(const QString& s)
 
 void Game::Play()
 {
-	//if (_manette)
-		//comm->OpenPort();
-
-	
-	//std::cout << data.random << std::endl;
 	if (_manette)
 	{
 		controllerTimer.start(1000 / 15);
 	}
-	//std::cout << data.random << std::endl;
-
-	
-
 	_map->ReadMap();
 	view.setRenderHint(QPainter::Antialiasing);
 	view.setScene(_map);

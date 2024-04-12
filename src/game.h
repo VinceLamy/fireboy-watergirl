@@ -67,6 +67,7 @@ class Game : public QObject
 	QTimer timer;
 	QTimer controllerTimer;
 	InGameMenu* _inGameMenu;
+	GameOverMenu* _gameOverMenu;
 
 	int code;
 	QString _numberEntered;
