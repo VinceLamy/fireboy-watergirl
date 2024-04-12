@@ -247,6 +247,7 @@ void Map::AddCharacter(int x, int y, Element e)
 		connect(_fireBoy, &Character::SwitchCharacter, this, &Map::SwitchCharacter);
 		connect(_fireBoy, &Character::CheckGates, this, &Map::CheckGates);
 		connect(_fireBoy, &Character::OpenInGameMenu, this, &Map::GoingToOpenInGameMenu);
+		connect(_fireBoy, &Character::SendCodeLock, this, &Map::CatchCodeLock);
 	}
 	else if (e == WATER)
 	{
@@ -257,6 +258,7 @@ void Map::AddCharacter(int x, int y, Element e)
 		connect(_waterGirl, &Character::SwitchCharacter, this, &Map::SwitchCharacter);
 		connect(_waterGirl, &Character::CheckGates, this, &Map::CheckGates);
 		connect(_waterGirl, &Character::OpenInGameMenu, this, &Map::GoingToOpenInGameMenu);
+		connect(_waterGirl, &Character::SendCodeLock, this, &Map::CatchCodeLock);
 	}
 }
 
@@ -447,6 +449,11 @@ void Map::SendDigitsToGame(const QString& s)
 void Map::GoingToOpenInGameMenu()
 {
 	emit OpenInGameMenu();
+}
+
+void Map::CatchCodeLock(CodeLock* code)
+{
+	SendCodeLockToGame(code);
 }
 
 

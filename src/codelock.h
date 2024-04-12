@@ -27,6 +27,7 @@ public:
 	void GenerateCode(int code);
 	/*void Show();*/
 	void Clear();
+	std::string GetCode();
 
 private:
 	CodeDigits _myCode = { 0, 0, 0, 0 };

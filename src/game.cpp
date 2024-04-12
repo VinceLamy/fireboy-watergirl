@@ -89,6 +89,7 @@ void Game::LoadLevel(int level)
 		srand(time(NULL));
 		code = rand() % (10000 - 999 + 1) + 999;
 	}
+	std::cout << "Code dans Game" << code << std::endl;
 
 	switch (_currentLevel)
 	{
@@ -109,11 +110,8 @@ void Game::LoadLevel(int level)
 		break;
 	case 5:
 		_map =  new Map(code, "./map/5.txt", &view);
+		break;
 	case 6:
-		system("CLS");
-		std::cout << "FELICITATION!!! MERCI D'AVOIR JOUE!!!" << std::endl;
-		Sleep(2000);
-		_currentLevel = 1;
 		ShowEndGameMenu();
 		break;
 	}
@@ -121,8 +119,8 @@ void Game::LoadLevel(int level)
 	connect(_map, &Map::GameOver, this, &Game::GameOverScreen);
 	connect(_map, &Map::SendingDigits, this, &Game::SendDigitsToController);
 	connect(_map, &Map::OpenInGameMenu, this, &Game::ShowInGameMenu);
-	connect(_map, &Map::LevelFinished, this, &Game::ShowEndGameMenu);
-	
+	connect(_map, &Map::LevelFinished, this, &Game::BetweenLevelScreen);
+	connect(_map, &Map::SendCodeLockToGame, this, &Game::AskUserInput);
 	Play();
 }
 
@@ -149,9 +147,21 @@ void Game::RestartGame()
 	LoadLevel(_currentLevel); 
 }
 
+void Game::AskUserInput(CodeLock* code)
+{
+	timer.stop();
+	view.close();
+	_codeInputMenu = new CodeInputMenu(code);
+	connect(_codeInputMenu, &CodeInputMenu::VerifyCode, this, &Game::VerifyCode);
+	_mainWindow->setStyleSheet("QMainWindow {" "background-image: url(./sprite/menu/fractal-1722991_1920.jpg);" "}");
+	_mainWindow->setCentralWidget(_codeInputMenu);
+	_mainWindow->show();
+}
+
 
 void Game::ShowMainMenu()
 {
+
 	_mainMenu = new MainMenu();
 	connect(_mainMenu, &MainMenu::levelSelected, this, &Game::LoadLevel);
 	connect(_mainMenu, &MainMenu::levelSelection, this, &Game::ChooseLevel);
@@ -162,29 +172,27 @@ void Game::ShowMainMenu()
 
 void Game::ShowGameOverMenu()
 {
-	_codeInputMenu = new CodeInputMenu();
-	connect(_codeInputMenu, &CodeInputMenu::VerifyCode, this, &Game::VerifyCode);
+	_gameOverMenu = new GameOverMenu(_currentLevel);
+	connect(_gameOverMenu, &GameOverMenu::levelSelected, this, &Game::LoadLevel);
+	connect(_gameOverMenu, &GameOverMenu::BackToMainMenu, this, &Game::ShowMainMenu);
 	_mainWindow->setStyleSheet("QMainWindow {" "background-image: url(./sprite/menu/fractal-1722991_1920.jpg);" "}");
-	_mainWindow->setCentralWidget(_codeInputMenu);
-
-	/*_codeInputMenu = new CodeInputMenu();
-	connect(_codeInputMenu, &CodeInputMenu::VerifyCode, this, &Game::VerifyCode);
-	_mainWindow->setStyleSheet("QMainWindow {" "background-image: url(./sprite/menu/fractal-1722991_1920.jpg);" "}");
-	_mainWindow->setCentralWidget(_codeInputMenu);*/
+	_mainWindow->setCentralWidget(_gameOverMenu);
 }
 
-void Game::VerifyCode(QString numberEntered) {
-	std::cout << numberEntered.toStdString();
+void Game::VerifyCode(QString numberEntered, CodeLock* code) 
+{
+
+	if (numberEntered.toStdString() == code->GetCode())
+	{
+		code->SetState(OPEN);
+	}
+	std::cout << numberEntered.toStdString() << '\n';
+	std::cout << "Code a l'arrive " << code->GetCode() << '\n';
+	ResumeGame();
 }
 
 void Game::ShowEndGameMenu() 
 {
-	if (_manette)
-	{
-		controllerTimer.stop();
-		comm->ClosePort();
-	}
-	view.close();
 	_endGameMenu = new EndGameMenu();
 	connect(_endGameMenu, &EndGameMenu::BackToMainMenu, this, &Game::ShowMainMenu);
 	_mainWindow->setStyleSheet("QMainWindow {" "background-image: url(./sprite/menu/fractal-1722991_1920.jpg);" "}");
@@ -200,6 +208,7 @@ void Game::GameOverScreen()
 		//comm->ClosePort();
 	}
 	view.close();
+	delete _map;
 	ShowGameOverMenu();
 	_mainWindow->show();
 }
@@ -210,12 +219,11 @@ void Game::BetweenLevelScreen()
 	if (_manette)
 	{
 		controllerTimer.stop();
-		comm->ClosePort();
+		//comm->ClosePort();
 	}
 	view.close();
-	delete _map;
 	_betweenLevelMenu = new BetweenLevelMenu(_currentLevel);
-	connect(_betweenLevelMenu, &BetweenLevelMenu::LoadLevel, this, &Game::LoadLevel);
+	connect(_betweenLevelMenu, &BetweenLevelMenu::LoadLevel, this, &Game::NextLevel);
 	connect(_betweenLevelMenu, &BetweenLevelMenu::BackToMainMenu, this, &Game::ShowMainMenu);
 	_mainWindow->setStyleSheet("QMainWindow {" "background-image: url(./sprite/menu/fractal-1722991_1920.jpg);" "}");
 	_mainWindow->setCentralWidget(_betweenLevelMenu);
@@ -300,13 +308,13 @@ void Game::SendResponse()
 
 void Game::NextLevel()
 {
-	timer.stop();
-	if (_manette)
-	{
-		controllerTimer.stop();
-		//comm->ClosePort();
-	}
-	view.close();
+	//timer.stop();
+	//if (_manette)
+	//{
+	//	controllerTimer.stop();
+	//	//comm->ClosePort();
+	//}
+	//view.close();
 
 	if(_map)
 		delete _map;
@@ -319,6 +327,8 @@ void Game::NextLevel()
 	}
 
 	_currentLevel++;
+
+	LoadLevel(_currentLevel);
 }
 
 void Game::ControllerLoop()

@@ -67,7 +67,6 @@ class Game : public QObject
 	QTimer timer;
 	QTimer controllerTimer;
 	InGameMenu* _inGameMenu;
-	GameOverMenu* _gameOverMenu;
 
 	int code;
 	QString _numberEntered;
@@ -78,7 +77,7 @@ public slots:
 	void ShowMainMenu();
 	void ShowGameOverMenu();
 	void ShowEndGameMenu();
-	void VerifyCode(QString number);
+	void VerifyCode(QString number, CodeLock* code);
 	void GameOverScreen();
 	void BetweenLevelScreen();
 	void Play();
@@ -88,6 +87,7 @@ public slots:
 	void ShowInGameMenu();
 	void ResumeGame();
 	void RestartGame();
+	void AskUserInput(CodeLock* code);
 
 public:
 	Game(const char* port, QObject* parent = nullptr);

@@ -1,8 +1,9 @@
 #include "codeinputmenu.h"
 
-CodeInputMenu::CodeInputMenu(QWidget* parent) : QWidget(parent)
+CodeInputMenu::CodeInputMenu(CodeLock* code, QWidget* parent) : QWidget(parent)
 {
 	InitMenu();
+	_code = code;
 }
 
 CodeInputMenu::~CodeInputMenu()
@@ -41,7 +42,7 @@ void CodeInputMenu::InitMenu()
 
 void CodeInputMenu::Back()
 {
-	emit VerifyCode(_number->text());
+	emit VerifyCode(_number->text(), _code);
 }
 
 #include "CodeInputMenu.h"

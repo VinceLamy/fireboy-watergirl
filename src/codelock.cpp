@@ -66,7 +66,7 @@ void CodeLock::VerifyCode()
 
 void CodeLock::GenerateCode(int code)
 {
-	std::cout << code << std::endl;
+	std::cout << "Code depart" << code << std::endl;
 	std::string strCode = std::to_string(code);
 
 	if (strCode.size() < 4)
@@ -92,5 +92,13 @@ void CodeLock::Clear()
 	_myCode.second = 0;
 	_myCode.third = 0;
 	_myCode.fourth = 0;
+}
+
+std::string CodeLock::GetCode()
+{
+	return std::to_string(_myCode.first) +
+		std::to_string(_myCode.second) +
+		std::to_string(_myCode.third) +
+		std::to_string(_myCode.fourth);
 }
 

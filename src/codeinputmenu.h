@@ -6,6 +6,7 @@
 #include <QLineEdit>
 #include "menubutton.h"
 #include "enum.h"
+#include "codelock.h"
 
 #ifndef CODEINPUTMENU_H
 #define CODEINPUTMENU_H
@@ -15,11 +16,11 @@ class CodeInputMenu : public QWidget
 	Q_OBJECT
 
 public:
-	CodeInputMenu(QWidget* parent = nullptr);
+	CodeInputMenu(CodeLock* code, QWidget* parent = nullptr);
 	~CodeInputMenu();
 
 signals:
-	void VerifyCode(QString code);
+	void VerifyCode(QString code, CodeLock* CodeLock);
 
 private slots:
 	void Back();
@@ -30,6 +31,7 @@ private:
 	QLabel* _title;
 	QLineEdit* _number;
 	MenuButton* _confirm;
+	CodeLock* _code;
 
 	void InitMenu();
 };

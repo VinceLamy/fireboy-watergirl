@@ -9,6 +9,7 @@
 #include <QtWidgets>
 #include <QGraphicsPixmapItem>
 #include <QObject>
+#include "codelock.h"
 
 class Character : public QObject, public QGraphicsPixmapItem
 {
@@ -36,6 +37,7 @@ signals:
 	void SwitchCharacter();
 	void CheckGates();
 	void OpenInGameMenu();
+	void SendCodeLock(CodeLock* lock);
 
 private:
 	Element _element;

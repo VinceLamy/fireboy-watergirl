@@ -44,8 +44,7 @@ void BetweenLevelMenu::InitMenu()
 
 void BetweenLevelMenu::Next()
 {
-	int levelSelected = _currentLevel + 1;
-	emit LoadLevel(levelSelected);
+	emit LoadLevel();
 }
 
 void BetweenLevelMenu::Back()

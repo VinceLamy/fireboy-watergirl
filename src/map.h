@@ -53,6 +53,7 @@ signals:
 	void LevelFinished();
 	void SendingDigits(const QString& s);
 	void OpenInGameMenu();
+	void SendCodeLockToGame(CodeLock* code);
 
 public slots:
 	void UpdateScene();
@@ -63,6 +64,7 @@ public slots:
 	void CheckExits();
 	void SendDigitsToGame(const QString& s);
 	void GoingToOpenInGameMenu();
+	void CatchCodeLock(CodeLock* code);
 	
 private:
 	const char* _fileName;

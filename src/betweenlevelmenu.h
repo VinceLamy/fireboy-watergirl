@@ -18,7 +18,7 @@ public:
 	~BetweenLevelMenu();
 
 signals:
-	void LoadLevel(int level);
+	void LoadLevel();
 	void BackToMainMenu();
 
 private slots:
