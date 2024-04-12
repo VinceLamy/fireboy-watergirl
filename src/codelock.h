@@ -22,15 +22,15 @@ struct CodeDigits {
 class CodeLock : public Controller
 {
 public:
-	CodeLock(QPixmap& pixmap, qreal x, qreal y, std::vector<CodeGiver*> codeGiver);
+	CodeLock(int code, QPixmap& pixmap, qreal x, qreal y, std::vector<CodeGiver*> codeGiver);
 	void GiveCode(CodeDigits code);
 	void VerifyCode();
-	void GenerateCode();
+	void GenerateCode(int code);
 	/*void Show();*/
 	void Clear();
 
 private:
-	CodeDigits _myCode;
+	CodeDigits _myCode = { 0, 0, 0, 0 };
 	std::vector<CodeGiver*> _codeGiver;
 };
 

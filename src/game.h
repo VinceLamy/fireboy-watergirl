@@ -27,7 +27,7 @@ struct input_data
 
 	bool accelUp;
 
-	int random;
+	int random = 0;
 
 };
 
@@ -58,6 +58,8 @@ class Game : public QObject
 	QTimer timer;
 	QTimer controllerTimer;
 	InGameMenu* _inGameMenu;
+
+	int code;
 
 public slots:
 	void LoadLevel(int level);

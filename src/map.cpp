@@ -47,7 +47,39 @@ backgroundPixmap("./sprite/map/background.png")
 	setBackgroundBrush(backgroundPixmap);
 
 	_fileName = nomNiveau;
+}
 
+Map::Map(int code, const char* nomNiveau, QObject* parent) : QGraphicsScene(parent), _fileName(nomNiveau),
+wallPixmap("./sprite/map/brick_brown_1.png"),
+waterPixamp("./sprite/map/dngn_deep_water.png"),
+lavaPixmap("./sprite/map/lava0.png"),
+gooPixmap("./sprite/map/dngn_deep_water_murky.png"),
+gatePixmap("./sprite/map/relief1.png"),
+fireJpPixmap("./sprite/map/Fire_JP_V2.png"),
+waterAlexPixmap("./sprite/map/Water_Alex_V2.png"),
+codeGiverPixmap("./sprite/map/dngn_altar_beogh.png"),
+exitPixmap("./sprite/map/dngn_enter_cocytus.png"),
+leverPixmap("./sprite/map/Lever.png"),
+buttonPixmap("./sprite/map/openButton.png"),
+codeLockPixmap("./sprite/map/Old Padlock - GREY - 0000.png"),
+backgroundPixmap("./sprite/map/background.png")
+{
+	wallPixmap = wallPixmap.scaled(QSize(BLOCKWIDTH, BLOCKHEIGHT));
+	waterPixamp = waterPixamp.scaled(QSize(BLOCKWIDTH, BLOCKHEIGHT));
+	lavaPixmap = lavaPixmap.scaled(QSize(BLOCKWIDTH, BLOCKHEIGHT));
+	gooPixmap = gooPixmap.scaled(QSize(BLOCKWIDTH, BLOCKHEIGHT));
+	fireJpPixmap = fireJpPixmap.scaled(QSize(BLOCKWIDTH, BLOCKHEIGHT));
+	waterAlexPixmap = waterAlexPixmap.scaled(QSize(BLOCKWIDTH, BLOCKHEIGHT));
+	codeGiverPixmap = codeGiverPixmap.scaled(QSize(2 * BLOCKWIDTH, BLOCKHEIGHT + BLOCKHEIGHT / 2));
+	exitPixmap = exitPixmap.scaled(QSize(2 * BLOCKWIDTH, BLOCKHEIGHT + BLOCKHEIGHT / 2));
+	leverPixmap = leverPixmap.scaled(QSize(2 * BLOCKWIDTH, BLOCKHEIGHT + BLOCKHEIGHT / 2));
+	buttonPixmap = buttonPixmap.scaled(QSize(2 * BLOCKWIDTH, BLOCKHEIGHT));
+	codeLockPixmap = codeLockPixmap.scaled(QSize(2 * BLOCKWIDTH, BLOCKHEIGHT + BLOCKHEIGHT / 2));
+	backgroundPixmap = backgroundPixmap.scaled(QSize(2560, 1440));
+	setBackgroundBrush(backgroundPixmap);
+
+	_code = code;
+	_fileName = nomNiveau;
 }
 
 Map::~Map()
@@ -300,7 +332,7 @@ void Map::AddButton(int x, int y)
 
 void Map::AddCodeLock(int x, int y, vector<CodeGiver*>)
 {
-	CodeLock* nCodeLock = new CodeLock(codeLockPixmap, x*BLOCKWIDTH, y*BLOCKHEIGHT - BLOCKHEIGHT - BLOCKHEIGHT / 2, _lastCodeGiver);
+	CodeLock* nCodeLock = new CodeLock(_code, codeLockPixmap, x*BLOCKWIDTH, y*BLOCKHEIGHT - BLOCKHEIGHT - BLOCKHEIGHT / 2, _lastCodeGiver);
 	Controller* connectCodeLock = static_cast<Controller*>(nCodeLock);
 	_lastControllers.push_back(connectCodeLock);
 	_lastCodeGiver.clear();
@@ -313,6 +345,11 @@ void Map::AddCodeGiver(int x, int y)
 	_lastCodeGiver.push_back(nCodeGiver);
 	addItem(nCodeGiver);
 	connect(nCodeGiver, &CodeGiver::SendingCode, this, &Map::SendDigitsToGame);
+}
+
+CodeLock* Map::GetCodeLock()
+{
+	return _codeLock;
 }
 
 

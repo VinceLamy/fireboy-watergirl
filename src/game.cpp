@@ -39,6 +39,10 @@ Game::Game(const char* port, QObject* parent)
 	_mainWindow->setCentralWidget(_mainMenu);
 	_mainWindow->show();
 
+	if (_manette)
+	{
+		connect(&controllerTimer, &QTimer::timeout, this, &Game::ControllerLoop);
+	}
 }
 
 void Game::ShowInGameMenu()
@@ -65,6 +69,26 @@ void Game::LoadLevel(int level)
 {
 	_currentLevel = level;
 	_codegiven = false;
+	if (_manette)
+		comm->OpenPort();
+	
+	int count = 0;
+
+	while ((data.random > 10000 || data.random < 1000) && count < 10)
+	{
+		count++;
+		Sleep(1000 / 15);
+		GetInput();
+	}
+	if (count < 10)
+	{
+		code = data.random;
+	}
+	else
+	{
+		srand(time(NULL));
+		code = rand() % (10000 - 999 + 1) + 999;
+	}
 
 	switch (_currentLevel)
 	{
@@ -78,13 +102,13 @@ void Game::LoadLevel(int level)
 		_map = new Map("./map/2.txt", &view);
 		break;
 	case 3:
-		_map = new Map("./map/3.txt", &view);
+		_map = new Map(code, "./map/3.txt", &view);
 		break;
 	case 4:
-		_map = new Map("./map/4.txt", &view);
+		_map = new Map(code, "./map/4.txt", &view);
 		break;
 	case 5:
-		_map =  new Map("./map/5.txt", &view);
+		_map =  new Map(code, "./map/5.txt", &view);
 		break;
 	case 6:
 		system("CLS");
@@ -141,7 +165,7 @@ void Game::GameOverScreen()
 	if (_manette)
 	{
 		controllerTimer.stop();
-		comm->ClosePort();
+		//comm->ClosePort();
 	}
 	view.close();
 	delete _map;
@@ -186,10 +210,9 @@ void Game::GetInput()
 
 		data.moveRight = std::stof(std::string(comm->rcv_msg["joystick"]["x"])) < -0.5;
 		data.moveLeft = std::stof(std::string(comm->rcv_msg["joystick"]["x"])) > 0.5;
+
+		data.random = comm->rcv_msg["random"];
 	}
-
-
-
 	if (data.jump || data.interact || data.moveRight || data.moveLeft)
 		_updated = true;
 }
@@ -231,7 +254,7 @@ void Game::NextLevel()
 	if (_manette)
 	{
 		controllerTimer.stop();
-		comm->ClosePort();
+		//comm->ClosePort();
 	}
 	view.close();
 	delete _map;
@@ -297,8 +320,18 @@ void Game::SendDigitsToController(const QString& s)
 
 void Game::Play()
 {
+	//if (_manette)
+		//comm->OpenPort();
+
+	
+	//std::cout << data.random << std::endl;
 	if (_manette)
-		comm->OpenPort();
+	{
+		controllerTimer.start(1000 / 15);
+	}
+	//std::cout << data.random << std::endl;
+
+	
 
 	_map->ReadMap();
 	view.setRenderHint(QPainter::Antialiasing);
@@ -307,13 +340,7 @@ void Game::Play()
 	view.show();
 	_mainWindow->close();
 
-	if (_manette)
-		QObject::connect(&controllerTimer, &QTimer::timeout, this, &Game::ControllerLoop);
-
 	QObject::connect(&timer, &QTimer::timeout, _map, &Map::UpdateScene);
-	
-	if (_manette)
-		controllerTimer.start(1000 / 15);
-
 	timer.start(1000 / 60);
 }
+

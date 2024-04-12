@@ -22,6 +22,7 @@ class Map : public QGraphicsScene
 	Q_OBJECT
 public:
 	Map(const char* nomNiveau, QObject* parent = nullptr);
+	Map(int code, const char* nomNiveau, QObject* parent = nullptr);
 	~Map();
 
 	void ReadMap();
@@ -39,6 +40,8 @@ public:
 	void AddButton(int x, int y);
 	void AddCodeLock(int x, int y, std::vector<CodeGiver*>);
 	void AddCodeGiver(int x, int y);
+
+	CodeLock* GetCodeLock();
 	
 
 	Character* GetActiveCharacter();
@@ -64,12 +67,14 @@ public slots:
 private:
 	const char* _fileName;
 	bool levelFinished = false;
+	int _code;
 	std::vector<std::vector<Tile*>> _grid;
 	std::vector<Controller*> _lastControllers;
 	std::vector<CodeGiver*> _lastCodeGiver;
 	std::vector<Button*> _button;
 	Character* _waterGirl;
 	Character* _fireBoy;
+	CodeLock* _codeLock;
 	std::vector<Pool*> _pool;
 	std::vector<Gate*> _gate;
 	std::vector<Exit*> _exit;

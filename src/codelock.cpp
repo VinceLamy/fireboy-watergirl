@@ -7,11 +7,11 @@
 #include<limits>
 
 
-CodeLock::CodeLock(QPixmap& pixmap, qreal x, qreal y, std::vector<CodeGiver*> codeGiver) : Controller(pixmap, x, y)
+CodeLock::CodeLock(int code, QPixmap& pixmap, qreal x, qreal y, std::vector<CodeGiver*> codeGiver) : Controller(pixmap, x, y)
 {
-	GenerateCode();
 	_codeGiver = codeGiver;
-	GiveCode(_myCode);
+	GenerateCode(code);
+	//GiveCode(_myCode);
 }
 
 void CodeLock::GiveCode(CodeDigits code)
@@ -64,13 +64,26 @@ void CodeLock::VerifyCode()
 	}
 }
 
-void CodeLock::GenerateCode()
+void CodeLock::GenerateCode(int code)
 {
-	srand(time(NULL));
+	std::cout << code << std::endl;
+	std::string strCode = std::to_string(code);
+
+	if (strCode.size() < 4)
+		strCode = "0000";
+
+	_myCode.first = strCode[0] - '0';
+	_myCode.second = strCode[1] - '0';
+	_myCode.third = strCode[2] - '0';
+	_myCode.fourth = strCode[3] - '0';
+
+	GiveCode(_myCode);
+	
+	/*srand(time(NULL));
 	_myCode.first = rand() % 10;
 	_myCode.second = rand() % 10;
 	_myCode.third = rand() % 10;
-	_myCode.fourth = rand() % 10;
+	_myCode.fourth = rand() % 10;*/
 }
 
 void CodeLock::Clear()
