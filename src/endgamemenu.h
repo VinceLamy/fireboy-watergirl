@@ -26,7 +26,10 @@ private slots:
 private:
 	QVBoxLayout* _layout;
 	QVBoxLayout* _littleLayout;
+	QHBoxLayout* _hLayout;
 	QLabel* _title;
+	QLabel* _fire;
+	QLabel* _water;
 	std::vector<MenuButton*> _listButton;
 
 	void InitMenu();

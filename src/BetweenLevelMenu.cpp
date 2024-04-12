@@ -13,30 +13,33 @@ BetweenLevelMenu::~BetweenLevelMenu()
 
 void BetweenLevelMenu::InitMenu()
 {
-	QFont titleFont("Arial", 50, QFont::Bold);
+	QFont titleFont("Arial", 100, QFont::Bold);
 
 	_layout = new QVBoxLayout(this);
-	_littleLayout = new QVBoxLayout();
-	_littleLayout->setAlignment(Qt::AlignCenter);
+	_hLayout = new QHBoxLayout();
 
-	_title = new QLabel("Niveau termine");
+	_title = new QLabel("Level Completed!");
 	_title->setAlignment(Qt::AlignHCenter);
 	_title->setFont(titleFont);
 	_title->setStyleSheet("color: #FFFFFF");
+	_layout->addStretch();
 	_layout->addWidget(_title);
-	_layout->addLayout(_littleLayout);
-	_littleLayout->addStretch();
+	_layout->addStretch();
+	_layout->addLayout(_hLayout);
+	_layout->addStretch();
 
-	_listButton.push_back(new MenuButton("Continue"));
+
+	_listButton.push_back(new MenuButton("Next Level"));
 	connect(_listButton.back(), &QPushButton::released, this, &BetweenLevelMenu::Next);
 
-	_listButton.push_back(new MenuButton("Main menu"));
+	_listButton.push_back(new MenuButton("Main Menu"));
 	connect(_listButton.back(), &QPushButton::released, this, &BetweenLevelMenu::Back);
 
+	_hLayout->addStretch();
 	for (int i = 0; i < _listButton.size(); i++)
 	{
-		_littleLayout->addWidget(_listButton[i]);
-		_littleLayout->addStretch();
+		_hLayout->addWidget(_listButton[i]);
+		_hLayout->addStretch();
 	}
 
 	this->setLayout(_layout);

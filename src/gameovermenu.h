@@ -27,7 +27,7 @@ private slots:
 
 private:
 	QVBoxLayout* _layout;
-	QVBoxLayout* _littleLayout;
+	QHBoxLayout* _hLayout;
 	QLabel* _title;
 	std::vector<MenuButton*> _listButton;
 

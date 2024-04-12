@@ -55,7 +55,7 @@ void Game::ShowInGameMenu()
 	connect(_inGameMenu, &InGameMenu::resumeGame, this, &Game::ResumeGame);
 	connect(_inGameMenu, &InGameMenu::quitToMainMenu, this, &Game::ShowMainMenu);
 	connect(_inGameMenu, &InGameMenu::restartGame, this, &Game::RestartGame);
-	_mainWindow->setStyleSheet("background-color: black;");
+	_mainWindow->setStyleSheet("QMainWindow {" "background-image: url(./sprite/menu/fractal-1722991_1920.jpg);" "}");
 	_mainWindow->setCentralWidget(_inGameMenu);
 	_mainWindow->show();
 }
@@ -115,13 +115,16 @@ void Game::LoadLevel(int level)
 		ShowEndGameMenu();
 		break;
 	}
-
-	connect(_map, &Map::GameOver, this, &Game::GameOverScreen);
-	connect(_map, &Map::SendingDigits, this, &Game::SendDigitsToController);
-	connect(_map, &Map::OpenInGameMenu, this, &Game::ShowInGameMenu);
-	connect(_map, &Map::LevelFinished, this, &Game::BetweenLevelScreen);
-	connect(_map, &Map::SendCodeLockToGame, this, &Game::AskUserInput);
-	Play();
+	if(_currentLevel != 6)
+	{
+		connect(_map, &Map::GameOver, this, &Game::GameOverScreen);
+		connect(_map, &Map::SendingDigits, this, &Game::SendDigitsToController);
+		connect(_map, &Map::OpenInGameMenu, this, &Game::ShowInGameMenu);
+		connect(_map, &Map::LevelFinished, this, &Game::BetweenLevelScreen);
+		connect(_map, &Map::SendCodeLockToGame, this, &Game::AskUserInput);
+		Play();
+	}
+	
 }
 
 void Game::ShowTutorialScreen()
@@ -175,7 +178,7 @@ void Game::ShowGameOverMenu()
 	_gameOverMenu = new GameOverMenu(_currentLevel);
 	connect(_gameOverMenu, &GameOverMenu::levelSelected, this, &Game::LoadLevel);
 	connect(_gameOverMenu, &GameOverMenu::BackToMainMenu, this, &Game::ShowMainMenu);
-	_mainWindow->setStyleSheet("QMainWindow {" "background-image: url(./sprite/menu/fractal-1722991_1920.jpg);" "}");
+	_mainWindow->setStyleSheet("background-color: black;");
 	_mainWindow->setCentralWidget(_gameOverMenu);
 }
 
@@ -188,6 +191,9 @@ void Game::VerifyCode(QString numberEntered, CodeLock* code)
 	}
 	std::cout << numberEntered.toStdString() << '\n';
 	std::cout << "Code a l'arrive " << code->GetCode() << '\n';
+	QPixmap pixmap("./sprite/map/Old Padlock - GREY - 0008.png");
+	pixmap = pixmap.scaled(QSize(2 * 20, 36 + 36 / 2));
+	code->setPixmap(pixmap);
 	ResumeGame();
 }
 
@@ -219,15 +225,17 @@ void Game::BetweenLevelScreen()
 	if (_manette)
 	{
 		controllerTimer.stop();
-		//comm->ClosePort();
 	}
 	view.close();
-	_betweenLevelMenu = new BetweenLevelMenu(_currentLevel);
-	connect(_betweenLevelMenu, &BetweenLevelMenu::LoadLevel, this, &Game::NextLevel);
-	connect(_betweenLevelMenu, &BetweenLevelMenu::BackToMainMenu, this, &Game::ShowMainMenu);
-	_mainWindow->setStyleSheet("QMainWindow {" "background-image: url(./sprite/menu/fractal-1722991_1920.jpg);" "}");
-	_mainWindow->setCentralWidget(_betweenLevelMenu);
-	_mainWindow->show();
+	if (_currentLevel != 5)
+	{
+		_betweenLevelMenu = new BetweenLevelMenu(_currentLevel);
+		connect(_betweenLevelMenu, &BetweenLevelMenu::LoadLevel, this, &Game::NextLevel);
+		connect(_betweenLevelMenu, &BetweenLevelMenu::BackToMainMenu, this, &Game::ShowMainMenu);
+		_mainWindow->setStyleSheet("QMainWindow {" "background-image: url(./sprite/menu/fractal-1722991_1920.jpg);" "}");
+		_mainWindow->setCentralWidget(_betweenLevelMenu);
+		_mainWindow->show();
+	}
 }
 
 
@@ -308,14 +316,6 @@ void Game::SendResponse()
 
 void Game::NextLevel()
 {
-	//timer.stop();
-	//if (_manette)
-	//{
-	//	controllerTimer.stop();
-	//	//comm->ClosePort();
-	//}
-	//view.close();
-
 	if(_map)
 		delete _map;
 

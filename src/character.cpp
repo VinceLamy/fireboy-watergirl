@@ -260,7 +260,8 @@ void Character::Interact()
 		if (dynamic_cast<CodeLock*>(item) != nullptr && !dynamic_cast<Character*>(item))
 		{
 			CodeLock* codeLock = dynamic_cast<CodeLock*>(item);
-			emit SendCodeLock(codeLock);
+			if(codeLock->GetState() == CLOSED)
+				emit SendCodeLock(codeLock);
 		}
 	}
 }

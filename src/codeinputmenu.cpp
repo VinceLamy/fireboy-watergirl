@@ -19,24 +19,27 @@ void CodeInputMenu::InitMenu()
 	_littleLayout = new QVBoxLayout();
 	_littleLayout->setAlignment(Qt::AlignCenter);
 
-	_title = new QLabel("Code secret");
+	_title = new QLabel("Enter your Four Digits Code");
+	_layout->addSpacing(100);
 	_title->setAlignment(Qt::AlignHCenter);
 	_title->setFont(titleFont);
 	_title->setStyleSheet("color: #FFFFFF");
 	_layout->addWidget(_title);
 	_layout->addLayout(_littleLayout);
-	_littleLayout->addStretch();
+	_littleLayout->addStretch(2);
 
 	_number = new QLineEdit();
-	_number->setFixedWidth(120);
+	_number->setStyleSheet("QLineEdit {" "border-image: url(./sprite/menu/red_button10.png);" "}");
+	_number->setFixedSize(400, 50);
 	_number->setAlignment(Qt::AlignCenter);
 
-	_confirm = new MenuButton("Confirmer");
+	_confirm = new MenuButton("Confirm");
 	connect(_confirm, &QPushButton::released, this, &CodeInputMenu::Back);
 
 	_littleLayout->addWidget(_number);
+	_littleLayout->addStretch(1);
 	_littleLayout->addWidget(_confirm);
-	_littleLayout->addStretch();
+	_littleLayout->addStretch(1);
 	this->setLayout(_layout);
 }
 

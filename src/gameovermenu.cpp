@@ -12,30 +12,34 @@ GameOverMenu::~GameOverMenu()
 
 void GameOverMenu::InitMenu()
 {
-	QFont titleFont("Arial", 50, QFont::Bold);
+	QFont titleFont("Arial", 125, QFont::Bold);
 
 	_layout = new QVBoxLayout(this);
-	_littleLayout = new QVBoxLayout();
-	_littleLayout->setAlignment(Qt::AlignCenter);
+	_hLayout = new QHBoxLayout();
 
-	_title = new QLabel("Game over");
+	_title = new QLabel("Game Over");
 	_title->setAlignment(Qt::AlignHCenter);
 	_title->setFont(titleFont);
-	_title->setStyleSheet("color: #FFFFFF");
+	_title->setStyleSheet("color: #9E1A1A");
+	_layout->addStretch();
 	_layout->addWidget(_title);
-	_layout->addLayout(_littleLayout);
-	_littleLayout->addStretch();
+	_layout->addStretch();
+	_layout->addLayout(_hLayout);
+	_layout->addStretch();
 
+	
 	_listButton.push_back(new MenuButton("Retry"));
 	connect(_listButton.back(), &QPushButton::released, this, &GameOverMenu::Next);
 
-	_listButton.push_back(new MenuButton("Main menu"));
+	_listButton.push_back(new MenuButton("Main Menu"));
 	connect(_listButton.back(), &QPushButton::released, this, &GameOverMenu::Back);
+
+	_hLayout->addStretch();
 
 	for (int i = 0; i < _listButton.size(); i++)
 	{
-		_littleLayout->addWidget(_listButton[i]);
-		_littleLayout->addStretch();
+		_hLayout->addWidget(_listButton[i]);
+		_hLayout->addStretch();
 	}
 	
 	this->setLayout(_layout);
