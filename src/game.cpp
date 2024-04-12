@@ -109,19 +109,20 @@ void Game::LoadLevel(int level)
 		break;
 	case 5:
 		_map =  new Map(code, "./map/5.txt", &view);
-		break;
 	case 6:
 		system("CLS");
 		std::cout << "FELICITATION!!! MERCI D'AVOIR JOUE!!!" << std::endl;
 		Sleep(2000);
 		_currentLevel = 1;
-		//MainMenu();
+		ShowEndGameMenu();
 		break;
 	}
+
 	connect(_map, &Map::GameOver, this, &Game::GameOverScreen);
-	connect(_map, &Map::LevelFinished, this, &Game::NextLevel);
 	connect(_map, &Map::SendingDigits, this, &Game::SendDigitsToController);
 	connect(_map, &Map::OpenInGameMenu, this, &Game::ShowInGameMenu);
+	connect(_map, &Map::LevelFinished, this, &Game::ShowEndGameMenu);
+	
 	Play();
 }
 
@@ -159,6 +160,32 @@ void Game::ShowMainMenu()
 	_mainWindow->setCentralWidget(_mainMenu);
 }
 
+void Game::ShowGameOverMenu()
+{
+	_codeInputMenu = new CodeInputMenu();
+	connect(_codeInputMenu, &CodeInputMenu::VerifyCode, this, &Game::VerifyCode);
+	_mainWindow->setStyleSheet("QMainWindow {" "background-image: url(./sprite/menu/fractal-1722991_1920.jpg);" "}");
+	_mainWindow->setCentralWidget(_codeInputMenu);
+}
+
+void Game::VerifyCode(QString numberEntered) {
+	std::cout << numberEntered.toStdString();
+}
+
+void Game::ShowEndGameMenu() 
+{
+	if (_manette)
+	{
+		controllerTimer.stop();
+		comm->ClosePort();
+	}
+	view.close();
+	_endGameMenu = new EndGameMenu();
+	connect(_endGameMenu, &EndGameMenu::BackToMainMenu, this, &Game::ShowMainMenu);
+	_mainWindow->setStyleSheet("QMainWindow {" "background-image: url(./sprite/menu/fractal-1722991_1920.jpg);" "}");
+	_mainWindow->setCentralWidget(_endGameMenu);
+	_mainWindow->show();
+}
 void Game::GameOverScreen()
 {
 	timer.stop();
@@ -170,6 +197,24 @@ void Game::GameOverScreen()
 	view.close();
 	delete _map;
 	ShowMainMenu();
+	_mainWindow->show();
+}
+
+void Game::BetweenLevelScreen()
+{
+	timer.stop();
+	if (_manette)
+	{
+		controllerTimer.stop();
+		comm->ClosePort();
+	}
+	view.close();
+	delete _map;
+	_betweenLevelMenu = new BetweenLevelMenu(_currentLevel);
+	connect(_betweenLevelMenu, &BetweenLevelMenu::LoadLevel, this, &Game::LoadLevel);
+	connect(_betweenLevelMenu, &BetweenLevelMenu::BackToMainMenu, this, &Game::ShowMainMenu);
+	_mainWindow->setStyleSheet("QMainWindow {" "background-image: url(./sprite/menu/fractal-1722991_1920.jpg);" "}");
+	_mainWindow->setCentralWidget(_betweenLevelMenu);
 	_mainWindow->show();
 }
 
@@ -213,6 +258,7 @@ void Game::GetInput()
 
 		data.random = comm->rcv_msg["random"];
 	}
+
 	if (data.jump || data.interact || data.moveRight || data.moveLeft)
 		_updated = true;
 }
@@ -257,15 +303,18 @@ void Game::NextLevel()
 		//comm->ClosePort();
 	}
 	view.close();
-	delete _map;
+
+	if(_map)
+		delete _map;
+
 	if (_currentLevel == 0)
 	{
 		ShowMainMenu();
 		_mainWindow->show();
 		return;
 	}
+
 	_currentLevel++;
-	LoadLevel(_currentLevel);
 }
 
 void Game::ControllerLoop()
