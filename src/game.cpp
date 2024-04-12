@@ -166,6 +166,11 @@ void Game::ShowGameOverMenu()
 	connect(_codeInputMenu, &CodeInputMenu::VerifyCode, this, &Game::VerifyCode);
 	_mainWindow->setStyleSheet("QMainWindow {" "background-image: url(./sprite/menu/fractal-1722991_1920.jpg);" "}");
 	_mainWindow->setCentralWidget(_codeInputMenu);
+
+	/*_codeInputMenu = new CodeInputMenu();
+	connect(_codeInputMenu, &CodeInputMenu::VerifyCode, this, &Game::VerifyCode);
+	_mainWindow->setStyleSheet("QMainWindow {" "background-image: url(./sprite/menu/fractal-1722991_1920.jpg);" "}");
+	_mainWindow->setCentralWidget(_codeInputMenu);*/
 }
 
 void Game::VerifyCode(QString numberEntered) {
@@ -195,7 +200,7 @@ void Game::GameOverScreen()
 		//comm->ClosePort();
 	}
 	view.close();
-	delete _map;
+	ShowGameOverMenu();
 	_mainWindow->show();
 }
 
