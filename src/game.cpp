@@ -39,6 +39,9 @@ Game::Game(const char* port, QObject* parent)
 	_mainWindow->setCentralWidget(_mainMenu);
 	_mainWindow->show();
 
+	if (_manette)
+		QObject::connect(&controllerTimer, &QTimer::timeout, this, &Game::ControllerLoop);
+	code = 4567;
 }
 
 void Game::ShowInGameMenu()
@@ -78,13 +81,13 @@ void Game::LoadLevel(int level)
 		_map = new Map("./map/2.txt", &view);
 		break;
 	case 3:
-		_map = new Map("./map/3.txt", &view);
+		_map = new Map(data.random, "./map/3.txt", &view);
 		break;
 	case 4:
-		_map = new Map("./map/4.txt", &view);
+		_map = new Map(data.random, "./map/4.txt", &view);
 		break;
 	case 5:
-		_map =  new Map("./map/5.txt", &view);
+		_map =  new Map(data.random, "./map/5.txt", &view);
 		break;
 	case 6:
 		system("CLS");
@@ -141,7 +144,7 @@ void Game::GameOverScreen()
 	if (_manette)
 	{
 		controllerTimer.stop();
-		comm->ClosePort();
+		//comm->ClosePort();
 	}
 	view.close();
 	delete _map;
@@ -186,8 +189,10 @@ void Game::GetInput()
 
 		data.moveRight = std::stof(std::string(comm->rcv_msg["joystick"]["x"])) < -0.5;
 		data.moveLeft = std::stof(std::string(comm->rcv_msg["joystick"]["x"])) > 0.5;
-	}
 
+		data.random = comm->rcv_msg["random"];
+	}
+	std::cout << data.random << std::endl;
 
 
 	if (data.jump || data.interact || data.moveRight || data.moveLeft)
@@ -231,7 +236,7 @@ void Game::NextLevel()
 	if (_manette)
 	{
 		controllerTimer.stop();
-		comm->ClosePort();
+		//comm->ClosePort();
 	}
 	view.close();
 	delete _map;
@@ -299,13 +304,14 @@ void Game::Play()
 	view.show();
 	_mainWindow->close();
 
-	if (_manette)
-		QObject::connect(&controllerTimer, &QTimer::timeout, this, &Game::ControllerLoop);
-
 	QObject::connect(&timer, &QTimer::timeout, _map, &Map::UpdateScene);
 	
 	if (_manette)
 		controllerTimer.start(1000 / 15);
+
+	/*CodeLock* codeLock = _map->GetCodeLock();
+	if(codeLock != nullptr)
+		codeLock->GenerateCode(4567);*/
 
 	timer.start(1000 / 60);
 }

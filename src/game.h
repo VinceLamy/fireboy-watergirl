@@ -59,6 +59,8 @@ class Game : public QObject
 	QTimer controllerTimer;
 	InGameMenu* _inGameMenu;
 
+	int code;
+
 public slots:
 	void LoadLevel(int level);
 	void ShowTutorialScreen();
