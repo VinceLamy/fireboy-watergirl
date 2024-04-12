@@ -3,7 +3,6 @@
 
 #include "controller.h"
 #include "codegiver.h"
-#include "./Communication/communication.h"
 #include <iostream>
 #include <vector>
 

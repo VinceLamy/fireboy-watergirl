@@ -3,8 +3,8 @@
 #include <algorithm>
 
 #define COMM_JSON
-
 #ifdef COMM_JSON
+
 
 #include "json.hpp"
 #include "serial/SerialPort.hpp"
