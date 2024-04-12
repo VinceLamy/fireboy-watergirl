@@ -40,8 +40,9 @@ Game::Game(const char* port, QObject* parent)
 	_mainWindow->show();
 
 	if (_manette)
-		QObject::connect(&controllerTimer, &QTimer::timeout, this, &Game::ControllerLoop);
-	code = 4567;
+	{
+		connect(&controllerTimer, &QTimer::timeout, this, &Game::ControllerLoop);
+	}
 }
 
 void Game::ShowInGameMenu()
@@ -68,6 +69,26 @@ void Game::LoadLevel(int level)
 {
 	_currentLevel = level;
 	_codegiven = false;
+	if (_manette)
+		comm->OpenPort();
+	
+	int count = 0;
+
+	while ((data.random > 10000 || data.random < 1000) && count < 10)
+	{
+		count++;
+		Sleep(1000 / 15);
+		GetInput();
+	}
+	if (count < 10)
+	{
+		code = data.random;
+	}
+	else
+	{
+		srand(time(NULL));
+		code = rand() % (10000 - 999 + 1) + 999;
+	}
 
 	switch (_currentLevel)
 	{
@@ -81,13 +102,13 @@ void Game::LoadLevel(int level)
 		_map = new Map("./map/2.txt", &view);
 		break;
 	case 3:
-		_map = new Map(data.random, "./map/3.txt", &view);
+		_map = new Map(code, "./map/3.txt", &view);
 		break;
 	case 4:
-		_map = new Map(data.random, "./map/4.txt", &view);
+		_map = new Map(code, "./map/4.txt", &view);
 		break;
 	case 5:
-		_map =  new Map(data.random, "./map/5.txt", &view);
+		_map =  new Map(code, "./map/5.txt", &view);
 		break;
 	case 6:
 		system("CLS");
@@ -192,9 +213,6 @@ void Game::GetInput()
 
 		data.random = comm->rcv_msg["random"];
 	}
-	std::cout << data.random << std::endl;
-
-
 	if (data.jump || data.interact || data.moveRight || data.moveLeft)
 		_updated = true;
 }
@@ -294,8 +312,18 @@ void Game::SendDigitsToController(const QString& s)
 
 void Game::Play()
 {
+	//if (_manette)
+		//comm->OpenPort();
+
+	
+	//std::cout << data.random << std::endl;
 	if (_manette)
-		comm->OpenPort();
+	{
+		controllerTimer.start(1000 / 15);
+	}
+	//std::cout << data.random << std::endl;
+
+	
 
 	_map->ReadMap();
 	view.setRenderHint(QPainter::Antialiasing);
@@ -305,13 +333,6 @@ void Game::Play()
 	_mainWindow->close();
 
 	QObject::connect(&timer, &QTimer::timeout, _map, &Map::UpdateScene);
-	
-	if (_manette)
-		controllerTimer.start(1000 / 15);
-
-	/*CodeLock* codeLock = _map->GetCodeLock();
-	if(codeLock != nullptr)
-		codeLock->GenerateCode(4567);*/
-
 	timer.start(1000 / 60);
 }
+

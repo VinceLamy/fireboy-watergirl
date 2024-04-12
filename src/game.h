@@ -27,7 +27,7 @@ struct input_data
 
 	bool accelUp;
 
-	int random;
+	int random = 0;
 
 };
 
