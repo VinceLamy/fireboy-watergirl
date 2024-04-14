@@ -193,7 +193,10 @@ void Game::VerifyCode(QString numberEntered, CodeLock* code)
 	std::cout << "Code a l'arrive " << code->GetCode() << '\n';
 	QPixmap pixmap("./sprite/map/Old Padlock - GREY - 0008.png");
 	pixmap = pixmap.scaled(QSize(2 * 20, 36 + 36 / 2));
-	code->setPixmap(pixmap);
+	if (code->GetState() == OPEN)
+	{
+		code->setPixmap(pixmap);
+	}
 	ResumeGame();
 }
 
@@ -227,15 +230,13 @@ void Game::BetweenLevelScreen()
 		controllerTimer.stop();
 	}
 	view.close();
-	if (_currentLevel != 5)
-	{
-		_betweenLevelMenu = new BetweenLevelMenu(_currentLevel);
-		connect(_betweenLevelMenu, &BetweenLevelMenu::LoadLevel, this, &Game::NextLevel);
-		connect(_betweenLevelMenu, &BetweenLevelMenu::BackToMainMenu, this, &Game::ShowMainMenu);
-		_mainWindow->setStyleSheet("QMainWindow {" "background-image: url(./sprite/menu/fractal-1722991_1920.jpg);" "}");
-		_mainWindow->setCentralWidget(_betweenLevelMenu);
-		_mainWindow->show();
-	}
+	_betweenLevelMenu = new BetweenLevelMenu(_currentLevel);
+	connect(_betweenLevelMenu, &BetweenLevelMenu::LoadLevel, this, &Game::NextLevel);
+	connect(_betweenLevelMenu, &BetweenLevelMenu::BackToMainMenu, this, &Game::ShowMainMenu);
+	_mainWindow->setStyleSheet("QMainWindow {" "background-image: url(./sprite/menu/fractal-1722991_1920.jpg);" "}");
+	_mainWindow->setCentralWidget(_betweenLevelMenu);
+	_mainWindow->show();
+	
 }
 
 
