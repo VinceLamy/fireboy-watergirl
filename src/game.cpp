@@ -3,6 +3,7 @@
 #include "conio.h"
 #include "pool.h"
 #include "Windows.h"
+#include "codegiverscreen.h"
 #include <stdlib.h>
 #include <string>
 #include <QWidget>
@@ -376,10 +377,13 @@ void Game::CreateInputEvent()
 
 void Game::SendDigitsToController(const QString& s)
 {
-	int code = s.toInt();
-
-	_code = code;
-	_codegiven = true;
+	CodeGiverScreen* screen = new CodeGiverScreen(s);
+	timer.stop();
+	view.close();
+	connect(screen, &CodeGiverScreen::SendOk, this, &Game::ResumeGame);
+	_mainWindow->setStyleSheet("QMainWindow {" "background-image: url(./sprite/menu/fractal-1722991_1920.jpg);" "}");
+	_mainWindow->setCentralWidget(screen);
+	_mainWindow->show();
 }
 
 void Game::Play()

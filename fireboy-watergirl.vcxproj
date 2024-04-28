@@ -70,7 +70,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_CONSOLE;UNICODE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;WIN64;QT_WIDGETS_LIB;QT_GUI_LIB;QT_CORE_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessToFile>false</PreprocessToFile>
-      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
       <UseFullPaths>false</UseFullPaths>
@@ -147,6 +147,7 @@
     <ClCompile Include="src\button.cpp" />
     <ClCompile Include="src\character.cpp" />
     <ClCompile Include="src\codegiver.cpp" />
+    <ClCompile Include="src\codegiverscreen.cpp" />
     <ClCompile Include="src\codeinputmenu.cpp" />
     <ClCompile Include="src\codelock.cpp" />
     <ClCompile Include="Communication\communication.cpp" />
@@ -201,6 +202,16 @@
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Qt\6.6.1\msvc2019_64\bin\moc.exe  -DUNICODE -D_UNICODE -DWIN32 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -DWIN64 -DNDEBUG -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include C:/Users/felix/Documents/GitHub/fireboy-watergirl/release/moc_predefs.h -IC:/Qt/6.6.1/msvc2019_64/mkspecs/win32-msvc -IC:/Users/felix/Documents/GitHub/fireboy-watergirl -IC:/Users/felix/Documents/GitHub/fireboy-watergirl/src -IC:/Qt/6.6.1/msvc2019_64/include -IC:/Qt/6.6.1/msvc2019_64/include/QtWidgets -IC:/Qt/6.6.1/msvc2019_64/include/QtGui -IC:/Qt/6.6.1/msvc2019_64/include/QtCore -I"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\ATLMFC\include" -I"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\ucrt" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\shared" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\um" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\winrt" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\cppwinrt" src\codegiver.h -o release\moc_codegiver.cpp</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MOC src/codegiver.h</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">release\moc_codegiver.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="src\codegiverscreen.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\codegiverscreen.h;debug\moc_predefs.h;C:\Qt\6.6.1\msvc2019_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Qt\6.6.1\msvc2019_64\bin\moc.exe  -DUNICODE -D_UNICODE -DWIN32 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -DWIN64 -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include C:/Users/felix/Documents/GitHub/fireboy-watergirl/debug/moc_predefs.h -IC:/Qt/6.6.1/msvc2019_64/mkspecs/win32-msvc -IC:/Users/felix/Documents/GitHub/fireboy-watergirl -IC:/Users/felix/Documents/GitHub/fireboy-watergirl/src -IC:/Qt/6.6.1/msvc2019_64/include -IC:/Qt/6.6.1/msvc2019_64/include/QtWidgets -IC:/Qt/6.6.1/msvc2019_64/include/QtGui -IC:/Qt/6.6.1/msvc2019_64/include/QtCore -I"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\ATLMFC\include" -I"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\ucrt" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\shared" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\um" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\winrt" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\cppwinrt" src\codegiverscreen.h -o debug\moc_codegiverscreen.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MOC src/codegiverscreen.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">debug\moc_codegiverscreen.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\codegiverscreen.h;release\moc_predefs.h;C:\Qt\6.6.1\msvc2019_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Qt\6.6.1\msvc2019_64\bin\moc.exe  -DUNICODE -D_UNICODE -DWIN32 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -DWIN64 -DNDEBUG -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include C:/Users/felix/Documents/GitHub/fireboy-watergirl/release/moc_predefs.h -IC:/Qt/6.6.1/msvc2019_64/mkspecs/win32-msvc -IC:/Users/felix/Documents/GitHub/fireboy-watergirl -IC:/Users/felix/Documents/GitHub/fireboy-watergirl/src -IC:/Qt/6.6.1/msvc2019_64/include -IC:/Qt/6.6.1/msvc2019_64/include/QtWidgets -IC:/Qt/6.6.1/msvc2019_64/include/QtGui -IC:/Qt/6.6.1/msvc2019_64/include/QtCore -I"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\ATLMFC\include" -I"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\ucrt" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\shared" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\um" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\winrt" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\cppwinrt" src\codegiverscreen.h -o release\moc_codegiverscreen.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MOC src/codegiverscreen.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">release\moc_codegiverscreen.cpp;%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="src\codeinputmenu.h">
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\codeinputmenu.h;debug\moc_predefs.h;C:\Qt\6.6.1\msvc2019_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
@@ -341,6 +352,12 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="release\moc_codegiver.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="debug\moc_codegiverscreen.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="release\moc_codegiverscreen.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="debug\moc_codeinputmenu.cpp">
